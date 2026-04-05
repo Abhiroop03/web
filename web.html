@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SkillForge &ndash; Learn Without Limits</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0d0d0d;
+    --ink2: #3a3a3a;
+    --ink3: #888;
+    --surface: #f7f5f0;
+    --card: #ffffff;
+    --accent: #ff4f17;
+    --accent2: #1a1a2e;
+    --gold: #f5a623;
+    --border: rgba(0,0,0,0.08);
+    --radius: 16px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: var(--surface);
+    color: var(--ink);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 2rem; background: var(--accent2);
+    position: sticky; top: 0; z-index: 100;
+  }
+  .logo { font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
+  .logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
+  .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+  .nav-links a:hover { color: #fff; }
+  .nav-cta {
+    background: var(--accent); color: #fff; border: none;
+    padding: 0.5rem 1.25rem; border-radius: 50px;
+    font-size: 0.875rem; font-weight: 700; cursor: pointer;
+    transition: opacity 0.2s; font-family: inherit;
+  }
+  .nav-cta:hover { opacity: 0.85; }
+  .cart-pill {
+    background: rgba(255,255,255,0.22); border-radius: 50px;
+    padding: 1px 8px; margin-left: 5px; font-weight: 800;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--accent2); color: #fff;
+    padding: 5rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+  }
+  .glow-a {
+    position: absolute; width: 520px; height: 520px; border-radius: 50%;
+    background: rgba(255,79,23,0.14); top: -180px; right: -80px; pointer-events: none;
+  }
+  .glow-b {
+    position: absolute; width: 360px; height: 360px; border-radius: 50%;
+    background: rgba(245,166,35,0.10); bottom: -120px; left: -50px; pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,79,23,0.18); border: 1px solid rgba(255,79,23,0.35);
+    color: #ff7a50; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 1.2px; text-transform: uppercase;
+    padding: 0.35rem 1rem; border-radius: 50px; margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800;
+    line-height: 1.1; max-width: 680px; margin: 0 auto 1.2rem; letter-spacing: -1px;
+  }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero > p {
+    color: rgba(255,255,255,0.58); font-size: 1.05rem;
+    max-width: 470px; margin: 0 auto 2rem; line-height: 1.75;
+  }
+  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+  .btn-fill {
+    background: var(--accent); color: #fff; border: none;
+    padding: 0.8rem 2rem; border-radius: 50px; font-size: 1rem;
+    font-weight: 700; cursor: pointer; transition: transform 0.2s, opacity 0.2s;
+    font-family: inherit;
+  }
+  .btn-fill:hover { opacity: 0.9; transform: translateY(-2px); }
+  .btn-ghost {
+    background: transparent; color: #fff;
+    border: 1px solid rgba(255,255,255,0.28);
+    padding: 0.8rem 2rem; border-radius: 50px; font-size: 1rem;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s; font-family: inherit;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.65); background: rgba(255,255,255,0.05); }
+  .hero-stats {
+    display: flex; gap: 3rem; justify-content: center;
+    margin-top: 3.5rem; padding-top: 2.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap;
+  }
+  .sn { font-size: 1.85rem; font-weight: 800; color: #fff; }
+  .sl { font-size: 0.78rem; color: rgba(255,255,255,0.42); margin-top: 3px; }
+
+  /* TRUST */
+  .trust {
+    background: #fff; border-bottom: 1px solid var(--border);
+    padding: 1.2rem 2rem; display: flex;
+    justify-content: center; gap: 2.5rem; flex-wrap: wrap;
+  }
+  .ti { display: flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; color: var(--ink2); font-weight: 500; }
+  .ti-icon { color: var(--accent); font-weight: 800; font-size: 1rem; }
+
+  /* SECTIONS */
+  .sec { padding: 4.5rem 2rem; }
+  .mw { max-width: 1100px; margin: 0 auto; }
+  .sec-hd { text-align: center; margin-bottom: 3rem; }
+  .sec-tag {
+    display: inline-block; font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem;
+  }
+  .sec-title { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; color: var(--ink); letter-spacing: -0.5px; }
+  .sec-sub { color: var(--ink3); margin-top: 0.4rem; font-size: 0.95rem; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2.5rem; flex-wrap: wrap; }
+  .tab {
+    padding: 0.45rem 1.2rem; border-radius: 50px;
+    border: 1px solid var(--border); background: var(--card);
+    font-size: 0.875rem; cursor: pointer; transition: all 0.2s;
+    color: var(--ink2); font-family: inherit;
+  }
+  .tab:hover, .tab.on { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+
+  /* COURSE CARDS */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(285px, 1fr)); gap: 1.5rem; }
+  .cc {
+    background: var(--card); border-radius: var(--radius);
+    overflow: hidden; border: 1px solid var(--border);
+    transition: transform 0.25s, box-shadow 0.25s; cursor: pointer;
+  }
+  .cc:hover { transform: translateY(-5px); box-shadow: 0 20px 45px rgba(0,0,0,0.1); }
+  .ct { height: 185px; display: flex; align-items: center; justify-content: center; font-size: 3.2rem; position: relative; }
+  .cbadge {
+    position: absolute; top: 12px; left: 12px; font-size: 0.68rem; font-weight: 700;
+    padding: 3px 10px; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .b-new  { background: #e8f5e9; color: #1b5e20; }
+  .b-hot  { background: #fff3e0; color: #bf360c; }
+  .b-sale { background: #fce4ec; color: #b71c1c; }
+  .cb { padding: 1.25rem; }
+  .cc-cat { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 0.4rem; }
+  .cc-title { font-size: 1.05rem; font-weight: 700; color: var(--ink); line-height: 1.35; margin-bottom: 0.45rem; }
+  .cc-desc { font-size: 0.84rem; color: var(--ink3); line-height: 1.6; margin-bottom: 0.8rem; }
+  .cc-meta { display: flex; align-items: center; gap: 0.6rem; font-size: 0.78rem; color: var(--ink3); margin-bottom: 1rem; }
+  .stars { color: var(--gold); }
+  .cc-foot { display: flex; align-items: center; justify-content: space-between; }
+  .price { font-size: 1.25rem; font-weight: 800; color: var(--ink); }
+  .price-old { text-decoration: line-through; font-size: 0.82rem; color: var(--ink3); font-weight: 400; margin-left: 4px; }
+  .btn-enroll {
+    background: var(--accent2); color: #fff; border: none;
+    padding: 0.5rem 1.1rem; border-radius: 50px;
+    font-size: 0.8rem; font-weight: 700; cursor: pointer;
+    transition: background 0.2s; font-family: inherit;
+  }
+  .btn-enroll:hover { background: var(--accent); }
+
+  /* FEATURES */
+  .feat-sec { background: var(--accent2); }
+  .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+  .fc {
+    padding: 1.75rem; background: rgba(255,255,255,0.05);
+    border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.09);
+  }
+  .fc-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .fc-title { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.45rem; }
+  .fc-text { font-size: 0.875rem; color: rgba(255,255,255,0.48); line-height: 1.65; }
+
+  /* TESTIMONIALS */
+  .tg { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .tc { background: var(--card); border-radius: var(--radius); padding: 1.75rem; border: 1px solid var(--border); }
+  .tc-stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 0.75rem; }
+  .tc-text { font-size: 0.93rem; color: var(--ink2); line-height: 1.7; margin-bottom: 1.25rem; font-style: italic; }
+  .tc-auth { display: flex; align-items: center; gap: 0.75rem; }
+  .ava {
+    width: 40px; height: 40px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 0.85rem; color: #fff; flex-shrink: 0;
+  }
+  .ava-name { font-weight: 700; font-size: 0.88rem; color: var(--ink); }
+  .ava-role { font-size: 0.75rem; color: var(--ink3); margin-top: 1px; }
+
+  /* CTA */
+  .cta-wrap { padding: 0 2rem 4.5rem; }
+  .cta {
+    background: var(--accent); border-radius: 24px;
+    padding: 3.5rem 2rem; text-align: center; color: #fff;
+    max-width: 1100px; margin: 0 auto;
+  }
+  .cta h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; margin-bottom: 0.6rem; letter-spacing: -0.5px; }
+  .cta p { opacity: 0.82; font-size: 0.95rem; max-width: 440px; margin: 0 auto 2rem; }
+  .btn-white {
+    background: #fff; color: var(--accent); border: none;
+    padding: 0.85rem 2.25rem; border-radius: 50px;
+    font-size: 1rem; font-weight: 800; cursor: pointer;
+    transition: transform 0.2s; font-family: inherit;
+  }
+  .btn-white:hover { transform: translateY(-2px); }
+
+  /* FOOTER */
+  footer { background: var(--accent2); color: rgba(255,255,255,0.42); padding: 2.5rem 2rem; text-align: center; font-size: 0.85rem; }
+  .f-logo { font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 1rem; }
+  .f-logo span { color: var(--accent); }
+  .f-links { margin-bottom: 1rem; }
+  .f-links a { color: rgba(255,255,255,0.42); text-decoration: none; margin: 0 0.75rem; transition: color 0.2s; }
+  .f-links a:hover { color: #fff; }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 2rem; right: 2rem;
+    background: var(--accent2); color: #fff;
+    padding: 0.9rem 1.4rem; border-radius: 12px;
+    font-size: 0.875rem; border-left: 4px solid var(--accent);
+    transform: translateY(120px); opacity: 0;
+    transition: all 0.3s ease; z-index: 999; max-width: 320px;
+  }
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    nav { padding: 0.85rem 1rem; }
+    .nav-links { display: none; }
+    .hero { padding: 3rem 1rem 2.5rem; }
+    .sec { padding: 3rem 1rem; }
+    .cta-wrap { padding: 0 1rem 3rem; }
+    .trust { gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">Skill<span>Forge</span></div>
+  <ul class="nav-links">
+    <li><a href="#courses">Courses</a></li>
+    <li><a href="#features">Why Us</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  <button class="nav-cta" onclick="showCart()">
+    &#128722; Cart <span class="cart-pill" id="cart-count">0</span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="glow-a"></div>
+  <div class="glow-b"></div>
+  <div class="hero-badge">&#10022; New Courses Added Weekly</div>
+  <h1>Unlock Your <em>Potential.</em><br>Master Real Skills.</h1>
+  <p>Expert-crafted courses designed to transform your career. Learn at your own pace with lifetime access.</p>
+  <div class="hero-btns">
+    <button class="btn-fill" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Browse Courses</button>
+    <button class="btn-ghost">Watch Preview &#9654;</button>
+  </div>
+  <div class="hero-stats">
+    <div><div class="sn">12K+</div><div class="sl">Students Enrolled</div></div>
+    <div><div class="sn">48</div><div class="sl">Courses Available</div></div>
+    <div><div class="sn">4.9 &#9733;</div><div class="sl">Average Rating</div></div>
+    <div><div class="sn">98%</div><div class="sl">Completion Rate</div></div>
+  </div>
+</div>
+
+<!-- TRUST STRIP -->
+<div class="trust">
+  <div class="ti"><span class="ti-icon">&#10003;</span> Lifetime Access</div>
+  <div class="ti"><span class="ti-icon">&#10003;</span> Certificate on Completion</div>
+  <div class="ti"><span class="ti-icon">&#10003;</span> 30-Day Money-Back Guarantee</div>
+  <div class="ti"><span class="ti-icon">&#10003;</span> Learn on Any Device</div>
+</div>
+
+<!-- COURSES -->
+<section class="sec" id="courses">
+  <div class="mw">
+    <div class="sec-hd">
+      <div class="sec-tag">Our Catalog</div>
+      <h2 class="sec-title">Featured Courses</h2>
+      <p class="sec-sub">Handpicked programs for every level and goal</p>
+    </div>
+    <div class="tabs">
+      <button class="tab on" onclick="filter('all', this)">All Courses</button>
+      <button class="tab" onclick="filter('tech', this)">Tech &amp; Coding</button>
+      <button class="tab" onclick="filter('business', this)">Business</button>
+      <button class="tab" onclick="filter('design', this)">Design</button>
+      <button class="tab" onclick="filter('marketing', this)">Marketing</button>
+    </div>
+    <div class="grid" id="cgrid"></div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="sec feat-sec" id="features">
+  <div class="mw">
+    <div class="sec-hd">
+      <div class="sec-tag" style="color:#f5a623;">Why SkillForge</div>
+      <h2 class="sec-title" style="color:#fff;">Everything you need to succeed</h2>
+      <p class="sec-sub" style="color:rgba(255,255,255,0.38);">Built for learners who mean business</p>
+    </div>
+    <div class="feat-grid">
+      <div class="fc">
+        <div class="fc-icon">&#127891;</div>
+        <div class="fc-title">Expert Instructors</div>
+        <div class="fc-text">Learn from industry practitioners with real-world experience and proven track records.</div>
+      </div>
+      <div class="fc">
+        <div class="fc-icon">&#9854;</div>
+        <div class="fc-title">Lifetime Access</div>
+        <div class="fc-text">Buy once, learn forever. All updates and new content included at no extra cost.</div>
+      </div>
+      <div class="fc">
+        <div class="fc-icon">&#128241;</div>
+        <div class="fc-title">Learn Anywhere</div>
+        <div class="fc-text">Access your courses on any device &mdash; desktop, tablet, or mobile &mdash; anytime.</div>
+      </div>
+      <div class="fc">
+        <div class="fc-icon">&#127942;</div>
+        <div class="fc-title">Certificates</div>
+        <div class="fc-text">Earn shareable certificates upon completion to showcase your skills to employers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec" id="reviews">
+  <div class="mw">
+    <div class="sec-hd">
+      <div class="sec-tag">Student Reviews</div>
+      <h2 class="sec-title">What our learners say</h2>
+      <p class="sec-sub">Real results from real people</p>
+    </div>
+    <div class="tg">
+      <div class="tc">
+        <div class="tc-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="tc-text">&ldquo;This platform completely changed my career. The Python course was the best investment I ever made. Got hired 2 months after completing it!&rdquo;</p>
+        <div class="tc-auth">
+          <div class="ava" style="background:#ff4f17;">AK</div>
+          <div><div class="ava-name">Arjun Kumar</div><div class="ava-role">Junior Developer @ TechCorp</div></div>
+        </div>
+      </div>
+      <div class="tc">
+        <div class="tc-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="tc-text">&ldquo;I doubled my freelance rates after completing the Digital Marketing course. The content is practical and up to date. Highly recommend!&rdquo;</p>
+        <div class="tc-auth">
+          <div class="ava" style="background:#1a1a2e;">PS</div>
+          <div><div class="ava-name">Priya Sharma</div><div class="ava-role">Freelance Marketer</div></div>
+        </div>
+      </div>
+      <div class="tc">
+        <div class="tc-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <p class="tc-text">&ldquo;The UI/UX Design bundle is phenomenal. Step-by-step projects, clear explanations. I built my whole portfolio from just this one course.&rdquo;</p>
+        <div class="tc-auth">
+          <div class="ava" style="background:#2e7d32;">RD</div>
+          <div><div class="ava-name">Rahul Das</div><div class="ava-role">UI Designer @ Startup</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta">
+    <h2>Start learning today.<br>No risk, 30-day refund.</h2>
+    <p>Join thousands of students already transforming their careers with SkillForge.</p>
+    <button class="btn-white" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Explore All Courses &#8594;</button>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="f-logo">Skill<span>Forge</span></div>
+  <div class="f-links">
+    <a href="#">Home</a>
+    <a href="#">Courses</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+    <a href="#">Privacy</a>
+  </div>
+  <div>&copy; 2026 SkillForge. All rights reserved.</div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">&#10003; Added to cart!</div>
+
+<script>
+var courses = [
+  { id:1, icon:'&#x1F40D;', bg:'#e8f0fe', cat:'tech',      label:'Tech & Coding',  title:'Python Mastery: Zero to Pro',         desc:'Build real projects from data pipelines to web apps. Master Python from the ground up.',       rating:'4.9', students:'3.2k', price:'&#x20B9;1,499', old:'&#x20B9;2,999', badge:'hot'  },
+  { id:2, icon:'&#x1F4C8;', bg:'#fff8e1', cat:'business',  label:'Business',       title:'Financial Modeling & Valuation',       desc:'Build Excel models used by investment bankers. DCF, LBO, and M&A analysis covered.',          rating:'4.8', students:'1.8k', price:'&#x20B9;1,299', old:'&#x20B9;2,499', badge:'new'  },
+  { id:3, icon:'&#x1F3A8;', bg:'#fce4ec', cat:'design',    label:'Design',         title:'UI/UX Design Complete Bundle',         desc:'Figma, user research, prototyping &mdash; everything to land your first design job.',          rating:'5.0', students:'2.5k', price:'&#x20B9;1,799', old:'&#x20B9;3,499', badge:'hot'  },
+  { id:4, icon:'&#x1F4F1;', bg:'#e8f5e9', cat:'marketing', label:'Marketing',      title:'Digital Marketing Bootcamp',           desc:'SEO, paid ads, email funnels, and social media. Grow any business online.',                   rating:'4.7', students:'4.1k', price:'&#x20B9;999',   old:'&#x20B9;1,999', badge:'sale' },
+  { id:5, icon:'&#x26A1;',  bg:'#f3e5f5', cat:'tech',      label:'Tech & Coding',  title:'JavaScript & React Fullstack',         desc:'From DOM basics to building full production-grade React applications.',                       rating:'4.9', students:'2.9k', price:'&#x20B9;1,699', old:'&#x20B9;3,199', badge:'new'  },
+  { id:6, icon:'&#x1F4BC;', bg:'#e0f7fa', cat:'business',  label:'Business',       title:'Startup Launchpad: Idea to MVP',       desc:'Validate your idea, build an MVP, and pitch to investors. The complete playbook.',            rating:'4.8', students:'1.1k', price:'&#x20B9;1,199', old:'&#x20B9;2,299', badge:null   }
+];
+
+var cart = 0;
+
+function renderCourses(list) {
+  var html = '';
+  for (var i = 0; i < list.length; i++) {
+    var c = list[i];
+    var bdg = c.badge ? '<span class="cbadge b-' + c.badge + '">' + c.badge + '</span>' : '';
+    var t = c.title.replace(/'/g, '&#39;');
+    html +=
+      '<div class="cc">' +
+        '<div class="ct" style="background:' + c.bg + ';">' + bdg + '<span>' + c.icon + '</span></div>' +
+        '<div class="cb">' +
+          '<div class="cc-cat">' + c.label + '</div>' +
+          '<div class="cc-title">' + c.title + '</div>' +
+          '<div class="cc-desc">' + c.desc + '</div>' +
+          '<div class="cc-meta"><span class="stars">&#9733;</span> ' + c.rating + ' &middot; ' + c.students + ' students &middot; Lifetime access</div>' +
+          '<div class="cc-foot">' +
+            '<div class="price">' + c.price + ' <span class="price-old">' + c.old + '</span></div>' +
+            '<button class="btn-enroll" onclick="addToCart(\'' + t + '\')">Enroll Now</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>';
+  }
+  document.getElementById('cgrid').innerHTML = html;
+}
+
+function filter(cat, btn) {
+  var tabs = document.querySelectorAll('.tab');
+  for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('on');
+  btn.classList.add('on');
+  var list = cat === 'all' ? courses : courses.filter(function(c) { return c.cat === cat; });
+  renderCourses(list);
+}
+
+function addToCart(title) {
+  cart++;
+  document.getElementById('cart-count').textContent = cart;
+  var toast = document.getElementById('toast');
+  var short = title.length > 32 ? title.substring(0, 32) + '...' : title;
+  toast.innerHTML = '&#10003; &ldquo;' + short + '&rdquo; added!';
+  toast.classList.add('show');
+  setTimeout(function() { toast.classList.remove('show'); }, 2800);
+}
+
+function showCart() {
+  if (cart === 0) {
+    alert('Your cart is empty.\nBrowse our courses and enroll!');
+  } else {
+    alert('You have ' + cart + ' course(s) in your cart.\n\nCheckout coming soon!\n(Integrate Razorpay / Stripe / PayPal)');
+  }
+}
+
+renderCourses(courses);
+</script>
+</body>
+</html>
