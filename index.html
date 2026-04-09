@@ -1,463 +1,708 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SkillForge &ndash; Learn Without Limits</title>
+<title>Abhiroop Sen — Digital Designer & Developer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --ink: #0d0d0d;
-    --ink2: #3a3a3a;
-    --ink3: #888;
-    --surface: #f7f5f0;
-    --card: #ffffff;
-    --accent: #ff4f17;
-    --accent2: #1a1a2e;
-    --gold: #f5a623;
+    --bg: #080c14;
+    --bg2: #0d1220;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: rgba(255,255,255,0.07);
+    --text: #f0f4ff;
+    --text2: #8a9abf;
+    --text3: #4a5a7a;
+    --accent: #4f8cff;
+    --accent2: #7c5fff;
+    --accent3: #ff5f8f;
+    --glow: rgba(79,140,255,0.18);
+    --glow2: rgba(124,95,255,0.12);
+    --card-bg: rgba(17,24,39,0.8);
+    --header-bg: rgba(8,12,20,0.85);
+  }
+  [data-theme="light"] {
+    --bg: #f4f7ff;
+    --bg2: #eaf0ff;
+    --surface: #ffffff;
+    --surface2: #e8eef8;
     --border: rgba(0,0,0,0.08);
-    --radius: 16px;
+    --text: #0d1220;
+    --text2: #3a4a6a;
+    --text3: #8a9abf;
+    --accent: #2d6cff;
+    --accent2: #6a3fff;
+    --accent3: #e8005a;
+    --glow: rgba(45,108,255,0.10);
+    --glow2: rgba(106,63,255,0.07);
+    --card-bg: rgba(255,255,255,0.9);
+    --header-bg: rgba(244,247,255,0.92);
   }
-
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-    background: var(--surface);
-    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
     min-height: 100vh;
-    line-height: 1.6;
+    overflow-x: hidden;
+    transition: background 0.4s, color 0.4s;
   }
 
-  /* NAV */
-  nav {
+  /* ── NOISE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: 0.4;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 1rem 2rem; background: var(--accent2);
-    position: sticky; top: 0; z-index: 100;
+    padding: 0 5vw;
+    height: 68px;
+    background: var(--header-bg);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.4s, border-color 0.4s;
   }
-  .logo { font-size: 1.5rem; font-weight: 800; color: #fff; letter-spacing: -0.5px; }
-  .logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 1.5rem; list-style: none; }
-  .nav-links a { color: rgba(255,255,255,0.65); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
-  .nav-links a:hover { color: #fff; }
-  .nav-cta {
-    background: var(--accent); color: #fff; border: none;
-    padding: 0.5rem 1.25rem; border-radius: 50px;
-    font-size: 0.875rem; font-weight: 700; cursor: pointer;
-    transition: opacity 0.2s; font-family: inherit;
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    text-decoration: none;
   }
-  .nav-cta:hover { opacity: 0.85; }
-  .cart-pill {
-    background: rgba(255,255,255,0.22); border-radius: 50px;
-    padding: 1px 8px; margin-left: 5px; font-weight: 800;
+  nav { display: flex; gap: 2rem; align-items: center; }
+  nav a {
+    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.04em;
+    color: var(--text2); text-decoration: none;
+    transition: color 0.2s;
+    text-transform: uppercase;
   }
+  nav a:hover { color: var(--accent); }
+  .theme-btn {
+    width: 44px; height: 24px; border-radius: 12px;
+    background: var(--surface2); border: 1px solid var(--border);
+    cursor: pointer; position: relative; transition: background 0.3s;
+    flex-shrink: 0;
+  }
+  .theme-btn::after {
+    content: '';
+    position: absolute; top: 3px; left: 3px;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: var(--accent);
+    transition: transform 0.3s, background 0.3s;
+    box-shadow: 0 0 6px var(--glow);
+  }
+  [data-theme="light"] .theme-btn::after { transform: translateX(20px); background: var(--accent2); }
+  .theme-label { font-size: 0.75rem; color: var(--text3); margin-right: 4px; }
 
-  /* HERO */
+  /* ── HERO ── */
   .hero {
-    background: var(--accent2); color: #fff;
-    padding: 5rem 2rem 4rem; text-align: center; position: relative; overflow: hidden;
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 10vh 5vw 6vh;
+    position: relative; overflow: hidden;
   }
-  .glow-a {
-    position: absolute; width: 520px; height: 520px; border-radius: 50%;
-    background: rgba(255,79,23,0.14); top: -180px; right: -80px; pointer-events: none;
+  .hero-bg-orb {
+    position: absolute; border-radius: 50%; filter: blur(80px);
+    pointer-events: none; z-index: 0;
   }
-  .glow-b {
-    position: absolute; width: 360px; height: 360px; border-radius: 50%;
-    background: rgba(245,166,35,0.10); bottom: -120px; left: -50px; pointer-events: none;
+  .orb1 { width: 500px; height: 500px; background: var(--glow2); top: -100px; right: -100px; }
+  .orb2 { width: 350px; height: 350px; background: var(--glow); bottom: 0; left: -80px; }
+  .hero-inner { position: relative; z-index: 1; max-width: 900px; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--accent);
+    background: rgba(79,140,255,0.1); border: 1px solid rgba(79,140,255,0.2);
+    padding: 6px 14px; border-radius: 100px; margin-bottom: 2rem;
+    animation: fadeUp 0.6s ease both;
   }
-  .hero-badge {
-    display: inline-block;
-    background: rgba(255,79,23,0.18); border: 1px solid rgba(255,79,23,0.35);
-    color: #ff7a50; font-size: 0.72rem; font-weight: 700;
-    letter-spacing: 1.2px; text-transform: uppercase;
-    padding: 0.35rem 1rem; border-radius: 50px; margin-bottom: 1.5rem;
+  .hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 1.5s infinite; }
+  .hero-name {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 0.92; letter-spacing: -0.04em;
+    margin-bottom: 1rem;
+    animation: fadeUp 0.6s 0.1s ease both;
   }
-  .hero h1 {
-    font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 800;
-    line-height: 1.1; max-width: 680px; margin: 0 auto 1.2rem; letter-spacing: -1px;
+  .hero-name span {
+    background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-size: 200% 200%; animation: gradShift 4s ease infinite;
   }
-  .hero h1 em { color: var(--accent); font-style: normal; }
-  .hero > p {
-    color: rgba(255,255,255,0.58); font-size: 1.05rem;
-    max-width: 470px; margin: 0 auto 2rem; line-height: 1.75;
+  .hero-sub {
+    font-size: clamp(1rem, 2.5vw, 1.25rem); font-weight: 300;
+    color: var(--text2); max-width: 560px; line-height: 1.7;
+    margin-bottom: 2.5rem;
+    animation: fadeUp 0.6s 0.2s ease both;
   }
-  .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
-  .btn-fill {
-    background: var(--accent); color: #fff; border: none;
-    padding: 0.8rem 2rem; border-radius: 50px; font-size: 1rem;
-    font-weight: 700; cursor: pointer; transition: transform 0.2s, opacity 0.2s;
-    font-family: inherit;
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 28px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; font-weight: 600; font-size: 0.9rem;
+    text-decoration: none; border: none; cursor: pointer;
+    box-shadow: 0 4px 24px var(--glow);
+    transition: transform 0.2s, box-shadow 0.2s;
   }
-  .btn-fill:hover { opacity: 0.9; transform: translateY(-2px); }
-  .btn-ghost {
-    background: transparent; color: #fff;
-    border: 1px solid rgba(255,255,255,0.28);
-    padding: 0.8rem 2rem; border-radius: 50px; font-size: 1rem;
-    cursor: pointer; transition: border-color 0.2s, background 0.2s; font-family: inherit;
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--glow); }
+  .btn-outline {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 13px 28px; border-radius: 12px;
+    border: 1px solid var(--border); color: var(--text);
+    font-weight: 500; font-size: 0.9rem; text-decoration: none;
+    background: transparent; cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, transform 0.2s;
   }
-  .btn-ghost:hover { border-color: rgba(255,255,255,0.65); background: rgba(255,255,255,0.05); }
-  .hero-stats {
-    display: flex; gap: 3rem; justify-content: center;
-    margin-top: 3.5rem; padding-top: 2.5rem;
-    border-top: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap;
-  }
-  .sn { font-size: 1.85rem; font-weight: 800; color: #fff; }
-  .sl { font-size: 0.78rem; color: rgba(255,255,255,0.42); margin-top: 3px; }
+  .btn-outline:hover { border-color: var(--accent); background: var(--glow); transform: translateY(-2px); }
 
-  /* TRUST */
-  .trust {
-    background: #fff; border-bottom: 1px solid var(--border);
-    padding: 1.2rem 2rem; display: flex;
-    justify-content: center; gap: 2.5rem; flex-wrap: wrap;
+  /* ── PHOTO FLOAT ── */
+  .hero-photo {
+    position: absolute; right: 5vw; bottom: 0;
+    width: clamp(260px, 30vw, 400px);
+    z-index: 1; pointer-events: none;
+    animation: floatY 4s ease-in-out infinite;
   }
-  .ti { display: flex; align-items: center; gap: 0.45rem; font-size: 0.85rem; color: var(--ink2); font-weight: 500; }
-  .ti-icon { color: var(--accent); font-weight: 800; font-size: 1rem; }
+  .hero-photo img { width: 100%; object-fit: cover; filter: drop-shadow(0 20px 60px rgba(79,140,255,0.3)); }
 
-  /* SECTIONS */
-  .sec { padding: 4.5rem 2rem; }
-  .mw { max-width: 1100px; margin: 0 auto; }
-  .sec-hd { text-align: center; margin-bottom: 3rem; }
-  .sec-tag {
-    display: inline-block; font-size: 0.7rem; font-weight: 700;
-    letter-spacing: 1.5px; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem;
+  /* ── STATS ── */
+  .stats-row {
+    display: flex; gap: 2.5rem; flex-wrap: wrap; margin-top: 3rem;
+    animation: fadeUp 0.6s 0.4s ease both;
   }
-  .sec-title { font-size: clamp(1.6rem, 3vw, 2.3rem); font-weight: 800; color: var(--ink); letter-spacing: -0.5px; }
-  .sec-sub { color: var(--ink3); margin-top: 0.4rem; font-size: 0.95rem; }
+  .stat { border-left: 2px solid var(--accent); padding-left: 1rem; }
+  .stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; color: var(--text); }
+  .stat-label { font-size: 0.78rem; color: var(--text2); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
 
-  /* TABS */
-  .tabs { display: flex; gap: 0.5rem; justify-content: center; margin-bottom: 2.5rem; flex-wrap: wrap; }
-  .tab {
-    padding: 0.45rem 1.2rem; border-radius: 50px;
-    border: 1px solid var(--border); background: var(--card);
-    font-size: 0.875rem; cursor: pointer; transition: all 0.2s;
-    color: var(--ink2); font-family: inherit;
+  /* ── SECTION ── */
+  section { padding: 6rem 5vw; position: relative; }
+  .section-tag {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 8px;
   }
-  .tab:hover, .tab.on { background: var(--accent2); color: #fff; border-color: var(--accent2); }
+  .section-tag::before { content: ''; flex: 0 0 24px; height: 1px; background: var(--accent); }
+  .section-title {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: -0.03em;
+    line-height: 1.1; margin-bottom: 1rem;
+  }
+  .section-desc { color: var(--text2); max-width: 540px; line-height: 1.75; margin-bottom: 3rem; }
 
-  /* COURSE CARDS */
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(285px, 1fr)); gap: 1.5rem; }
-  .cc {
-    background: var(--card); border-radius: var(--radius);
-    overflow: hidden; border: 1px solid var(--border);
-    transition: transform 0.25s, box-shadow 0.25s; cursor: pointer;
+  /* ── SERVICES ── */
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+  .service-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2rem;
+    backdrop-filter: blur(12px);
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
+    cursor: default;
   }
-  .cc:hover { transform: translateY(-5px); box-shadow: 0 20px 45px rgba(0,0,0,0.1); }
-  .ct { height: 185px; display: flex; align-items: center; justify-content: center; font-size: 3.2rem; position: relative; }
-  .cbadge {
-    position: absolute; top: 12px; left: 12px; font-size: 0.68rem; font-weight: 700;
-    padding: 3px 10px; border-radius: 50px; text-transform: uppercase; letter-spacing: 0.5px;
+  .service-card::before {
+    content: ''; position: absolute; inset: 0; border-radius: 20px;
+    background: linear-gradient(135deg, var(--glow), transparent);
+    opacity: 0; transition: opacity 0.3s;
   }
-  .b-new  { background: #e8f5e9; color: #1b5e20; }
-  .b-hot  { background: #fff3e0; color: #bf360c; }
-  .b-sale { background: #fce4ec; color: #b71c1c; }
-  .cb { padding: 1.25rem; }
-  .cc-cat { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); margin-bottom: 0.4rem; }
-  .cc-title { font-size: 1.05rem; font-weight: 700; color: var(--ink); line-height: 1.35; margin-bottom: 0.45rem; }
-  .cc-desc { font-size: 0.84rem; color: var(--ink3); line-height: 1.6; margin-bottom: 0.8rem; }
-  .cc-meta { display: flex; align-items: center; gap: 0.6rem; font-size: 0.78rem; color: var(--ink3); margin-bottom: 1rem; }
-  .stars { color: var(--gold); }
-  .cc-foot { display: flex; align-items: center; justify-content: space-between; }
-  .price { font-size: 1.25rem; font-weight: 800; color: var(--ink); }
-  .price-old { text-decoration: line-through; font-size: 0.82rem; color: var(--ink3); font-weight: 400; margin-left: 4px; }
-  .btn-enroll {
-    background: var(--accent2); color: #fff; border: none;
-    padding: 0.5rem 1.1rem; border-radius: 50px;
-    font-size: 0.8rem; font-weight: 700; cursor: pointer;
-    transition: background 0.2s; font-family: inherit;
-  }
-  .btn-enroll:hover { background: var(--accent); }
-
-  /* FEATURES */
-  .feat-sec { background: var(--accent2); }
-  .feat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
-  .fc {
-    padding: 1.75rem; background: rgba(255,255,255,0.05);
-    border-radius: var(--radius); border: 1px solid rgba(255,255,255,0.09);
-  }
-  .fc-icon { font-size: 2rem; margin-bottom: 1rem; }
-  .fc-title { font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 0.45rem; }
-  .fc-text { font-size: 0.875rem; color: rgba(255,255,255,0.48); line-height: 1.65; }
-
-  /* TESTIMONIALS */
-  .tg { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-  .tc { background: var(--card); border-radius: var(--radius); padding: 1.75rem; border: 1px solid var(--border); }
-  .tc-stars { color: var(--gold); font-size: 0.9rem; margin-bottom: 0.75rem; }
-  .tc-text { font-size: 0.93rem; color: var(--ink2); line-height: 1.7; margin-bottom: 1.25rem; font-style: italic; }
-  .tc-auth { display: flex; align-items: center; gap: 0.75rem; }
-  .ava {
-    width: 40px; height: 40px; border-radius: 50%;
+  .service-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 40px var(--glow); }
+  .service-card:hover::before { opacity: 1; }
+  .service-icon {
+    width: 52px; height: 52px; border-radius: 14px;
     display: flex; align-items: center; justify-content: center;
-    font-weight: 800; font-size: 0.85rem; color: #fff; flex-shrink: 0;
+    font-size: 1.5rem; margin-bottom: 1.25rem;
   }
-  .ava-name { font-weight: 700; font-size: 0.88rem; color: var(--ink); }
-  .ava-role { font-size: 0.75rem; color: var(--ink3); margin-top: 1px; }
-
-  /* CTA */
-  .cta-wrap { padding: 0 2rem 4.5rem; }
-  .cta {
-    background: var(--accent); border-radius: 24px;
-    padding: 3.5rem 2rem; text-align: center; color: #fff;
-    max-width: 1100px; margin: 0 auto;
+  .s1 .service-icon { background: rgba(79,140,255,0.15); }
+  .s2 .service-icon { background: rgba(124,95,255,0.15); }
+  .s3 .service-icon { background: rgba(255,95,143,0.15); }
+  .service-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.15rem; margin-bottom: 0.6rem; }
+  .service-card p { font-size: 0.88rem; color: var(--text2); line-height: 1.7; }
+  .service-badge {
+    display: inline-flex; gap: 6px; flex-wrap: wrap; margin-top: 1rem;
   }
-  .cta h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; margin-bottom: 0.6rem; letter-spacing: -0.5px; }
-  .cta p { opacity: 0.82; font-size: 0.95rem; max-width: 440px; margin: 0 auto 2rem; }
-  .btn-white {
-    background: #fff; color: var(--accent); border: none;
-    padding: 0.85rem 2.25rem; border-radius: 50px;
-    font-size: 1rem; font-weight: 800; cursor: pointer;
-    transition: transform 0.2s; font-family: inherit;
+  .badge {
+    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.04em;
+    padding: 3px 10px; border-radius: 100px;
+    background: var(--surface2); color: var(--text3); border: 1px solid var(--border);
   }
-  .btn-white:hover { transform: translateY(-2px); }
 
-  /* FOOTER */
-  footer { background: var(--accent2); color: rgba(255,255,255,0.42); padding: 2.5rem 2rem; text-align: center; font-size: 0.85rem; }
-  .f-logo { font-size: 1.25rem; font-weight: 800; color: #fff; margin-bottom: 1rem; }
-  .f-logo span { color: var(--accent); }
-  .f-links { margin-bottom: 1rem; }
-  .f-links a { color: rgba(255,255,255,0.42); text-decoration: none; margin: 0 0.75rem; transition: color 0.2s; }
-  .f-links a:hover { color: #fff; }
-
-  /* TOAST */
-  .toast {
-    position: fixed; bottom: 2rem; right: 2rem;
-    background: var(--accent2); color: #fff;
-    padding: 0.9rem 1.4rem; border-radius: 12px;
-    font-size: 0.875rem; border-left: 4px solid var(--accent);
-    transform: translateY(120px); opacity: 0;
-    transition: all 0.3s ease; z-index: 999; max-width: 320px;
+  /* ── TIERS ── */
+  .tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+  .tier-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2rem;
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative; overflow: hidden;
   }
-  .toast.show { transform: translateY(0); opacity: 1; }
+  .tier-card.featured {
+    border-color: var(--accent);
+    box-shadow: 0 0 40px var(--glow);
+  }
+  .tier-card.featured::after {
+    content: 'POPULAR';
+    position: absolute; top: 1.25rem; right: 1.25rem;
+    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; padding: 3px 10px; border-radius: 100px;
+  }
+  .tier-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px var(--glow); }
+  .tier-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; margin-bottom: 0.5rem; }
+  .tier-stripe { height: 3px; border-radius: 100px; margin-bottom: 1.25rem; }
+  .t-basic .tier-stripe { background: var(--accent); }
+  .t-advanced .tier-stripe { background: var(--accent2); }
+  .t-premium .tier-stripe { background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3)); }
+  .tier-features { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
+  .tier-features li {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.87rem; color: var(--text2);
+  }
+  .tier-features li::before { content: '✓'; color: var(--accent); font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
 
-  /* RESPONSIVE */
+  /* ── COMPETITIVE EDGE ── */
+  .edge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
+  .edge-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2rem; text-align: center;
+    backdrop-filter: blur(12px);
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .edge-card:hover { transform: translateY(-4px); border-color: var(--accent2); }
+  .edge-icon { font-size: 2.2rem; margin-bottom: 1rem; display: block; }
+  .edge-card h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
+  .edge-card p { font-size: 0.83rem; color: var(--text2); line-height: 1.65; }
+
+  /* ── ABOUT ── */
+  .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  @media (max-width: 768px) { .about-layout { grid-template-columns: 1fr; gap: 2.5rem; } }
+  .about-photo-wrap { position: relative; }
+  .about-photo-bg {
+    position: absolute; inset: -20px;
+    border-radius: 30px;
+    background: linear-gradient(135deg, var(--glow2), var(--glow));
+    filter: blur(30px);
+  }
+  .about-photo-frame {
+    position: relative; border-radius: 24px; overflow: hidden;
+    border: 1px solid var(--border);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .about-photo-frame img { width: 100%; display: block; }
+  .about-photo-label {
+    position: absolute; bottom: 1rem; left: 1rem;
+    background: rgba(8,12,20,0.85);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 0.6rem 1rem;
+    font-size: 0.78rem; color: var(--text2);
+  }
+  .about-photo-label strong { color: var(--accent); font-weight: 600; }
+  .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+  .skill-chip {
+    font-size: 0.78rem; font-weight: 500;
+    padding: 5px 14px; border-radius: 100px;
+    background: var(--surface2); border: 1px solid var(--border);
+    color: var(--text2); transition: background 0.2s, color 0.2s, border-color 0.2s;
+    cursor: default;
+  }
+  .skill-chip:hover { background: var(--glow); border-color: var(--accent); color: var(--accent); }
+
+  /* ── CONTACT ── */
+  .contact-inner {
+    max-width: 700px; margin: 0 auto; text-align: center;
+  }
+  .contact-card {
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 24px; padding: 3.5rem;
+    backdrop-filter: blur(12px);
+    position: relative; overflow: hidden;
+  }
+  .contact-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--glow2), var(--glow));
+    opacity: 0.5; pointer-events: none;
+  }
+  .contact-card > * { position: relative; }
+  .contact-card h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.5rem); letter-spacing: -0.03em; margin-bottom: 1rem; }
+  .contact-card p { color: var(--text2); margin-bottom: 2rem; line-height: 1.7; }
+  .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .contact-link {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 22px; border-radius: 12px;
+    border: 1px solid var(--border); color: var(--text);
+    font-weight: 500; font-size: 0.88rem; text-decoration: none;
+    background: var(--surface); transition: all 0.2s;
+  }
+  .contact-link:hover { border-color: var(--accent); color: var(--accent); background: var(--glow); transform: translateY(-2px); }
+  .contact-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 5vw; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    font-size: 0.82rem; color: var(--text3);
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s, transform 0.65s; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  /* ── DIVIDER ── */
+  .divider { height: 1px; background: var(--border); margin: 0 5vw; }
+
+  /* ── KEYFRAMES ── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-18px); } }
+  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
+  @keyframes gradShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── MOBILE NAV ── */
   @media (max-width: 640px) {
-    nav { padding: 0.85rem 1rem; }
-    .nav-links { display: none; }
-    .hero { padding: 3rem 1rem 2.5rem; }
-    .sec { padding: 3rem 1rem; }
-    .cta-wrap { padding: 0 1rem 3rem; }
-    .trust { gap: 1rem; }
+    nav { display: none; }
+    .hero-photo { display: none; }
   }
+
+  /* ── CURSOR DOT ── */
+  .cursor { position: fixed; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); pointer-events: none; z-index: 9999; transition: transform 0.15s; mix-blend-mode: difference; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--accent); pointer-events: none; z-index: 9998; transition: transform 0.1s, width 0.2s, height 0.2s, opacity 0.2s; opacity: 0.5; }
+
+  /* Timeline / experience */
+  .timeline { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+  .timeline-item { display: flex; gap: 1.5rem; align-items: flex-start; }
+  .tl-dot { flex-shrink: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); margin-top: 5px; box-shadow: 0 0 10px var(--glow); position: relative; }
+  .tl-dot::before { content: ''; position: absolute; top: 12px; left: 5px; width: 1px; height: calc(100% + 1.5rem); background: var(--border); }
+  .timeline-item:last-child .tl-dot::before { display: none; }
+  .tl-content h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
+  .tl-content p { font-size: 0.83rem; color: var(--text2); margin-top: 4px; line-height: 1.6; }
+  .tl-year { font-size: 0.72rem; color: var(--text3); margin-top: 4px; }
 </style>
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="logo">Skill<span>Forge</span></div>
-  <ul class="nav-links">
-    <li><a href="#courses">Courses</a></li>
-    <li><a href="#features">Why Us</a></li>
-    <li><a href="#reviews">Reviews</a></li>
-    <li><a href="#">About</a></li>
-  </ul>
-  <button class="nav-cta" onclick="showCart()">
-    &#128722; Cart <span class="cart-pill" id="cart-count">0</span>
-  </button>
-</nav>
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-<!-- HERO -->
-<div class="hero">
-  <div class="glow-a"></div>
-  <div class="glow-b"></div>
-  <div class="hero-badge">&#10022; New Courses Added Weekly</div>
-  <h1>Unlock Your <em>Potential.</em><br>Master Real Skills.</h1>
-  <p>Expert-crafted courses designed to transform your career. Learn at your own pace with lifetime access.</p>
-  <div class="hero-btns">
-    <button class="btn-fill" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Browse Courses</button>
-    <button class="btn-ghost">Watch Preview &#9654;</button>
+<!-- ── HEADER ── -->
+<header>
+  <a href="#" class="logo">AS.</a>
+  <nav>
+    <a href="#services">Services</a>
+    <a href="#tiers">Tiers</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div style="display:flex;align-items:center;gap:10px;">
+    <span class="theme-label" id="themeLabel">Dark</span>
+    <button class="theme-btn" id="themeToggle" aria-label="Toggle theme"></button>
   </div>
-  <div class="hero-stats">
-    <div><div class="sn">12K+</div><div class="sl">Students Enrolled</div></div>
-    <div><div class="sn">48</div><div class="sl">Courses Available</div></div>
-    <div><div class="sn">4.9 &#9733;</div><div class="sl">Average Rating</div></div>
-    <div><div class="sn">98%</div><div class="sl">Completion Rate</div></div>
+</header>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-bg-orb orb1"></div>
+  <div class="hero-bg-orb orb2"></div>
+  <div class="hero-inner">
+    <div class="hero-tag">Available for Work & Collaboration</div>
+    <h1 class="hero-name">Abhiroop<br><span>Sen</span></h1>
+    <p class="hero-sub">Marketing Manager & Growth Strategist — crafting high-conversion digital experiences through design, development, and data-driven strategy.</p>
+    <div class="hero-ctas">
+      <a href="#contact" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        Let's Work Together
+      </a>
+      <a href="https://abhiroop03.github.io/web" target="_blank" class="btn-outline">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+        View Portfolio
+      </a>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num">3+</div><div class="stat-label">Years Exp.</div></div>
+      <div class="stat"><div class="stat-num">50+</div><div class="stat-label">Clients</div></div>
+      <div class="stat"><div class="stat-num">60+</div><div class="stat-label">Projects</div></div>
+      <div class="stat"><div class="stat-num">20+</div><div class="stat-label">Companies</div></div>
+    </div>
   </div>
-</div>
-
-<!-- TRUST STRIP -->
-<div class="trust">
-  <div class="ti"><span class="ti-icon">&#10003;</span> Lifetime Access</div>
-  <div class="ti"><span class="ti-icon">&#10003;</span> Certificate on Completion</div>
-  <div class="ti"><span class="ti-icon">&#10003;</span> 30-Day Money-Back Guarantee</div>
-  <div class="ti"><span class="ti-icon">&#10003;</span> Learn on Any Device</div>
-</div>
-
-<!-- COURSES -->
-<section class="sec" id="courses">
-  <div class="mw">
-    <div class="sec-hd">
-      <div class="sec-tag">Our Catalog</div>
-      <h2 class="sec-title">Featured Courses</h2>
-      <p class="sec-sub">Handpicked programs for every level and goal</p>
-    </div>
-    <div class="tabs">
-      <button class="tab on" onclick="filter('all', this)">All Courses</button>
-      <button class="tab" onclick="filter('tech', this)">Tech &amp; Coding</button>
-      <button class="tab" onclick="filter('business', this)">Business</button>
-      <button class="tab" onclick="filter('design', this)">Design</button>
-      <button class="tab" onclick="filter('marketing', this)">Marketing</button>
-    </div>
-    <div class="grid" id="cgrid"></div>
+  <div class="hero-photo">
+    <img src="/mnt/user-data/uploads/WhatsApp_Image_2026-04-07_at_1_01_52_AM__1_.jpeg" alt="Abhiroop Sen" onerror="this.style.display='none'">
   </div>
 </section>
 
-<!-- FEATURES -->
-<section class="sec feat-sec" id="features">
-  <div class="mw">
-    <div class="sec-hd">
-      <div class="sec-tag" style="color:#f5a623;">Why SkillForge</div>
-      <h2 class="sec-title" style="color:#fff;">Everything you need to succeed</h2>
-      <p class="sec-sub" style="color:rgba(255,255,255,0.38);">Built for learners who mean business</p>
-    </div>
-    <div class="feat-grid">
-      <div class="fc">
-        <div class="fc-icon">&#127891;</div>
-        <div class="fc-title">Expert Instructors</div>
-        <div class="fc-text">Learn from industry practitioners with real-world experience and proven track records.</div>
-      </div>
-      <div class="fc">
-        <div class="fc-icon">&#9854;</div>
-        <div class="fc-title">Lifetime Access</div>
-        <div class="fc-text">Buy once, learn forever. All updates and new content included at no extra cost.</div>
-      </div>
-      <div class="fc">
-        <div class="fc-icon">&#128241;</div>
-        <div class="fc-title">Learn Anywhere</div>
-        <div class="fc-text">Access your courses on any device &mdash; desktop, tablet, or mobile &mdash; anytime.</div>
-      </div>
-      <div class="fc">
-        <div class="fc-icon">&#127942;</div>
-        <div class="fc-title">Certificates</div>
-        <div class="fc-text">Earn shareable certificates upon completion to showcase your skills to employers.</div>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="divider"></div>
 
-<!-- TESTIMONIALS -->
-<section class="sec" id="reviews">
-  <div class="mw">
-    <div class="sec-hd">
-      <div class="sec-tag">Student Reviews</div>
-      <h2 class="sec-title">What our learners say</h2>
-      <p class="sec-sub">Real results from real people</p>
+<!-- ── SERVICES ── -->
+<section id="services">
+  <div class="section-tag">What I Do</div>
+  <h2 class="section-title">Service<br>Specializations</h2>
+  <p class="section-desc">From basic CMS setups to premium custom-coded applications — a tiered model built for every scale and ambition.</p>
+  <div class="services-grid reveal">
+    <div class="service-card s1">
+      <div class="service-icon">🌐</div>
+      <h3>Tiered Website Design</h3>
+      <p>Everything from basic WordPress setups to premium, custom-coded websites with full source code ownership and SEO optimization.</p>
+      <div class="service-badge">
+        <span class="badge">WordPress</span>
+        <span class="badge">Custom Code</span>
+        <span class="badge">SEO</span>
+        <span class="badge">Animations</span>
+      </div>
     </div>
-    <div class="tg">
-      <div class="tc">
-        <div class="tc-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="tc-text">&ldquo;This platform completely changed my career. The Python course was the best investment I ever made. Got hired 2 months after completing it!&rdquo;</p>
-        <div class="tc-auth">
-          <div class="ava" style="background:#ff4f17;">AK</div>
-          <div><div class="ava-name">Arjun Kumar</div><div class="ava-role">Junior Developer @ TechCorp</div></div>
-        </div>
+    <div class="service-card s2">
+      <div class="service-icon">📱</div>
+      <h3>Mobile App Development</h3>
+      <p>Comprehensive mobile solutions including UI/UX design, backend integration, feature-rich builds, and Play Store publishing support.</p>
+      <div class="service-badge">
+        <span class="badge">UI/UX</span>
+        <span class="badge">Backend</span>
+        <span class="badge">Play Store</span>
+        <span class="badge">Testing</span>
       </div>
-      <div class="tc">
-        <div class="tc-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="tc-text">&ldquo;I doubled my freelance rates after completing the Digital Marketing course. The content is practical and up to date. Highly recommend!&rdquo;</p>
-        <div class="tc-auth">
-          <div class="ava" style="background:#1a1a2e;">PS</div>
-          <div><div class="ava-name">Priya Sharma</div><div class="ava-role">Freelance Marketer</div></div>
-        </div>
-      </div>
-      <div class="tc">
-        <div class="tc-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <p class="tc-text">&ldquo;The UI/UX Design bundle is phenomenal. Step-by-step projects, clear explanations. I built my whole portfolio from just this one course.&rdquo;</p>
-        <div class="tc-auth">
-          <div class="ava" style="background:#2e7d32;">RD</div>
-          <div><div class="ava-name">Rahul Das</div><div class="ava-role">UI Designer @ Startup</div></div>
-        </div>
+    </div>
+    <div class="service-card s3">
+      <div class="service-icon">🎨</div>
+      <h3>Creative Marketing Assets</h3>
+      <p>Specialized production of social media creatives, video animation ads, and complete branding assets that convert audiences.</p>
+      <div class="service-badge">
+        <span class="badge">Social Media</span>
+        <span class="badge">Video Ads</span>
+        <span class="badge">Branding</span>
+        <span class="badge">Graphics</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<div class="cta-wrap">
-  <div class="cta">
-    <h2>Start learning today.<br>No risk, 30-day refund.</h2>
-    <p>Join thousands of students already transforming their careers with SkillForge.</p>
-    <button class="btn-white" onclick="document.getElementById('courses').scrollIntoView({behavior:'smooth'})">Explore All Courses &#8594;</button>
-  </div>
-</div>
+<div class="divider"></div>
 
-<!-- FOOTER -->
+<!-- ── TIERS ── -->
+<section id="tiers">
+  <div class="section-tag">Pricing Structure</div>
+  <h2 class="section-title">Service Tier<br>Deliverables</h2>
+  <p class="section-desc">Choose the right level for your project — every tier delivers maximum value at its scale.</p>
+  <div class="tiers-grid reveal">
+    <div class="tier-card t-basic">
+      <div class="tier-name">Basic</div>
+      <div class="tier-stripe"></div>
+      <p style="font-size:0.83rem;color:var(--text2);margin-bottom:1.25rem;">Perfect for startups & small businesses getting online.</p>
+      <ul class="tier-features">
+        <li>CMS / WordPress Setup</li>
+        <li>SEO Optimization</li>
+        <li>UI Design & Simple Logic</li>
+        <li>Responsive Design</li>
+        <li>Basic Animations</li>
+      </ul>
+    </div>
+    <div class="tier-card t-advanced featured">
+      <div class="tier-name">Advanced</div>
+      <div class="tier-stripe"></div>
+      <p style="font-size:0.83rem;color:var(--text2);margin-bottom:1.25rem;">For brands needing standout digital presence.</p>
+      <ul class="tier-features">
+        <li>Custom UI & Animations</li>
+        <li>Backend Integration</li>
+        <li>Feature-Rich Apps</li>
+        <li>Performance Optimization</li>
+        <li>Priority Support</li>
+      </ul>
+    </div>
+    <div class="tier-card t-premium">
+      <div class="tier-name">Premium</div>
+      <div class="tier-stripe"></div>
+      <p style="font-size:0.83rem;color:var(--text2);margin-bottom:1.25rem;">Full custom solutions for serious business growth.</p>
+      <ul class="tier-features">
+        <li>Full Source Code & APIs</li>
+        <li>Custom-Coded Website</li>
+        <li>Play Store Support & Testing</li>
+        <li>Scalable Architecture</li>
+        <li>Complete Brand Assets</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── COMPETITIVE EDGE ── -->
+<section>
+  <div class="section-tag">Competitive Edge</div>
+  <h2 class="section-title">Why Choose<br>Abhiroop?</h2>
+  <div class="edge-grid reveal">
+    <div class="edge-card">
+      <span class="edge-icon">🧠</span>
+      <h4>Conversion-Focused UI/UX</h4>
+      <p>Modern, user-centric design strategies engineered to drive specific digital conversions — not just aesthetics.</p>
+    </div>
+    <div class="edge-card">
+      <span class="edge-icon">📈</span>
+      <h4>Technical Scalability</h4>
+      <p>Performance-optimized code and scalable architecture built ready for business growth from day one.</p>
+    </div>
+    <div class="edge-card">
+      <span class="edge-icon">⚡</span>
+      <h4>Fast Delivery</h4>
+      <p>Efficient workflows and clear communication ensure your project lands on time, every time.</p>
+    </div>
+    <div class="edge-card">
+      <span class="edge-icon">🎯</span>
+      <h4>"Designing Digital Experiences That Convert"</h4>
+      <p>The core philosophy driving every creative and development project delivered.</p>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+  <div class="about-layout">
+    <div class="about-photo-wrap reveal">
+      <div class="about-photo-bg"></div>
+      <div class="about-photo-frame">
+        <img src="/mnt/user-data/uploads/WhatsApp_Image_2026-04-07_at_1_01_52_AM__1_.jpeg" alt="Abhiroop Sen" onerror="this.parentElement.style.display='none'">
+        <div class="about-photo-label">📍 Guwahati, Assam &nbsp; | &nbsp; <strong>Open to Remote Work</strong></div>
+      </div>
+    </div>
+    <div class="reveal">
+      <div class="section-tag">About Me</div>
+      <h2 class="section-title">Growth Strategist &amp; Digital Creator</h2>
+      <p style="color:var(--text2);line-height:1.8;margin-bottom:1.25rem;">I'm a Graphic and Web/App Designer with 3+ years of experience focused on creating high-conversion digital experiences. My work sits at the intersection of aesthetic design and measurable business impact.</p>
+      <p style="color:var(--text2);line-height:1.8;margin-bottom:1.5rem;">Having collaborated with 20+ companies and delivered 60+ projects, I've developed a deep understanding of what drives growth — from compelling visuals to scalable technical architecture.</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>Marketing Manager & Growth Strategist</h4>
+            <p>Helping brands scale through data-driven strategies and digital marketing excellence.</p>
+            <div class="tl-year">2023 — Present</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>Web & App Designer</h4>
+            <p>Custom-coded websites, mobile applications, and creative marketing assets for 50+ clients.</p>
+            <div class="tl-year">2021 — Present</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="tl-dot"></div>
+          <div class="tl-content">
+            <h4>Graphic Designer & Brand Strategist</h4>
+            <p>Social media creatives, video ads, and complete branding systems for 20+ companies.</p>
+            <div class="tl-year">2021 — Present</div>
+          </div>
+        </div>
+      </div>
+      <div class="skills-list" style="margin-top:1.5rem;">
+        <span class="skill-chip">WordPress</span>
+        <span class="skill-chip">UI/UX Design</span>
+        <span class="skill-chip">React</span>
+        <span class="skill-chip">Mobile Apps</span>
+        <span class="skill-chip">SEO</span>
+        <span class="skill-chip">Branding</span>
+        <span class="skill-chip">Video Animation</span>
+        <span class="skill-chip">Growth Strategy</span>
+        <span class="skill-chip">Social Media</span>
+        <span class="skill-chip">API Integration</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── CONTACT ── -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="section-tag" style="justify-content:center;">Get In Touch</div>
+    <div class="contact-card reveal">
+      <h2>Ready to Build<br>Something Great?</h2>
+      <p>DM for work, collaboration, or just to say hello. Fast responses, faster delivery.</p>
+      <div class="contact-links">
+        <a href="https://abhiroop03.github.io/web" target="_blank" class="contact-link">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+          Portfolio Website
+        </a>
+        <a href="mailto:abhiroop@example.com" class="contact-link">
+          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
+          Email Me
+        </a>
+        <a href="#" class="contact-link">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 00-4.885-1.515.074.074 0 00-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 00-5.487 0 12.64 12.64 0 00-.617-1.25.077.077 0 00-.079-.037A19.736 19.736 0 003.677 4.37a.07.07 0 00-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 00.031.057 19.9 19.9 0 005.993 3.03.078.078 0 00.084-.028 14.09 14.09 0 001.226-1.994.076.076 0 00-.041-.106 13.107 13.107 0 01-1.872-.892.077.077 0 01-.008-.128 10.2 10.2 0 00.372-.292.074.074 0 01.077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 01.078.01c.12.098.246.198.373.292a.077.077 0 01-.006.127 12.299 12.299 0 01-1.873.892.077.077 0 00-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 00.084.028 19.839 19.839 0 006.002-3.03.077.077 0 00.032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 00-.031-.03z"/></svg>
+          Discord / DM
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
 <footer>
-  <div class="f-logo">Skill<span>Forge</span></div>
-  <div class="f-links">
-    <a href="#">Home</a>
-    <a href="#">Courses</a>
-    <a href="#">About</a>
-    <a href="#">Contact</a>
-    <a href="#">Privacy</a>
-  </div>
-  <div>&copy; 2026 SkillForge. All rights reserved.</div>
+  <span>© 2026 Abhiroop Sen. All rights reserved.</span>
+  <span>Built with ✦ in Guwahati &nbsp;·&nbsp; <a href="https://abhiroop03.github.io/web" target="_blank">abhiroop03.github.io/web</a></span>
 </footer>
 
-<!-- TOAST -->
-<div class="toast" id="toast">&#10003; Added to cart!</div>
-
 <script>
-var courses = [
-  { id:1, icon:'&#x1F40D;', bg:'#e8f0fe', cat:'tech',      label:'Tech & Coding',  title:'Python Mastery: Zero to Pro',         desc:'Build real projects from data pipelines to web apps. Master Python from the ground up.',       rating:'4.9', students:'3.2k', price:'&#x20B9;1,499', old:'&#x20B9;2,999', badge:'hot'  },
-  { id:2, icon:'&#x1F4C8;', bg:'#fff8e1', cat:'business',  label:'Business',       title:'Financial Modeling & Valuation',       desc:'Build Excel models used by investment bankers. DCF, LBO, and M&A analysis covered.',          rating:'4.8', students:'1.8k', price:'&#x20B9;1,299', old:'&#x20B9;2,499', badge:'new'  },
-  { id:3, icon:'&#x1F3A8;', bg:'#fce4ec', cat:'design',    label:'Design',         title:'UI/UX Design Complete Bundle',         desc:'Figma, user research, prototyping &mdash; everything to land your first design job.',          rating:'5.0', students:'2.5k', price:'&#x20B9;1,799', old:'&#x20B9;3,499', badge:'hot'  },
-  { id:4, icon:'&#x1F4F1;', bg:'#e8f5e9', cat:'marketing', label:'Marketing',      title:'Digital Marketing Bootcamp',           desc:'SEO, paid ads, email funnels, and social media. Grow any business online.',                   rating:'4.7', students:'4.1k', price:'&#x20B9;999',   old:'&#x20B9;1,999', badge:'sale' },
-  { id:5, icon:'&#x26A1;',  bg:'#f3e5f5', cat:'tech',      label:'Tech & Coding',  title:'JavaScript & React Fullstack',         desc:'From DOM basics to building full production-grade React applications.',                       rating:'4.9', students:'2.9k', price:'&#x20B9;1,699', old:'&#x20B9;3,199', badge:'new'  },
-  { id:6, icon:'&#x1F4BC;', bg:'#e0f7fa', cat:'business',  label:'Business',       title:'Startup Launchpad: Idea to MVP',       desc:'Validate your idea, build an MVP, and pitch to investors. The complete playbook.',            rating:'4.8', students:'1.1k', price:'&#x20B9;1,199', old:'&#x20B9;2,299', badge:null   }
-];
+  // Theme Toggle
+  const toggle = document.getElementById('themeToggle');
+  const label = document.getElementById('themeLabel');
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.dataset.theme === 'dark';
+    document.documentElement.dataset.theme = isDark ? 'light' : 'dark';
+    label.textContent = isDark ? 'Light' : 'Dark';
+  });
 
-var cart = 0;
-
-function renderCourses(list) {
-  var html = '';
-  for (var i = 0; i < list.length; i++) {
-    var c = list[i];
-    var bdg = c.badge ? '<span class="cbadge b-' + c.badge + '">' + c.badge + '</span>' : '';
-    var t = c.title.replace(/'/g, '&#39;');
-    html +=
-      '<div class="cc">' +
-        '<div class="ct" style="background:' + c.bg + ';">' + bdg + '<span>' + c.icon + '</span></div>' +
-        '<div class="cb">' +
-          '<div class="cc-cat">' + c.label + '</div>' +
-          '<div class="cc-title">' + c.title + '</div>' +
-          '<div class="cc-desc">' + c.desc + '</div>' +
-          '<div class="cc-meta"><span class="stars">&#9733;</span> ' + c.rating + ' &middot; ' + c.students + ' students &middot; Lifetime access</div>' +
-          '<div class="cc-foot">' +
-            '<div class="price">' + c.price + ' <span class="price-old">' + c.old + '</span></div>' +
-            '<button class="btn-enroll" onclick="addToCart(\'' + t + '\')">Enroll Now</button>' +
-          '</div>' +
-        '</div>' +
-      '</div>';
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx - 4 + 'px';
+    cursor.style.top = my - 4 + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx - 18 + 'px';
+    ring.style.top = ry - 18 + 'px';
+    requestAnimationFrame(animRing);
   }
-  document.getElementById('cgrid').innerHTML = html;
-}
+  animRing();
+  document.querySelectorAll('a,button,.service-card,.tier-card,.edge-card').forEach(el => {
+    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2)'; ring.style.width = '56px'; ring.style.height = '56px'; ring.style.opacity = '0.3'; });
+    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.width = '36px'; ring.style.height = '36px'; ring.style.opacity = '0.5'; });
+  });
 
-function filter(cat, btn) {
-  var tabs = document.querySelectorAll('.tab');
-  for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('on');
-  btn.classList.add('on');
-  var list = cat === 'all' ? courses : courses.filter(function(c) { return c.cat === cat; });
-  renderCourses(list);
-}
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(r => observer.observe(r));
 
-function addToCart(title) {
-  cart++;
-  document.getElementById('cart-count').textContent = cart;
-  var toast = document.getElementById('toast');
-  var short = title.length > 32 ? title.substring(0, 32) + '...' : title;
-  toast.innerHTML = '&#10003; &ldquo;' + short + '&rdquo; added!';
-  toast.classList.add('show');
-  setTimeout(function() { toast.classList.remove('show'); }, 2800);
-}
-
-function showCart() {
-  if (cart === 0) {
-    alert('Your cart is empty.\nBrowse our courses and enroll!');
-  } else {
-    alert('You have ' + cart + ' course(s) in your cart.\n\nCheckout coming soon!\n(Integrate Razorpay / Stripe / PayPal)');
-  }
-}
-
-renderCourses(courses);
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id === '#') return;
+      const el = document.querySelector(id);
+      if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    });
+  });
 </script>
 </body>
 </html>
