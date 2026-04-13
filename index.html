@@ -1,704 +1,530 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Abhiroop Sen — Digital Designer & Developer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #080c14;
-    --bg2: #0d1220;
-    --surface: #111827;
-    --surface2: #1a2235;
-    --border: rgba(255,255,255,0.07);
-    --text: #f0f4ff;
-    --text2: #8a9abf;
-    --text3: #4a5a7a;
-    --accent: #4f8cff;
-    --accent2: #7c5fff;
-    --accent3: #ff5f8f;
-    --glow: rgba(79,140,255,0.18);
-    --glow2: rgba(124,95,255,0.12);
-    --card-bg: rgba(17,24,39,0.8);
-    --header-bg: rgba(8,12,20,0.85);
-  }
-  [data-theme="light"] {
-    --bg: #f4f7ff;
-    --bg2: #eaf0ff;
-    --surface: #ffffff;
-    --surface2: #e8eef8;
-    --border: rgba(0,0,0,0.08);
-    --text: #0d1220;
-    --text2: #3a4a6a;
-    --text3: #8a9abf;
-    --accent: #2d6cff;
-    --accent2: #6a3fff;
-    --accent3: #e8005a;
-    --glow: rgba(45,108,255,0.10);
-    --glow2: rgba(106,63,255,0.07);
-    --card-bg: rgba(255,255,255,0.9);
-    --header-bg: rgba(244,247,255,0.92);
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    overflow-x: hidden;
-    transition: background 0.4s, color 0.4s;
-  }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chutney (চাটনি) - Premium Bengali Restaurant</title>
+    <meta name="description" content="Chutney is a premium Bengali Restaurant in Agartala serving authentic cuisine. Dine-in, Takeaway, and Online Ordering.">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d4af37; /* Warm Gold */
+            --primary-dark: #b5952f;
+            --bg-dark: #0f1115;
+            --bg-card: #1a1d24;
+            --text-light: #fbfbfb;
+            --text-muted: #a0a5b1;
+            --accent: #e63946; /* Bengali Red */
+        }
 
-  /* ── NOISE OVERLAY ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 0; opacity: 0.4;
-  }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
 
-  /* ── HEADER ── */
-  header {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 5vw;
-    height: 68px;
-    background: var(--header-bg);
-    backdrop-filter: blur(20px);
-    border-bottom: 1px solid var(--border);
-    transition: background 0.4s, border-color 0.4s;
-  }
-  .logo {
-    font-family: 'Syne', sans-serif;
-    font-weight: 800;
-    font-size: 1.2rem;
-    letter-spacing: -0.02em;
-    background: linear-gradient(90deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    text-decoration: none;
-  }
-  nav { display: flex; gap: 2rem; align-items: center; }
-  nav a {
-    font-size: 0.88rem; font-weight: 500; letter-spacing: 0.04em;
-    color: var(--text2); text-decoration: none;
-    transition: color 0.2s;
-    text-transform: uppercase;
-  }
-  nav a:hover { color: var(--accent); }
-  .theme-btn {
-    width: 44px; height: 24px; border-radius: 12px;
-    background: var(--surface2); border: 1px solid var(--border);
-    cursor: pointer; position: relative; transition: background 0.3s;
-    flex-shrink: 0;
-  }
-  .theme-btn::after {
-    content: '';
-    position: absolute; top: 3px; left: 3px;
-    width: 16px; height: 16px; border-radius: 50%;
-    background: var(--accent);
-    transition: transform 0.3s, background 0.3s;
-    box-shadow: 0 0 6px var(--glow);
-  }
-  [data-theme="light"] .theme-btn::after { transform: translateX(20px); background: var(--accent2); }
-  .theme-label { font-size: 0.75rem; color: var(--text3); margin-right: 4px; }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: flex; flex-direction: column; justify-content: center;
-    padding: 10vh 5vw 6vh;
-    position: relative; overflow: hidden;
-  }
-  .hero-bg-orb {
-    position: absolute; border-radius: 50%; filter: blur(80px);
-    pointer-events: none; z-index: 0;
-  }
-  .orb1 { width: 500px; height: 500px; background: var(--glow2); top: -100px; right: -100px; }
-  .orb2 { width: 350px; height: 350px; background: var(--glow); bottom: 0; left: -80px; }
-  .hero-inner { position: relative; z-index: 1; max-width: 900px; }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-size: 0.78rem; font-weight: 500; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--accent);
-    background: rgba(79,140,255,0.1); border: 1px solid rgba(79,140,255,0.2);
-    padding: 6px 14px; border-radius: 100px; margin-bottom: 2rem;
-    animation: fadeUp 0.6s ease both;
-  }
-  .hero-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 1.5s infinite; }
-  .hero-name {
-    font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: clamp(3rem, 8vw, 6.5rem);
-    line-height: 0.92; letter-spacing: -0.04em;
-    margin-bottom: 1rem;
-    animation: fadeUp 0.6s 0.1s ease both;
-  }
-  .hero-name span {
-    background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent3));
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-size: 200% 200%; animation: gradShift 4s ease infinite;
-  }
-  .hero-sub {
-    font-size: clamp(1rem, 2.5vw, 1.25rem); font-weight: 300;
-    color: var(--text2); max-width: 560px; line-height: 1.7;
-    margin-bottom: 2.5rem;
-    animation: fadeUp 0.6s 0.2s ease both;
-  }
-  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; animation: fadeUp 0.6s 0.3s ease both; }
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 14px 28px; border-radius: 12px;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff; font-weight: 600; font-size: 0.9rem;
-    text-decoration: none; border: none; cursor: pointer;
-    box-shadow: 0 4px 24px var(--glow);
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px var(--glow); }
-  .btn-outline {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 13px 28px; border-radius: 12px;
-    border: 1px solid var(--border); color: var(--text);
-    font-weight: 500; font-size: 0.9rem; text-decoration: none;
-    background: transparent; cursor: pointer;
-    transition: border-color 0.2s, background 0.2s, transform 0.2s;
-  }
-  .btn-outline:hover { border-color: var(--accent); background: var(--glow); transform: translateY(-2px); }
+        /* Typography */
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+        }
 
-  /* ── PHOTO FLOAT ── */
-  .hero-photo {
-    position: absolute; right: 5vw; bottom: 0;
-    width: clamp(260px, 30vw, 400px);
-    z-index: 1; pointer-events: none;
-    animation: floatY 4s ease-in-out infinite;
-  }
-  .hero-photo img { width: 100%; object-fit: cover; filter: drop-shadow(0 20px 60px rgba(79,140,255,0.3)); }
+        .gold-text {
+            color: var(--primary);
+        }
 
-  /* ── STATS ── */
-  .stats-row {
-    display: flex; gap: 2.5rem; flex-wrap: wrap; margin-top: 3rem;
-    animation: fadeUp 0.6s 0.4s ease both;
-  }
-  .stat { border-left: 2px solid var(--accent); padding-left: 1rem; }
-  .stat-num { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; color: var(--text); }
-  .stat-label { font-size: 0.78rem; color: var(--text2); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(15, 17, 21, 0.85);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
 
-  /* ── SECTION ── */
-  section { padding: 6rem 5vw; position: relative; }
-  .section-tag {
-    font-size: 0.72rem; font-weight: 600; letter-spacing: 0.14em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 0.75rem;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .section-tag::before { content: ''; flex: 0 0 24px; height: 1px; background: var(--accent); }
-  .section-title {
-    font-family: 'Syne', sans-serif; font-weight: 800;
-    font-size: clamp(1.8rem, 4vw, 3rem); letter-spacing: -0.03em;
-    line-height: 1.1; margin-bottom: 1rem;
-  }
-  .section-desc { color: var(--text2); max-width: 540px; line-height: 1.75; margin-bottom: 3rem; }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            color: var(--primary);
+        }
 
-  /* ── SERVICES ── */
-  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
-  .service-card {
-    background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: 20px; padding: 2rem;
-    backdrop-filter: blur(12px);
-    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-    position: relative; overflow: hidden;
-    cursor: default;
-  }
-  .service-card::before {
-    content: ''; position: absolute; inset: 0; border-radius: 20px;
-    background: linear-gradient(135deg, var(--glow), transparent);
-    opacity: 0; transition: opacity 0.3s;
-  }
-  .service-card:hover { border-color: var(--accent); transform: translateY(-4px); box-shadow: 0 12px 40px var(--glow); }
-  .service-card:hover::before { opacity: 1; }
-  .service-icon {
-    width: 52px; height: 52px; border-radius: 14px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.5rem; margin-bottom: 1.25rem;
-  }
-  .s1 .service-icon { background: rgba(79,140,255,0.15); }
-  .s2 .service-icon { background: rgba(124,95,255,0.15); }
-  .s3 .service-icon { background: rgba(255,95,143,0.15); }
-  .service-card h3 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.15rem; margin-bottom: 0.6rem; }
-  .service-card p { font-size: 0.88rem; color: var(--text2); line-height: 1.7; }
-  .service-badge {
-    display: inline-flex; gap: 6px; flex-wrap: wrap; margin-top: 1rem;
-  }
-  .badge {
-    font-size: 0.7rem; font-weight: 500; letter-spacing: 0.04em;
-    padding: 3px 10px; border-radius: 100px;
-    background: var(--surface2); color: var(--text3); border: 1px solid var(--border);
-  }
+        .logo span {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            font-weight: 300;
+        }
 
-  /* ── TIERS ── */
-  .tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-  .tier-card {
-    background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: 20px; padding: 2rem;
-    backdrop-filter: blur(12px);
-    transition: transform 0.3s, box-shadow 0.3s;
-    position: relative; overflow: hidden;
-  }
-  .tier-card.featured {
-    border-color: var(--accent);
-    box-shadow: 0 0 40px var(--glow);
-  }
-  .tier-card.featured::after {
-    content: 'POPULAR';
-    position: absolute; top: 1.25rem; right: 1.25rem;
-    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff; padding: 3px 10px; border-radius: 100px;
-  }
-  .tier-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px var(--glow); }
-  .tier-name { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.3rem; margin-bottom: 0.5rem; }
-  .tier-stripe { height: 3px; border-radius: 100px; margin-bottom: 1.25rem; }
-  .t-basic .tier-stripe { background: var(--accent); }
-  .t-advanced .tier-stripe { background: var(--accent2); }
-  .t-premium .tier-stripe { background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3)); }
-  .tier-features { list-style: none; display: flex; flex-direction: column; gap: 0.6rem; }
-  .tier-features li {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 0.87rem; color: var(--text2);
-  }
-  .tier-features li::before { content: '✓'; color: var(--accent); font-weight: 700; font-size: 0.8rem; flex-shrink: 0; }
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-weight: 400;
+            transition: color 0.3s;
+        }
 
-  /* ── COMPETITIVE EDGE ── */
-  .edge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin-top: 3rem; }
-  .edge-card {
-    background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: 20px; padding: 2rem; text-align: center;
-    backdrop-filter: blur(12px);
-    transition: transform 0.3s, border-color 0.3s;
-  }
-  .edge-card:hover { transform: translateY(-4px); border-color: var(--accent2); }
-  .edge-icon { font-size: 2.2rem; margin-bottom: 1rem; display: block; }
-  .edge-card h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1rem; margin-bottom: 0.5rem; }
-  .edge-card p { font-size: 0.83rem; color: var(--text2); line-height: 1.65; }
+        .nav-links a:hover {
+            color: var(--primary);
+        }
 
-  /* ── ABOUT ── */
-  .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-  @media (max-width: 768px) { .about-layout { grid-template-columns: 1fr; gap: 2.5rem; } }
-  .about-photo-wrap { position: relative; }
-  .about-photo-bg {
-    position: absolute; inset: -20px;
-    border-radius: 30px;
-    background: linear-gradient(135deg, var(--glow2), var(--glow));
-    filter: blur(30px);
-  }
-  .about-photo-frame {
-    position: relative; border-radius: 24px; overflow: hidden;
-    border: 1px solid var(--border);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-  }
-  .about-photo-frame img { width: 100%; display: block; }
-  .about-photo-label {
-    position: absolute; bottom: 1rem; left: 1rem;
-    background: rgba(8,12,20,0.85);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--border);
-    border-radius: 12px; padding: 0.6rem 1rem;
-    font-size: 0.78rem; color: var(--text2);
-  }
-  .about-photo-label strong { color: var(--accent); font-weight: 600; }
-  .skills-list { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
-  .skill-chip {
-    font-size: 0.78rem; font-weight: 500;
-    padding: 5px 14px; border-radius: 100px;
-    background: var(--surface2); border: 1px solid var(--border);
-    color: var(--text2); transition: background 0.2s, color 0.2s, border-color 0.2s;
-    cursor: default;
-  }
-  .skill-chip:hover { background: var(--glow); border-color: var(--accent); color: var(--accent); }
+        .btn {
+            background: var(--primary);
+            color: var(--bg-dark);
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
 
-  /* ── CONTACT ── */
-  .contact-inner {
-    max-width: 700px; margin: 0 auto; text-align: center;
-  }
-  .contact-card {
-    background: var(--card-bg); border: 1px solid var(--border);
-    border-radius: 24px; padding: 3.5rem;
-    backdrop-filter: blur(12px);
-    position: relative; overflow: hidden;
-  }
-  .contact-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, var(--glow2), var(--glow));
-    opacity: 0.5; pointer-events: none;
-  }
-  .contact-card > * { position: relative; }
-  .contact-card h2 { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1.6rem, 3vw, 2.5rem); letter-spacing: -0.03em; margin-bottom: 1rem; }
-  .contact-card p { color: var(--text2); margin-bottom: 2rem; line-height: 1.7; }
-  .contact-links { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
-  .contact-link {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 12px 22px; border-radius: 12px;
-    border: 1px solid var(--border); color: var(--text);
-    font-weight: 500; font-size: 0.88rem; text-decoration: none;
-    background: var(--surface); transition: all 0.2s;
-  }
-  .contact-link:hover { border-color: var(--accent); color: var(--accent); background: var(--glow); transform: translateY(-2px); }
-  .contact-link svg { width: 16px; height: 16px; flex-shrink: 0; }
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
+        }
 
-  /* ── FOOTER ── */
-  footer {
-    padding: 2rem 5vw; border-top: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 1rem;
-    font-size: 0.82rem; color: var(--text3);
-  }
-  footer a { color: var(--accent); text-decoration: none; }
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
 
-  /* ── SCROLL REVEAL ── */
-  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s, transform 0.65s; }
-  .reveal.visible { opacity: 1; transform: none; }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+        }
 
-  /* ── DIVIDER ── */
-  .divider { height: 1px; background: var(--border); margin: 0 5vw; }
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            margin-top: 60px;
+            position: relative;
+        }
 
-  /* ── KEYFRAMES ── */
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-  @keyframes floatY { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-18px); } }
-  @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
-  @keyframes gradShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-  @keyframes spin { to { transform: rotate(360deg); } }
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+            z-index: 2;
+            animation: slideUp 1s ease forwards;
+        }
 
-  /* ── MOBILE NAV ── */
-  @media (max-width: 640px) {
-    nav { display: none; }
-    .hero-photo { display: none; }
-  }
+        .hero-content h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+        }
 
-  /* ── CURSOR DOT ── */
-  .cursor { position: fixed; width: 8px; height: 8px; border-radius: 50%; background: var(--accent); pointer-events: none; z-index: 9999; transition: transform 0.15s; mix-blend-mode: difference; }
-  .cursor-ring { position: fixed; width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--accent); pointer-events: none; z-index: 9998; transition: transform 0.1s, width 0.2s, height 0.2s, opacity 0.2s; opacity: 0.5; }
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
 
-  /* Timeline / experience */
-  .timeline { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
-  .timeline-item { display: flex; gap: 1.5rem; align-items: flex-start; }
-  .tl-dot { flex-shrink: 0; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); margin-top: 5px; box-shadow: 0 0 10px var(--glow); position: relative; }
-  .tl-dot::before { content: ''; position: absolute; top: 12px; left: 5px; width: 1px; height: calc(100% + 1.5rem); background: var(--border); }
-  .timeline-item:last-child .tl-dot::before { display: none; }
-  .tl-content h4 { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 0.95rem; }
-  .tl-content p { font-size: 0.83rem; color: var(--text2); margin-top: 4px; line-height: 1.6; }
-  .tl-year { font-size: 0.72rem; color: var(--text3); margin-top: 4px; }
-</style>
+        .hero-image-container {
+            flex: 1;
+            height: 70%;
+            position: relative;
+            animation: fadeIn 1.5s ease forwards;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .hero-image {
+            width: 90%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            mask-image: linear-gradient(to left, rgba(0,0,0,1) 80%, rgba(0,0,0,0));
+            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 80%, rgba(0,0,0,0));
+        }
+
+        .rating-badge {
+            position: absolute;
+            bottom: -20px;
+            left: 20px;
+            background: rgba(26, 29, 36, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .rating-badge .stars {
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        /* Features/Info Strip */
+        .info-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            padding: 4rem 5%;
+            background: var(--bg-card);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .info-item {
+            text-align: center;
+        }
+
+        .info-item h3 {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .info-item p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Menu Highlights */
+        .menu-section {
+            padding: 6rem 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .menu-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.02);
+            cursor: pointer;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: rgba(212, 175, 55, 0.3);
+        }
+
+        .menu-card img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .menu-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .menu-card-body {
+            padding: 2rem;
+        }
+
+        .menu-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .menu-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* About & Location */
+        .location-section {
+            padding: 6rem 5%;
+            background: var(--bg-card);
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .location-details {
+            flex: 1;
+        }
+
+        .location-details h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-icon {
+            color: var(--primary);
+            font-size: 1.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 10px;
+            border-radius: 50%;
+        }
+
+        .map-container {
+            flex: 1;
+            height: 400px;
+            background: #2a2d35;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .map-placeholder {
+            text-align: center;
+            color: var(--text-muted);
+        }
+
+        /* Footer */
+        footer {
+            background: #0a0c0f;
+            padding: 3rem 5%;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        footer p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                padding-top: 5rem;
+            }
+            .hero-image-container {
+                display: none; /* Hide on mobile for simplicity, or re-layout */
+            }
+            .location-section {
+                flex-direction: column;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<!-- Cursor -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
-
-<!-- ── HEADER ── -->
-<header>
-  <a href="#" class="logo">AS.</a>
-  <nav>
-    <a href="#services">Services</a>
-    <a href="#tiers">Tiers</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-  </nav>
-  <div style="display:flex;align-items:center;gap:10px;">
-    <span class="theme-label" id="themeLabel">Dark</span>
-    <button class="theme-btn" id="themeToggle" aria-label="Toggle theme"></button>
-  </div>
-</header>
-
-<!-- ── HERO ── -->
-<section class="hero" id="home">
-  <div class="hero-bg-orb orb1"></div>
-  <div class="hero-bg-orb orb2"></div>
-  <div class="hero-inner">
-    <div class="hero-tag">Available for Work & Collaboration</div>
-    <h1 class="hero-name">Abhiroop<br><span>Sen</span></h1>
-    <p class="hero-sub">Marketing Manager & Growth Strategist — crafting high-conversion digital experiences through design, development, and data-driven strategy.</p>
-    <div class="hero-ctas">
-      <a href="#contact" class="btn-primary">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-        Let's Work Together
-      </a>
-      <a href="https://abhiroop03.github.io/web" target="_blank" class="btn-outline">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
-        View Portfolio
-      </a>
-    </div>
-    <div class="stats-row">
-      <div class="stat"><div class="stat-num">3+</div><div class="stat-label">Years Exp.</div></div>
-      <div class="stat"><div class="stat-num">50+</div><div class="stat-label">Clients</div></div>
-      <div class="stat"><div class="stat-num">60+</div><div class="stat-label">Projects</div></div>
-      <div class="stat"><div class="stat-num">20+</div><div class="stat-label">Companies</div></div>
-    </div>
-  </div>
-  <div class="hero-photo">
-    <img src="/mnt/user-data/uploads/WhatsApp_Image_2026-04-07_at_1_01_52_AM__1_.jpeg" alt="Abhiroop Sen" onerror="this.style.display='none'">
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ── SERVICES ── -->
-<section id="services">
-  <div class="section-tag">What I Do</div>
-  <h2 class="section-title">Service<br>Specializations</h2>
-  <p class="section-desc">From basic CMS setups to premium custom-coded applications — a tiered model built for every scale and ambition.</p>
-  <div class="services-grid reveal">
-    <div class="service-card s1">
-      <div class="service-icon">🌐</div>
-      <h3>Tiered Website Design</h3>
-      <p>Everything from basic WordPress setups to premium, custom-coded websites with full source code ownership and SEO optimization.</p>
-      <div class="service-badge">
-        <span class="badge">WordPress</span>
-        <span class="badge">Custom Code</span>
-        <span class="badge">SEO</span>
-        <span class="badge">Animations</span>
-      </div>
-    </div>
-    <div class="service-card s2">
-      <div class="service-icon">📱</div>
-      <h3>Mobile App Development</h3>
-      <p>Comprehensive mobile solutions including UI/UX design, backend integration, feature-rich builds, and Play Store publishing support.</p>
-      <div class="service-badge">
-        <span class="badge">UI/UX</span>
-        <span class="badge">Backend</span>
-        <span class="badge">Play Store</span>
-        <span class="badge">Testing</span>
-      </div>
-    </div>
-    <div class="service-card s3">
-      <div class="service-icon">🎨</div>
-      <h3>Creative Marketing Assets</h3>
-      <p>Specialized production of social media creatives, video animation ads, and complete branding assets that convert audiences.</p>
-      <div class="service-badge">
-        <span class="badge">Social Media</span>
-        <span class="badge">Video Ads</span>
-        <span class="badge">Branding</span>
-        <span class="badge">Graphics</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ── TIERS ── -->
-<section id="tiers">
-  <div class="section-tag">Pricing Structure</div>
-  <h2 class="section-title">Service Tier<br>Deliverables</h2>
-  <p class="section-desc">Choose the right level for your project — every tier delivers maximum value at its scale.</p>
-  <div class="tiers-grid reveal">
-    <div class="tier-card t-basic">
-      <div class="tier-name">Basic</div>
-      <div class="tier-stripe"></div>
-      <p style="font-size:0.83rem;color:var(--text2);margin-bottom:1.25rem;">Perfect for startups & small businesses getting online.</p>
-      <ul class="tier-features">
-        <li>CMS / WordPress Setup</li>
-        <li>SEO Optimization</li>
-        <li>UI Design & Simple Logic</li>
-        <li>Responsive Design</li>
-        <li>Basic Animations</li>
-      </ul>
-    </div>
-    <div class="tier-card t-advanced featured">
-      <div class="tier-name">Advanced</div>
-      <div class="tier-stripe"></div>
-      <p style="font-size:0.83rem;color:var(--text2);margin-bottom:1.25rem;">For brands needing standout digital presence.</p>
-      <ul class="tier-features">
-        <li>Custom UI & Animations</li>
-        <li>Backend Integration</li>
-        <li>Feature-Rich Apps</li>
-        <li>Performance Optimization</li>
-        <li>Priority Support</li>
-      </ul>
-    </div>
-    <div class="tier-card t-premium">
-      <div class="tier-name">Premium</div>
-      <div class="tier-stripe"></div>
-      <p style="font-size:0.83rem;color:var(--text2);margin-bottom:1.25rem;">Full custom solutions for serious business growth.</p>
-      <ul class="tier-features">
-        <li>Full Source Code & APIs</li>
-        <li>Custom-Coded Website</li>
-        <li>Play Store Support & Testing</li>
-        <li>Scalable Architecture</li>
-        <li>Complete Brand Assets</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ── COMPETITIVE EDGE ── -->
-<section>
-  <div class="section-tag">Competitive Edge</div>
-  <h2 class="section-title">Why Choose<br>Abhiroop?</h2>
-  <div class="edge-grid reveal">
-    <div class="edge-card">
-      <span class="edge-icon">🧠</span>
-      <h4>Conversion-Focused UI/UX</h4>
-      <p>Modern, user-centric design strategies engineered to drive specific digital conversions — not just aesthetics.</p>
-    </div>
-    <div class="edge-card">
-      <span class="edge-icon">📈</span>
-      <h4>Technical Scalability</h4>
-      <p>Performance-optimized code and scalable architecture built ready for business growth from day one.</p>
-    </div>
-    <div class="edge-card">
-      <span class="edge-icon">⚡</span>
-      <h4>Fast Delivery</h4>
-      <p>Efficient workflows and clear communication ensure your project lands on time, every time.</p>
-    </div>
-    <div class="edge-card">
-      <span class="edge-icon">🎯</span>
-      <h4>"Designing Digital Experiences That Convert"</h4>
-      <p>The core philosophy driving every creative and development project delivered.</p>
-    </div>
-  </div>
-</section>
-
-<div class="divider"></div>
-
-<!-- ── ABOUT ── -->
-<section id="about">
-  <div class="about-layout">
-    <div class="about-photo-wrap reveal">
-      <div class="about-photo-bg"></div>
-      <div class="about-photo-frame">
-        <img src="/mnt/user-data/uploads/WhatsApp_Image_2026-04-07_at_1_01_52_AM__1_.jpeg" alt="Abhiroop Sen" onerror="this.parentElement.style.display='none'">
-        <div class="about-photo-label">📍 Guwahati, Assam &nbsp; | &nbsp; <strong>Open to Remote Work</strong></div>
-      </div>
-    </div>
-    <div class="reveal">
-      <div class="section-tag">About Me</div>
-      <h2 class="section-title">Growth Strategist &amp; Digital Creator</h2>
-      <p style="color:var(--text2);line-height:1.8;margin-bottom:1.25rem;">I'm a Graphic and Web/App Designer with 3+ years of experience focused on creating high-conversion digital experiences. My work sits at the intersection of aesthetic design and measurable business impact.</p>
-      <p style="color:var(--text2);line-height:1.8;margin-bottom:1.5rem;">Having collaborated with 20+ companies and delivered 60+ projects, I've developed a deep understanding of what drives growth — from compelling visuals to scalable technical architecture.</p>
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="tl-dot"></div>
-          <div class="tl-content">
-            <h4>Marketing Manager & Growth Strategist</h4>
-            <p>Helping brands scale through data-driven strategies and digital marketing excellence.</p>
-            <div class="tl-year">2023 — Present</div>
-          </div>
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">Chutney <span>(চাটনি)</span></div>
+        <div class="nav-links">
+            <a href="#overview">Overview</a>
+            <a href="#menu">Menu</a>
+            <a href="#location">Location</a>
         </div>
-        <div class="timeline-item">
-          <div class="tl-dot"></div>
-          <div class="tl-content">
-            <h4>Web & App Designer</h4>
-            <p>Custom-coded websites, mobile applications, and creative marketing assets for 50+ clients.</p>
-            <div class="tl-year">2021 — Present</div>
-          </div>
+        <div style="display: flex; gap: 15px;">
+            <a href="#" class="btn btn-outline" onclick="alert('Proceeding to Online Ordering...')">Order Online</a>
+            <a href="tel:07085709411" class="btn">Book a Table</a>
         </div>
-        <div class="timeline-item">
-          <div class="tl-dot"></div>
-          <div class="tl-content">
-            <h4>Graphic Designer & Brand Strategist</h4>
-            <p>Social media creatives, video ads, and complete branding systems for 20+ companies.</p>
-            <div class="tl-year">2021 — Present</div>
-          </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="overview">
+        <div class="hero-content">
+            <h1>Authentic <span class="gold-text">Bengali</span> Flavors.</h1>
+            <p>Experience the rich heritage and vibrant spices of Bengal right in the heart of Agartala. A premium dining experience blending tradition with modern elegance.</p>
+            <div style="display: flex; gap: 15px; margin-top: 20px;">
+                <a href="#menu" class="btn">Explore Menu</a>
+                <a href="#location" class="btn btn-outline">Visit Us</a>
+            </div>
         </div>
-      </div>
-      <div class="skills-list" style="margin-top:1.5rem;">
-        <span class="skill-chip">WordPress</span>
-        <span class="skill-chip">UI/UX Design</span>
-        <span class="skill-chip">React</span>
-        <span class="skill-chip">Mobile Apps</span>
-        <span class="skill-chip">SEO</span>
-        <span class="skill-chip">Branding</span>
-        <span class="skill-chip">Video Animation</span>
-        <span class="skill-chip">Growth Strategy</span>
-        <span class="skill-chip">Social Media</span>
-        <span class="skill-chip">API Integration</span>
-      </div>
-    </div>
-  </div>
-</section>
+        <div class="hero-image-container">
+            <img src="./chutney-hero.png" alt="Chutney Restaurant Interior" class="hero-image">
+            <div class="rating-badge">
+                <div class="stars">★★★★☆</div>
+                <div>
+                    <strong style="display: block; font-size: 1.1rem;">4.2 / 5.0</strong>
+                    <span style="font-size: 0.8rem; color: var(--text-muted)">492 Google Reviews</span>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="divider"></div>
+    <!-- Info Strip -->
+    <section class="info-strip">
+        <div class="info-item">
+            <h3>₹200–400</h3>
+            <p>Avg. Price Per Person</p>
+        </div>
+        <div class="info-item">
+            <h3>Open Now</h3>
+            <p>Closes at 11:00 PM</p>
+        </div>
+        <div class="info-item">
+            <h3>4 Options</h3>
+            <p>Dine-in, Takeaway, No-contact Delivery, Online Ordering</p>
+        </div>
+        <div class="info-item">
+            <h3>Premium</h3>
+            <p>100% Authentic Bengali Cuisine</p>
+        </div>
+    </section>
 
-<!-- ── CONTACT ── -->
-<section id="contact">
-  <div class="contact-inner">
-    <div class="section-tag" style="justify-content:center;">Get In Touch</div>
-    <div class="contact-card reveal">
-      <h2>Ready to Build<br>Something Great?</h2>
-      <p>DM for work, collaboration, or just to say hello. Fast responses, faster delivery.</p>
-      <div class="contact-links">
-        <a href="#" target="_blank" class="contact-link">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
-       Official Marketing agency website
-        </a>
-        <a href="marketing.manager.abhiroop@gmail.com" class="contact-link">
-          <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 7l10 7 10-7"/></svg>
-          Email Me
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
+    <!-- Menu Section -->
+    <section class="menu-section" id="menu">
+        <div class="section-header">
+            <h2>Our Signature <span class="gold-text">Dishes</span></h2>
+            <p>Curated with love using traditional recipes passed down through generations. A true celebration of Bengali culinary art.</p>
+        </div>
 
-<!-- ── FOOTER ── -->
-<footer>
-  <span>© 2026 Abhiroop Sen. All rights reserved.</span>
-  <span>Built with ✦ in Guwahati &nbsp;·&nbsp; <a href="https://abhiroop03.github.io/web" target="_blank">abhiroop03.github.io/web</a></span>
-</footer>
+        <div class="menu-grid">
+            <!-- Menu Item 1 -->
+            <div class="menu-card">
+                <img src="./chutney-food-1.png" alt="Macher Jhol">
+                <div class="menu-card-body">
+                    <h3>Macher Jhol <span class="gold-text">₹250</span></h3>
+                    <p>Authentic Bengali fish curry cooked in a thin, lightly spiced mustard oil broth. Served with aromatic steamed rice.</p>
+                    <button class="btn btn-outline" style="width: 100%; mt-3">Add to Order</button>
+                </div>
+            </div>
 
-<script>
-  // Theme Toggle
-  const toggle = document.getElementById('themeToggle');
-  const label = document.getElementById('themeLabel');
-  toggle.addEventListener('click', () => {
-    const isDark = document.documentElement.dataset.theme === 'dark';
-    document.documentElement.dataset.theme = isDark ? 'light' : 'dark';
-    label.textContent = isDark ? 'Light' : 'Dark';
-  });
+            <!-- Menu Item 2 -->
+            <div class="menu-card">
+                <img src="./chutney-food-2.png" alt="Kosha Mangsho">
+                <div class="menu-card-body">
+                    <h3>Kosha Mangsho <span class="gold-text">₹380</span></h3>
+                    <p>Slow-cooked mutton in rich, dark, and spicy gravy packed with explosive flavors. Perfectly paired with fluffy hot Luchi.</p>
+                    <button class="btn btn-outline" style="width: 100%; mt-3">Add to Order</button>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  // Custom cursor
-  const cursor = document.getElementById('cursor');
-  const ring = document.getElementById('cursorRing');
-  let mx = 0, my = 0, rx = 0, ry = 0;
-  document.addEventListener('mousemove', e => {
-    mx = e.clientX; my = e.clientY;
-    cursor.style.left = mx - 4 + 'px';
-    cursor.style.top = my - 4 + 'px';
-  });
-  function animRing() {
-    rx += (mx - rx) * 0.12;
-    ry += (my - ry) * 0.12;
-    ring.style.left = rx - 18 + 'px';
-    ring.style.top = ry - 18 + 'px';
-    requestAnimationFrame(animRing);
-  }
-  animRing();
-  document.querySelectorAll('a,button,.service-card,.tier-card,.edge-card').forEach(el => {
-    el.addEventListener('mouseenter', () => { cursor.style.transform = 'scale(2)'; ring.style.width = '56px'; ring.style.height = '56px'; ring.style.opacity = '0.3'; });
-    el.addEventListener('mouseleave', () => { cursor.style.transform = 'scale(1)'; ring.style.width = '36px'; ring.style.height = '36px'; ring.style.opacity = '0.5'; });
-  });
+    <!-- Location & Contact -->
+    <section class="location-section" id="location">
+        <div class="location-details">
+            <h2>Visit <span class="gold-text">Chutney</span></h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">We are located in the heart of Agartala. Drop by for an unforgettable dining experience or order directly to your doorstep.</p>
 
-  // Scroll reveal
-  const reveals = document.querySelectorAll('.reveal');
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  reveals.forEach(r => observer.observe(r));
+            <div class="detail-row">
+                <div class="detail-icon">📍</div>
+                <div>
+                    <strong style="display: block; font-size: 1.1rem; margin-bottom: 5px;">Address</strong>
+                    <span style="color: var(--text-muted)">Motor Stand Rd, near I M Medical,<br>Indranagar, Agartala, Tripura – 799001</span>
+                </div>
+            </div>
 
-  // Smooth scroll for nav links
-  document.querySelectorAll('a[href^="#"]').forEach(a => {
-    a.addEventListener('click', e => {
-      const id = a.getAttribute('href');
-      if (id === '#') return;
-      const el = document.querySelector(id);
-      if (el) { e.preventDefault(); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-    });
-  });
-</script>
+            <div class="detail-row">
+                <div class="detail-icon">📌</div>
+                <div>
+                    <strong style="display: block; font-size: 1.1rem; margin-bottom: 5px;">Plus Code</strong>
+                    <span style="color: var(--text-muted)">R7JM+JX, Agartala, Tripura</span>
+                </div>
+            </div>
+
+            <div class="detail-row">
+                <div class="detail-icon">📞</div>
+                <div>
+                    <strong style="display: block; font-size: 1.1rem; margin-bottom: 5px;">Contact</strong>
+                    <span style="color: var(--text-muted)"><a href="tel:07085709411" style="color:var(--text-muted); text-decoration:none;">070857 09411</a></span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="map-container">
+            <div class="map-placeholder">
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
+                <h3>Agartala, Tripura</h3>
+                <p>Interactive Map Embed Here</p>
+                <a href="https://maps.google.com/?q=Motor+Stand+Rd,+near+I+M+Medical,+Indranagar,+Agartala,+Tripura+–+799001" target="_blank" class="btn" style="margin-top: 15px;">Open in Google Maps</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="logo" style="margin-bottom: 1rem;">Chutney <span>(চাটনি)</span></div>
+        <p>&copy; 2026 Chutney Bengali Restaurant. All rights reserved. | <a href="#" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
