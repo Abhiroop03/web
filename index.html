@@ -3,113 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chutney (চাটনি) - Premium Bengali Restaurant</title>
-    <meta name="description" content="Chutney is a premium Bengali Restaurant in Agartala serving authentic cuisine. Dine-in, Takeaway, and Online Ordering.">
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
+    <title>Artncraft - Handcrafted Home Decor from Jodhpur</title>
+    <meta name="description" content="Premium handcrafted home decor from the heart of Jodhpur. Wood, brass, iron, and stone crafts.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #d4af37; /* Warm Gold */
-            --primary-dark: #b5952f;
-            --bg-dark: #0f1115;
-            --bg-card: #1a1d24;
-            --text-light: #fbfbfb;
-            --text-muted: #a0a5b1;
-            --accent: #e63946; /* Bengali Red */
+            --primary: #cba365;       /* Warm gold/brass color */
+            --primary-dark: #b08d55;
+            --bg-dark: #121212;
+            --bg-surface: #1e1e1e;
+            --bg-surface-light: #2c2c2c;
+            --text-light: #f5f5f5;
+            --text-muted: #a0a0a0;
+            --border-color: rgba(203, 163, 101, 0.2);
+            --transition: all 0.3s ease;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Outfit', sans-serif;
         }
 
         body {
+            font-family: 'Inter', sans-serif;
             background-color: var(--bg-dark);
             color: var(--text-light);
             line-height: 1.6;
             overflow-x: hidden;
         }
 
-        /* Typography */
-        h1, h2, h3 {
+        h1, h2, h3, h4, h5, h6 {
             font-family: 'Playfair Display', serif;
             font-weight: 600;
         }
 
-        .gold-text {
-            color: var(--primary);
+        a {
+            text-decoration: none;
+            color: inherit;
         }
 
         /* Navbar */
         nav {
+            padding: 1.5rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.5rem 5%;
-            position: fixed;
-            width: 100%;
+            position: absolute;
             top: 0;
-            z-index: 1000;
-            background: rgba(15, 17, 21, 0.85);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            width: 100%;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .logo {
+            font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: 1px;
+            font-weight: 700;
+            letter-spacing: 2px;
             color: var(--primary);
+            text-transform: uppercase;
+        }
+        
+        .logo span {
+            color: var(--text-light);
         }
 
-        .logo span {
-            font-family: 'Outfit', sans-serif;
-            font-size: 1.2rem;
-            color: var(--text-light);
-            font-weight: 300;
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
         }
 
         .nav-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            margin-left: 2rem;
-            font-weight: 400;
-            transition: color 0.3s;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: var(--transition);
         }
 
         .nav-links a:hover {
             color: var(--primary);
         }
 
-        .btn {
-            background: var(--primary);
-            color: var(--bg-dark);
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            display: inline-block;
-            border: none;
-            cursor: pointer;
-        }
-
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
-        }
-
         .btn-outline {
-            background: transparent;
+            padding: 0.6rem 1.5rem;
             border: 1px solid var(--primary);
             color: var(--primary);
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            transition: var(--transition);
         }
 
         .btn-outline:hover {
-            background: var(--primary);
+            background-color: var(--primary);
             color: var(--bg-dark);
+        }
+
+        .btn-primary {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background-color: var(--primary);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
         }
 
         /* Hero Section */
@@ -117,99 +132,78 @@
             height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 5%;
-            margin-top: 60px;
+            justify-content: center;
             position: relative;
+            background: linear-gradient(rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)), url('https://images.unsplash.com/photo-1618220179428-22790b46a0eb?q=80&w=2000&auto=format&fit=crop') center/cover;
+            text-align: center;
+            padding: 0 5%;
         }
 
         .hero-content {
-            flex: 1;
-            max-width: 600px;
-            z-index: 2;
-            animation: slideUp 1s ease forwards;
+            max-width: 800px;
+            animation: fadeIn 1.5s ease-out forwards;
         }
 
-        .hero-content h1 {
-            font-size: 4rem;
-            line-height: 1.1;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .subtitle {
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            font-size: 0.9rem;
             margin-bottom: 1rem;
+            display: block;
         }
 
-        .hero-content p {
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+        }
+
+        .hero p {
             font-size: 1.2rem;
             color: var(--text-muted);
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .hero-image-container {
-            flex: 1;
-            height: 70%;
-            position: relative;
-            animation: fadeIn 1.5s ease forwards;
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .hero-image {
-            width: 90%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 20px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
-            mask-image: linear-gradient(to left, rgba(0,0,0,1) 80%, rgba(0,0,0,0));
-            -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 80%, rgba(0,0,0,0));
-        }
-
-        .rating-badge {
-            position: absolute;
-            bottom: -20px;
-            left: 20px;
-            background: rgba(26, 29, 36, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 1rem 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .rating-badge .stars {
-            color: var(--primary);
-            font-size: 1.2rem;
-        }
-
-        /* Features/Info Strip */
-        .info-strip {
+        /* Info Bar */
+        .info-bar {
+            background-color: var(--bg-surface);
+            padding: 2rem 5%;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 2rem;
-            padding: 4rem 5%;
-            background: var(--bg-card);
-            border-top: 1px solid rgba(255,255,255,0.05);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .info-item {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            opacity: 0.8;
+            transition: var(--transition);
         }
 
-        .info-item h3 {
+        .info-item:hover {
+            opacity: 1;
             color: var(--primary);
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
         }
 
-        .info-item p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
+        .info-icon {
+            font-size: 2rem;
+            color: var(--primary);
         }
 
-        /* Menu Highlights */
-        .menu-section {
+        /* Products Section */
+        .products {
             padding: 6rem 5%;
         }
 
@@ -219,7 +213,7 @@
         }
 
         .section-header h2 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             margin-bottom: 1rem;
         }
 
@@ -229,294 +223,449 @@
             margin: 0 auto;
         }
 
-        .menu-grid {
+        .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
         }
 
-        .menu-card {
-            background: var(--bg-card);
-            border-radius: 20px;
+        .product-card {
+            background-color: var(--bg-surface);
+            border-radius: 8px;
             overflow: hidden;
-            transition: all 0.4s ease;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
-            border: 1px solid rgba(255,255,255,0.02);
-            cursor: pointer;
         }
 
-        .menu-card:hover {
+        .product-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border-color: rgba(212, 175, 55, 0.3);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            border-color: var(--border-color);
         }
 
-        .menu-card img {
+        .product-img {
             width: 100%;
-            height: 300px;
+            height: 350px;
             object-fit: cover;
-            transition: transform 0.6s ease;
+            transition: transform 0.5s ease;
         }
 
-        .menu-card:hover img {
+        .product-card:hover .product-img {
             transform: scale(1.05);
         }
 
-        .menu-card-body {
+        .img-container {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            background-color: var(--bg-dark);
+            color: var(--primary);
+            padding: 0.4rem 1rem;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        .product-info {
             padding: 2rem;
+            text-align: center;
         }
 
-        .menu-card h3 {
-            font-size: 1.5rem;
+        .product-title {
+            font-size: 1.4rem;
             margin-bottom: 0.5rem;
-            display: flex;
-            justify-content: space-between;
+            font-family: 'Playfair Display', serif;
         }
 
-        .menu-card p {
+        .product-desc {
             color: var(--text-muted);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             margin-bottom: 1.5rem;
         }
 
-        /* About & Location */
-        .location-section {
+        .buy-btn {
+            background: transparent;
+            border: 1px solid var(--text-light);
+            color: var(--text-light);
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+        }
+
+        .product-card:hover .buy-btn {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: var(--bg-dark);
+        }
+
+        /* Banner Section */
+        .banner {
+            margin: 4rem 5%;
+            padding: 5rem;
+            background: linear-gradient(rgba(18, 18, 18, 0.8), rgba(20, 15, 8, 0.8)), url('https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop') center/cover;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+        }
+
+        .banner h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .banner p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            color: #ddd;
+        }
+
+        /* Contact Section */
+        .contact {
             padding: 6rem 5%;
-            background: var(--bg-card);
-            display: flex;
-            align-items: center;
+            background-color: var(--bg-surface);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
             gap: 4rem;
+            align-items: center;
         }
 
-        .location-details {
-            flex: 1;
-        }
-
-        .location-details h2 {
+        .contact-info h2 {
             font-size: 2.5rem;
             margin-bottom: 1.5rem;
         }
 
-        .detail-row {
+        .contact-info p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        .contact-method {
             display: flex;
             align-items: flex-start;
-            gap: 1rem;
+            gap: 1.5rem;
             margin-bottom: 1.5rem;
         }
 
-        .detail-icon {
-            color: var(--primary);
+        .contact-method i {
             font-size: 1.5rem;
-            background: rgba(212, 175, 55, 0.1);
-            padding: 10px;
+            color: var(--primary);
+            background-color: rgba(203, 163, 101, 0.1);
+            padding: 1rem;
             border-radius: 50%;
         }
 
-        .map-container {
-            flex: 1;
-            height: 400px;
-            background: #2a2d35;
-            border-radius: 20px;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .contact-method div h4 {
+            font-family: 'Inter', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
         }
-        
-        .map-placeholder {
-            text-align: center;
-            color: var(--text-muted);
+
+        .contact-method div p {
+            margin-bottom: 0;
+            font-size: 0.95rem;
+        }
+
+        .contact-form {
+            background-color: var(--bg-dark);
+            padding: 3rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--bg-surface);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .submit-btn:hover {
+            background-color: var(--primary-dark);
         }
 
         /* Footer */
         footer {
-            background: #0a0c0f;
             padding: 3rem 5%;
             text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.05);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            background-color: var(--bg-dark);
         }
 
-        footer p {
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .social-links a {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-text {
             color: var(--text-muted);
             font-size: 0.9rem;
         }
 
-        /* Animations */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        /* Responsive */
         @media (max-width: 900px) {
-            .hero {
-                flex-direction: column;
-                justify-content: center;
-                text-align: center;
-                padding-top: 5rem;
+            .contact, .info-bar {
+                grid-template-columns: 1fr;
             }
-            .hero-image-container {
-                display: none; /* Hide on mobile for simplicity, or re-layout */
+            .hero h1 {
+                font-size: 3rem;
             }
-            .location-section {
-                flex-direction: column;
+            .banner {
+                padding: 3rem 2rem;
             }
             .nav-links {
                 display: none;
             }
         }
     </style>
+    <!-- Adding FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!-- Navbar -->
+    <!-- Navigation -->
     <nav>
-        <div class="logo">Chutney <span>(চাটনি)</span></div>
-        <div class="nav-links">
-            <a href="#overview">Overview</a>
-            <a href="#menu">Menu</a>
-            <a href="#location">Location</a>
-        </div>
-        <div style="display: flex; gap: 15px;">
-            <a href="#" class="btn btn-outline" onclick="alert('Proceeding to Online Ordering...')">Order Online</a>
-            <a href="tel:07085709411" class="btn">Book a Table</a>
-        </div>
+        <a href="#" class="logo">ArtN<span>Craft</span></a>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#shop">Shop</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+        <a href="https://www.instagram.com/artncraftindia/" target="_blank" class="btn-outline">Instagram <i class="fab fa-instagram"></i></a>
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero" id="overview">
+    <section id="home" class="hero">
         <div class="hero-content">
-            <h1>Authentic <span class="gold-text">Bengali</span> Flavors.</h1>
-            <p>Experience the rich heritage and vibrant spices of Bengal right in the heart of Agartala. A premium dining experience blending tradition with modern elegance.</p>
-            <div style="display: flex; gap: 15px; margin-top: 20px;">
-                <a href="#menu" class="btn">Explore Menu</a>
-                <a href="#location" class="btn btn-outline">Visit Us</a>
-            </div>
-        </div>
-        <div class="hero-image-container">
-            <img src="./chutney-hero.png" alt="Chutney Restaurant Interior" class="hero-image">
-            <div class="rating-badge">
-                <div class="stars">★★★★☆</div>
-                <div>
-                    <strong style="display: block; font-size: 1.1rem;">4.2 / 5.0</strong>
-                    <span style="font-size: 0.8rem; color: var(--text-muted)">492 Google Reviews</span>
-                </div>
-            </div>
+            <span class="subtitle">Rooted in the heart of Jodhpur's old city 🇮🇳</span>
+            <h1>100% Handcrafted Elegance</h1>
+            <p>Discover premium home decor crafted from the finest Wood, Brass, Iron, and Stone. Bring authentic Indian heritage into your modern spaces.</p>
+            <a href="#shop" class="btn-primary">Explore Collection</a>
         </div>
     </section>
 
-    <!-- Info Strip -->
-    <section class="info-strip">
+    <!-- Info Bar -->
+    <div class="info-bar">
         <div class="info-item">
-            <h3>₹200–400</h3>
-            <p>Avg. Price Per Person</p>
+            <i class="fa-solid fa-hammer info-icon"></i>
+            <div>
+                <h4>100% Handcrafted</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Authentic artisanal work</p>
+            </div>
         </div>
         <div class="info-item">
-            <h3>Open Now</h3>
-            <p>Closes at 11:00 PM</p>
+            <i class="fa-solid fa-truck-fast info-icon"></i>
+            <div>
+                <h4>Pan-India Shipping</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Delivered to your doorstep</p>
+            </div>
         </div>
         <div class="info-item">
-            <h3>4 Options</h3>
-            <p>Dine-in, Takeaway, No-contact Delivery, Online Ordering</p>
+            <i class="fa-solid fa-gift info-icon"></i>
+            <div>
+                <h4>Perfect for Gifting</h4>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Luxurious & memorable</p>
+            </div>
         </div>
-        <div class="info-item">
-            <h3>Premium</h3>
-            <p>100% Authentic Bengali Cuisine</p>
-        </div>
-    </section>
+    </div>
 
-    <!-- Menu Section -->
-    <section class="menu-section" id="menu">
+    <!-- Products Section -->
+    <section id="shop" class="products">
         <div class="section-header">
-            <h2>Our Signature <span class="gold-text">Dishes</span></h2>
-            <p>Curated with love using traditional recipes passed down through generations. A true celebration of Bengali culinary art.</p>
+            <span class="subtitle">Our Offerings</span>
+            <h2>Curated Masterpieces</h2>
+            <p>From intricate woodwork to gleaming brass antiquities, every piece tells a story of generations of craftsmanship.</p>
         </div>
 
-        <div class="menu-grid">
-            <!-- Menu Item 1 -->
-            <div class="menu-card">
-                <img src="./chutney-food-1.png" alt="Macher Jhol">
-                <div class="menu-card-body">
-                    <h3>Macher Jhol <span class="gold-text">₹250</span></h3>
-                    <p>Authentic Bengali fish curry cooked in a thin, lightly spiced mustard oil broth. Served with aromatic steamed rice.</p>
-                    <button class="btn btn-outline" style="width: 100%; mt-3">Add to Order</button>
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card">
+                <div class="img-container">
+                    <span class="category-badge">Brass</span>
+                    <!-- Using the generated image that we copied over -->
+                    <img src="./brass_lantern.png" alt="Vintage Brass Lantern" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1542157585-ef31102eef56?q=80&w=800&auto=format&fit=crop'">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Vintage Brass Lantern</h3>
+                    <p class="product-desc">Hand-hammered brass with antique finish. Perfect for warm, ambient lighting.</p>
+                    <button class="buy-btn" onclick="window.open('https://ig.me/m/artncraftindia', '_blank')">DM to Order</button>
                 </div>
             </div>
 
-            <!-- Menu Item 2 -->
-            <div class="menu-card">
-                <img src="./chutney-food-2.png" alt="Kosha Mangsho">
-                <div class="menu-card-body">
-                    <h3>Kosha Mangsho <span class="gold-text">₹380</span></h3>
-                    <p>Slow-cooked mutton in rich, dark, and spicy gravy packed with explosive flavors. Perfectly paired with fluffy hot Luchi.</p>
-                    <button class="btn btn-outline" style="width: 100%; mt-3">Add to Order</button>
+            <!-- Product 2 -->
+            <div class="product-card">
+                <div class="img-container">
+                    <span class="category-badge">Wood</span>
+                    <img src="https://images.unsplash.com/photo-1579783900863-12f7162b7cd6?q=80&w=800&auto=format&fit=crop" alt="Carved Wood Panel" class="product-img">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Carved Wooden Panel</h3>
+                    <p class="product-desc">Intricately carved rosewood panel detailing traditional Rajasthani motifs.</p>
+                    <button class="buy-btn" onclick="window.open('https://ig.me/m/artncraftindia', '_blank')">DM to Order</button>
+                </div>
+            </div>
+
+            <!-- Product 3 -->
+            <div class="product-card">
+                <div class="img-container">
+                    <span class="category-badge">Stone</span>
+                    <img src="https://images.unsplash.com/photo-1582215286561-12711dc75465?q=80&w=800&auto=format&fit=crop" alt="Marble Coaster Set" class="product-img">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Inlay Marble Set</h3>
+                    <p class="product-desc">Premium white Makrana marble coasters with semi-precious stone inlay work.</p>
+                    <button class="buy-btn" onclick="window.open('https://ig.me/m/artncraftindia', '_blank')">DM to Order</button>
+                </div>
+            </div>
+            
+            <!-- Product 4 -->
+            <div class="product-card">
+                <div class="img-container">
+                    <span class="category-badge">Iron</span>
+                    <img src="https://images.unsplash.com/photo-1632223847551-78923a1a5b81?q=80&w=800&auto=format&fit=crop" alt="Wrought Iron Wall Art" class="product-img">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-title">Wrought Iron Wall Art</h3>
+                    <p class="product-desc">Contemporary geometric wall decor handcrafted from sturdy wrought iron.</p>
+                    <button class="buy-btn" onclick="window.open('https://ig.me/m/artncraftindia', '_blank')">DM to Order</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Location & Contact -->
-    <section class="location-section" id="location">
-        <div class="location-details">
-            <h2>Visit <span class="gold-text">Chutney</span></h2>
-            <p style="color: var(--text-muted); margin-bottom: 2rem;">We are located in the heart of Agartala. Drop by for an unforgettable dining experience or order directly to your doorstep.</p>
+    <!-- Franchise Banner -->
+    <section class="banner">
+        <span class="subtitle">Join Our Family</span>
+        <h2>Franchise Opportunity</h2>
+        <p>Start your own high-margin home decor store with ArtNcraft. Proven model, fast payback.</p>
+        <a href="#contact" class="btn-primary">Inquire Now</a>
+    </section>
 
-            <div class="detail-row">
-                <div class="detail-icon">📍</div>
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="contact-info">
+            <span class="subtitle">Get in Touch</span>
+            <h2>Bring Art to Your Home</h2>
+            <p>Interested in our products, gifting options, or franchise opportunities? Reach out to us. We offer pan-India shipping directly from Jodhpur.</p>
+            
+            <div class="contact-method">
+                <i class="fa-solid fa-location-dot"></i>
                 <div>
-                    <strong style="display: block; font-size: 1.1rem; margin-bottom: 5px;">Address</strong>
-                    <span style="color: var(--text-muted)">Motor Stand Rd, near I M Medical,<br>Indranagar, Agartala, Tripura – 799001</span>
+                    <h4>Our Location</h4>
+                    <p style="color: var(--text-muted);">Old City, Jodhpur, Rajasthan, India</p>
                 </div>
             </div>
-
-            <div class="detail-row">
-                <div class="detail-icon">📌</div>
+            
+            <div class="contact-method">
+                <i class="fa-brands fa-instagram"></i>
                 <div>
-                    <strong style="display: block; font-size: 1.1rem; margin-bottom: 5px;">Plus Code</strong>
-                    <span style="color: var(--text-muted)">R7JM+JX, Agartala, Tripura</span>
+                    <h4>Instagram</h4>
+                    <p style="color: var(--text-muted);"><a href="https://www.instagram.com/artncraftindia/" target="_blank">@artncraftindia</a> (DM to Order)</p>
                 </div>
             </div>
-
-            <div class="detail-row">
-                <div class="detail-icon">📞</div>
+            
+            <div class="contact-method">
+                <i class="fa-solid fa-envelope"></i>
                 <div>
-                    <strong style="display: block; font-size: 1.1rem; margin-bottom: 5px;">Contact</strong>
-                    <span style="color: var(--text-muted)"><a href="tel:07085709411" style="color:var(--text-muted); text-decoration:none;">070857 09411</a></span>
+                    <h4>Email Us</h4>
+                    <p style="color: var(--text-muted);">hello@artncraftindia.com</p>
                 </div>
             </div>
         </div>
-        
-        <div class="map-container">
-            <div class="map-placeholder">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
-                <h3>Agartala, Tripura</h3>
-                <p>Interactive Map Embed Here</p>
-                <a href="https://maps.google.com/?q=Motor+Stand+Rd,+near+I+M+Medical,+Indranagar,+Agartala,+Tripura+–+799001" target="_blank" class="btn" style="margin-top: 15px;">Open in Google Maps</a>
-            </div>
+
+        <div class="contact-form">
+            <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Thank you for your message. We will get back to you shortly!');">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <select style="width: 100%; padding: 1rem; background-color: var(--bg-surface); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; color: var(--text-muted); font-family: 'Inter', sans-serif; margin-bottom: 1.5rem;">
+                        <option value="" disabled selected>Subject</option>
+                        <option value="buy">Purchase Inquiry</option>
+                        <option value="gift">Corporate Gifting</option>
+                        <option value="franchise">Franchise Opportunity</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Your Message" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="logo" style="margin-bottom: 1rem;">Chutney <span>(চাটনি)</span></div>
-        <p>&copy; 2026 Chutney Bengali Restaurant. All rights reserved. | <a href="#" style="color: var(--primary); text-decoration: none;">Privacy Policy</a></p>
+        <div class="social-links">
+            <a href="https://www.instagram.com/artncraftindia/"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+        </div>
+        <p class="footer-text">&copy; 2026 ArtNCraft India. All rights reserved.</p>
+        <p class="footer-text" style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.7;">Rooted in the heart of Jodhpur's old city. 100% Handcrafted.</p>
     </footer>
 
     <script>
-        // Smooth scrolling for anchor links
+        // Smooth scrolling for navigation links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -524,6 +673,28 @@
                     behavior: 'smooth'
                 });
             });
+        });
+
+        // Simple scroll reveal
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.product-card, .info-item, .contact-method').forEach(el => {
+            el.style.opacity = "0";
+            el.style.transform = "translateY(20px)";
+            el.style.transition = "all 0.6s ease-out";
+            observer.observe(el);
         });
     </script>
 </body>
