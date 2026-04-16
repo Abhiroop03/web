@@ -1,701 +1,610 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Artncraft - Handcrafted Home Decor from Jodhpur</title>
-    <meta name="description" content="Premium handcrafted home decor from the heart of Jodhpur. Wood, brass, iron, and stone crafts.">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #cba365;       /* Warm gold/brass color */
-            --primary-dark: #b08d55;
-            --bg-dark: #121212;
-            --bg-surface: #1e1e1e;
-            --bg-surface-light: #2c2c2c;
-            --text-light: #f5f5f5;
-            --text-muted: #a0a0a0;
-            --border-color: rgba(203, 163, 101, 0.2);
-            --transition: all 0.3s ease;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hronak — Instagram Coach | Business | Mindset | Fitness</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  :root {
+    --black: #0a0a0a;
+    --dark: #111111;
+    --card: #161616;
+    --border: #222222;
+    --gold: #c9a84c;
+    --gold-light: #e8c96e;
+    --white: #f5f3ee;
+    --muted: #888888;
+    --accent: #d4a843;
+  }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
+  html { scroll-behavior: smooth; }
 
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Playfair Display', serif;
-            font-weight: 600;
-        }
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
 
-        a {
-            text-decoration: none;
-            color: inherit;
-        }
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 4rem;
+    background: rgba(10,10,10,0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+  }
+  .nav-links { display: flex; gap: 2.4rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted);
+    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em;
+    text-transform: uppercase; transition: color 0.25s;
+  }
+  .nav-links a:hover { color: var(--gold); }
 
-        /* Navbar */
-        nav {
-            padding: 1.5rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: absolute;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 8rem 4rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 70% 50%, rgba(201,168,76,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: center; max-width: 1100px; margin: 0 auto; width: 100%;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.3);
+    padding: 0.35rem 1rem; border-radius: 2rem; margin-bottom: 1.5rem;
+    font-size: 0.75rem; font-weight: 500; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold);
+  }
+  .hero-badge span { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; display: inline-block; }
+  .hero h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3.5rem, 7vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 em { color: var(--gold); font-style: normal; }
+  .hero-desc {
+    color: var(--muted); font-size: 1rem; max-width: 460px;
+    margin-bottom: 2.5rem; line-height: 1.75;
+  }
+  .hero-desc strong { color: var(--white); font-weight: 500; }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    display: inline-block; padding: 0.85rem 2rem;
+    background: var(--gold); color: var(--black);
+    font-weight: 700; font-size: 0.85rem; letter-spacing: 0.06em;
+    text-transform: uppercase; text-decoration: none;
+    border-radius: 3px; transition: background 0.25s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-secondary {
+    display: inline-block; padding: 0.85rem 2rem;
+    border: 1px solid var(--border); color: var(--white);
+    font-weight: 500; font-size: 0.85rem; letter-spacing: 0.06em;
+    text-transform: uppercase; text-decoration: none;
+    border-radius: 3px; transition: border-color 0.25s, color 0.25s;
+  }
+  .btn-secondary:hover { border-color: var(--gold); color: var(--gold); }
 
-        .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.8rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            color: var(--primary);
-            text-transform: uppercase;
-        }
-        
-        .logo span {
-            color: var(--text-light);
-        }
+  /* Hero right — avatar + stats */
+  .hero-right { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+  .avatar-wrap {
+    position: relative; width: 220px; height: 220px;
+  }
+  .avatar-ring {
+    position: absolute; inset: -8px; border-radius: 50%;
+    border: 2px solid transparent;
+    background: linear-gradient(135deg, var(--gold), transparent, var(--gold)) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: destination-out; mask-composite: exclude;
+    animation: spin 8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .avatar {
+    width: 220px; height: 220px; border-radius: 50%;
+    background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif; font-size: 5rem; color: var(--gold);
+    border: 3px solid var(--border);
+    overflow: hidden;
+  }
+  .stats-row {
+    display: flex; gap: 2rem;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 1.5rem 2rem;
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; color: var(--gold); letter-spacing: 0.04em;
+  }
+  .stat-label {
+    font-size: 0.7rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--muted); margin-top: 0.1rem;
+  }
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-        }
+  /* ── SECTION WRAPPER ── */
+  section { padding: 6rem 4rem; }
+  .section-inner { max-width: 1100px; margin: 0 auto; }
+  .section-tag {
+    font-size: 0.7rem; font-weight: 700; letter-spacing: 0.2em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1; margin-bottom: 3rem;
+  }
+  .divider {
+    width: 100%; height: 1px; background: var(--border);
+  }
 
-        .nav-links a {
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: var(--transition);
-        }
+  /* ── ABOUT ── */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
+  }
+  .about-text p {
+    color: var(--muted); line-height: 1.8; margin-bottom: 1.2rem; font-size: 0.97rem;
+  }
+  .about-text p strong { color: var(--white); font-weight: 500; }
+  .about-highlights { display: flex; flex-direction: column; gap: 1rem; }
+  .highlight-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 1.2rem 1.5rem; border-radius: 4px;
+  }
+  .highlight-card h4 { font-weight: 600; font-size: 0.9rem; margin-bottom: 0.3rem; }
+  .highlight-card p { font-size: 0.82rem; color: var(--muted); }
 
-        .nav-links a:hover {
-            color: var(--primary);
-        }
+  /* ── SERVICES ── */
+  #services { background: var(--dark); }
+  .services-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  }
+  .service-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 2rem;
+    transition: border-color 0.3s, transform 0.3s;
+    position: relative; overflow: hidden;
+  }
+  .service-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .service-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-4px); }
+  .service-card:hover::before { opacity: 1; }
+  .service-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .service-card h3 { font-weight: 600; margin-bottom: 0.6rem; font-size: 1rem; }
+  .service-card p { color: var(--muted); font-size: 0.85rem; line-height: 1.7; }
 
-        .btn-outline {
-            padding: 0.6rem 1.5rem;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            transition: var(--transition);
-        }
+  /* ── TOPICS / HIGHLIGHTS ── */
+  .topics-grid { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .topic-pill {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 0.6rem 1.4rem; border-radius: 2rem;
+    font-size: 0.85rem; font-weight: 500; transition: border-color 0.25s, color 0.25s;
+  }
+  .topic-pill:hover { border-color: var(--gold); color: var(--gold); cursor: default; }
 
-        .btn-outline:hover {
-            background-color: var(--primary);
-            color: var(--bg-dark);
-        }
+  /* ── CONTACT ── */
+  #contact { background: var(--dark); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
+  }
+  .contact-intro p {
+    color: var(--muted); line-height: 1.8; margin-bottom: 2rem; font-size: 0.97rem;
+  }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link {
+    display: flex; align-items: center; gap: 1rem;
+    background: var(--card); border: 1px solid var(--border);
+    padding: 1rem 1.5rem; border-radius: 6px; text-decoration: none; color: var(--white);
+    transition: border-color 0.25s, color 0.25s;
+  }
+  .contact-link:hover { border-color: var(--gold); color: var(--gold); }
+  .contact-link .link-icon { font-size: 1.2rem; width: 2rem; text-align: center; }
+  .contact-link .link-info { flex: 1; }
+  .contact-link .link-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .contact-link .link-value { font-size: 0.9rem; font-weight: 500; margin-top: 0.1rem; }
+  .contact-link .link-arrow { color: var(--muted); font-size: 0.8rem; }
 
-        .btn-primary {
-            display: inline-block;
-            padding: 1rem 2.5rem;
-            background-color: var(--primary);
-            color: var(--bg-dark);
-            border: none;
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-family: 'Inter', sans-serif;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
+  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); }
+  .form-group input,
+  .form-group textarea {
+    background: var(--card); border: 1px solid var(--border);
+    color: var(--white); padding: 0.85rem 1rem; border-radius: 4px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+    outline: none; transition: border-color 0.25s; resize: vertical;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+  .form-group textarea { min-height: 120px; }
+  .form-submit {
+    display: inline-block; padding: 0.9rem 2rem;
+    background: var(--gold); color: var(--black);
+    font-weight: 700; font-size: 0.85rem; letter-spacing: 0.06em;
+    text-transform: uppercase; border: none; cursor: pointer;
+    border-radius: 3px; transition: background 0.25s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .form-submit:hover { background: var(--gold-light); }
 
-        .btn-primary:hover {
-            background-color: var(--primary-dark);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-        }
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 4rem; border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--gold); }
+  .footer-copy { font-size: 0.78rem; color: var(--muted); }
+  .footer-socials { display: flex; gap: 1rem; }
+  .footer-socials a {
+    font-size: 0.78rem; color: var(--muted); text-decoration: none;
+    text-transform: uppercase; letter-spacing: 0.08em; transition: color 0.25s;
+  }
+  .footer-socials a:hover { color: var(--gold); }
 
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            background: linear-gradient(rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)), url('https://images.unsplash.com/photo-1618220179428-22790b46a0eb?q=80&w=2000&auto=format&fit=crop') center/cover;
-            text-align: center;
-            padding: 0 5%;
-        }
+  /* ── ANIMATIONS ── */
+  .fade-up {
+    opacity: 0; transform: translateY(24px);
+    animation: fadeUp 0.7s ease forwards;
+  }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .delay-1 { animation-delay: 0.1s; }
+  .delay-2 { animation-delay: 0.2s; }
+  .delay-3 { animation-delay: 0.35s; }
+  .delay-4 { animation-delay: 0.5s; }
 
-        .hero-content {
-            max-width: 800px;
-            animation: fadeIn 1.5s ease-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .subtitle {
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            display: block;
-        }
-
-        .hero h1 {
-            font-size: 4.5rem;
-            margin-bottom: 1.5rem;
-            line-height: 1.1;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            margin-bottom: 2.5rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Info Bar */
-        .info-bar {
-            background-color: var(--bg-surface);
-            padding: 2rem 5%;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .info-item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            opacity: 0.8;
-            transition: var(--transition);
-        }
-
-        .info-item:hover {
-            opacity: 1;
-            color: var(--primary);
-        }
-
-        .info-icon {
-            font-size: 2rem;
-            color: var(--primary);
-        }
-
-        /* Products Section */
-        .products {
-            padding: 6rem 5%;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-
-        .section-header h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .section-header p {
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2.5rem;
-        }
-
-        .product-card {
-            background-color: var(--bg-surface);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: var(--transition);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
-            border-color: var(--border-color);
-        }
-
-        .product-img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .product-card:hover .product-img {
-            transform: scale(1.05);
-        }
-
-        .img-container {
-            overflow: hidden;
-            position: relative;
-        }
-
-        .category-badge {
-            position: absolute;
-            top: 1rem;
-            left: 1rem;
-            background-color: var(--bg-dark);
-            color: var(--primary);
-            padding: 0.4rem 1rem;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            z-index: 2;
-        }
-
-        .product-info {
-            padding: 2rem;
-            text-align: center;
-        }
-
-        .product-title {
-            font-size: 1.4rem;
-            margin-bottom: 0.5rem;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .product-desc {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .buy-btn {
-            background: transparent;
-            border: 1px solid var(--text-light);
-            color: var(--text-light);
-            padding: 0.8rem 2rem;
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: var(--transition);
-            width: 100%;
-        }
-
-        .product-card:hover .buy-btn {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: var(--bg-dark);
-        }
-
-        /* Banner Section */
-        .banner {
-            margin: 4rem 5%;
-            padding: 5rem;
-            background: linear-gradient(rgba(18, 18, 18, 0.8), rgba(20, 15, 8, 0.8)), url('https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=2069&auto=format&fit=crop') center/cover;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid var(--border-color);
-        }
-
-        .banner h2 {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .banner p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            color: #ddd;
-        }
-
-        /* Contact Section */
-        .contact {
-            padding: 6rem 5%;
-            background-color: var(--bg-surface);
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .contact-info h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-info p {
-            color: var(--text-muted);
-            margin-bottom: 2rem;
-        }
-
-        .contact-method {
-            display: flex;
-            align-items: flex-start;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-method i {
-            font-size: 1.5rem;
-            color: var(--primary);
-            background-color: rgba(203, 163, 101, 0.1);
-            padding: 1rem;
-            border-radius: 50%;
-        }
-
-        .contact-method div h4 {
-            font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            margin-bottom: 0.3rem;
-        }
-
-        .contact-method div p {
-            margin-bottom: 0;
-            font-size: 0.95rem;
-        }
-
-        .contact-form {
-            background-color: var(--bg-dark);
-            padding: 3rem;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 1rem;
-            background-color: var(--bg-surface);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            color: var(--text-light);
-            font-family: 'Inter', sans-serif;
-            transition: var(--transition);
-        }
-
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        textarea {
-            height: 120px;
-            resize: vertical;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 1rem;
-            background-color: var(--primary);
-            color: var(--bg-dark);
-            border: none;
-            border-radius: 4px;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .submit-btn:hover {
-            background-color: var(--primary-dark);
-        }
-
-        /* Footer */
-        footer {
-            padding: 3rem 5%;
-            text-align: center;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            background-color: var(--bg-dark);
-        }
-
-        .social-links {
-            display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .social-links a {
-            font-size: 1.2rem;
-            color: var(--text-muted);
-            transition: var(--transition);
-        }
-
-        .social-links a:hover {
-            color: var(--primary);
-        }
-
-        .footer-text {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        @media (max-width: 900px) {
-            .contact, .info-bar {
-                grid-template-columns: 1fr;
-            }
-            .hero h1 {
-                font-size: 3rem;
-            }
-            .banner {
-                padding: 3rem 2rem;
-            }
-            .nav-links {
-                display: none;
-            }
-        }
-    </style>
-    <!-- Adding FontAwesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { gap: 1.4rem; }
+    section { padding: 4rem 1.5rem; }
+    .hero { padding: 7rem 1.5rem 3rem; }
+    .hero-grid { grid-template-columns: 1fr; text-align: center; }
+    .hero-badge { margin: 0 auto 1.5rem; }
+    .hero-desc { margin: 0 auto 2rem; }
+    .hero-cta { justify-content: center; }
+    .hero-right { order: -1; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+  @media (max-width: 600px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .stats-row { gap: 1.2rem; }
+    .nav-links { display: none; }
+  }
+</style>
 </head>
 <body>
 
-    <!-- Navigation -->
-    <nav>
-        <a href="#" class="logo">ArtN<span>Craft</span></a>
-        <ul class="nav-links">
-            <li><a href="#home">Home</a></li>
-            <li><a href="#shop">Shop</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-        <a href="https://www.instagram.com/artncraftindia/" target="_blank" class="btn-outline">Instagram <i class="fab fa-instagram"></i></a>
-    </nav>
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Hronak</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#topics">Topics</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="btn-primary" style="padding:0.55rem 1.3rem;font-size:0.78rem;">Work With Me</a>
+</nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-content">
-            <span class="subtitle">Rooted in the heart of Jodhpur's old city 🇮🇳</span>
-            <h1>100% Handcrafted Elegance</h1>
-            <p>Discover premium home decor crafted from the finest Wood, Brass, Iron, and Stone. Bring authentic Indian heritage into your modern spaces.</p>
-            <a href="#shop" class="btn-primary">Explore Collection</a>
-        </div>
-    </section>
-
-    <!-- Info Bar -->
-    <div class="info-bar">
-        <div class="info-item">
-            <i class="fa-solid fa-hammer info-icon"></i>
-            <div>
-                <h4>100% Handcrafted</h4>
-                <p style="font-size: 0.8rem; color: var(--text-muted);">Authentic artisanal work</p>
-            </div>
-        </div>
-        <div class="info-item">
-            <i class="fa-solid fa-truck-fast info-icon"></i>
-            <div>
-                <h4>Pan-India Shipping</h4>
-                <p style="font-size: 0.8rem; color: var(--text-muted);">Delivered to your doorstep</p>
-            </div>
-        </div>
-        <div class="info-item">
-            <i class="fa-solid fa-gift info-icon"></i>
-            <div>
-                <h4>Perfect for Gifting</h4>
-                <p style="font-size: 0.8rem; color: var(--text-muted);">Luxurious & memorable</p>
-            </div>
-        </div>
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-grid">
+    <div class="hero-left">
+      <div class="hero-badge fade-up delay-1"><span></span> Ex-Indian Army · Instagram Coach</div>
+      <h1 class="fade-up delay-2">
+        BUILD YOUR<br><em>BRAND.</em><br>GROW YOUR<br>INFLUENCE.
+      </h1>
+      <p class="hero-desc fade-up delay-3">
+        I'm <strong>Hronak</strong> — helping creators grow organically on Instagram
+        through <strong>Business</strong>, <strong>Mindset</strong>, and <strong>Fitness</strong> principles
+        forged in military discipline.
+      </p>
+      <div class="hero-cta fade-up delay-4">
+        <a href="#contact" class="btn-primary">Book a 1:1 Session</a>
+        <a href="https://www.instagram.com/hronak_4.01" target="_blank" class="btn-secondary">Instagram ↗</a>
+      </div>
     </div>
-
-    <!-- Products Section -->
-    <section id="shop" class="products">
-        <div class="section-header">
-            <span class="subtitle">Our Offerings</span>
-            <h2>Curated Masterpieces</h2>
-            <p>From intricate woodwork to gleaming brass antiquities, every piece tells a story of generations of craftsmanship.</p>
+    <div class="hero-right fade-up delay-3">
+      <div class="avatar-wrap">
+        <div class="avatar-ring"></div>
+        <div class="avatar">H</div>
+      </div>
+      <div class="stats-row">
+        <div class="stat">
+          <div class="stat-num">272</div>
+          <div class="stat-label">Posts</div>
         </div>
-
-        <div class="product-grid">
-            <!-- Product 1 -->
-            <div class="product-card">
-                <div class="img-container">
-                    <span class="category-badge">Brass</span>
-                    <!-- Using the generated image that we copied over -->
-                    <img src="./brass_lantern.png" alt="Vintage Brass Lantern" class="product-img" onerror="this.src='https://images.unsplash.com/photo-1542157585-ef31102eef56?q=80&w=800&auto=format&fit=crop'">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Vintage Brass Lantern</h3>
-                    <p class="product-desc">Hand-hammered brass with antique finish. Perfect for warm, ambient lighting.</p>
-                    <button class="buy-btn" onclick="window.open('https://ig.me/m/artncraftindia', '_blank')">DM to Order</button>
-                </div>
-            </div>
-
-            <!-- Product 2 -->
-            <div class="product-card">
-                <div class="img-container">
-                    <span class="category-badge">Wood</span>
-                    <img src="https://images.unsplash.com/photo-1579783900863-12f7162b7cd6?q=80&w=800&auto=format&fit=crop" alt="Carved Wood Panel" class="product-img">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Carved Wooden Panel</h3>
-                    <p class="product-desc">Intricately carved rosewood panel detailing traditional Rajasthani motifs.</p>
-                    <button class="buy-btn" onclick="window.open('https://ig.me/m/artncraftindia', '_blank')">DM to Order</button>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="product-card">
-                <div class="img-container">
-                    <span class="category-badge">Stone</span>
-                    <img src="https://images.unsplash.com/photo-1582215286561-12711dc75465?q=80&w=800&auto=format&fit=crop" alt="Marble Coaster Set" class="product-img">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Inlay Marble Set</h3>
-                    <p class="product-desc">Premium white Makrana marble coasters with semi-precious stone inlay work.</p>
-                    <button class="buy-btn" onclick="window.open('https://ig.me/m/artncraftindia', '_blank')">DM to Order</button>
-                </div>
-            </div>
-            
-            <!-- Product 4 -->
-            <div class="product-card">
-                <div class="img-container">
-                    <span class="category-badge">Iron</span>
-                    <img src="https://images.unsplash.com/photo-1632223847551-78923a1a5b81?q=80&w=800&auto=format&fit=crop" alt="Wrought Iron Wall Art" class="product-img">
-                </div>
-                <div class="product-info">
-                    <h3 class="product-title">Wrought Iron Wall Art</h3>
-                    <p class="product-desc">Contemporary geometric wall decor handcrafted from sturdy wrought iron.</p>
-                    <button class="buy-btn" onclick="window.open('https://ig.me/m/artncraftindia', '_blank')">DM to Order</button>
-                </div>
-            </div>
+        <div class="stat">
+          <div class="stat-num">9.8K</div>
+          <div class="stat-label">Followers</div>
         </div>
-    </section>
-
-    <!-- Franchise Banner -->
-    <section class="banner">
-        <span class="subtitle">Join Our Family</span>
-        <h2>Franchise Opportunity</h2>
-        <p>Start your own high-margin home decor store with ArtNcraft. Proven model, fast payback.</p>
-        <a href="#contact" class="btn-primary">Inquire Now</a>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="contact-info">
-            <span class="subtitle">Get in Touch</span>
-            <h2>Bring Art to Your Home</h2>
-            <p>Interested in our products, gifting options, or franchise opportunities? Reach out to us. We offer pan-India shipping directly from Jodhpur.</p>
-            
-            <div class="contact-method">
-                <i class="fa-solid fa-location-dot"></i>
-                <div>
-                    <h4>Our Location</h4>
-                    <p style="color: var(--text-muted);">Old City, Jodhpur, Rajasthan, India</p>
-                </div>
-            </div>
-            
-            <div class="contact-method">
-                <i class="fa-brands fa-instagram"></i>
-                <div>
-                    <h4>Instagram</h4>
-                    <p style="color: var(--text-muted);"><a href="https://www.instagram.com/artncraftindia/" target="_blank">@artncraftindia</a> (DM to Order)</p>
-                </div>
-            </div>
-            
-            <div class="contact-method">
-                <i class="fa-solid fa-envelope"></i>
-                <div>
-                    <h4>Email Us</h4>
-                    <p style="color: var(--text-muted);">hello@artncraftindia.com</p>
-                </div>
-            </div>
+        <div class="stat">
+          <div class="stat-num">339</div>
+          <div class="stat-label">Following</div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-        <div class="contact-form">
-            <form action="#" method="POST" onsubmit="event.preventDefault(); alert('Thank you for your message. We will get back to you shortly!');">
-                <div class="form-group">
-                    <input type="text" placeholder="Your Name" required>
-                </div>
-                <div class="form-group">
-                    <input type="email" placeholder="Your Email" required>
-                </div>
-                <div class="form-group">
-                    <select style="width: 100%; padding: 1rem; background-color: var(--bg-surface); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 4px; color: var(--text-muted); font-family: 'Inter', sans-serif; margin-bottom: 1.5rem;">
-                        <option value="" disabled selected>Subject</option>
-                        <option value="buy">Purchase Inquiry</option>
-                        <option value="gift">Corporate Gifting</option>
-                        <option value="franchise">Franchise Opportunity</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <textarea placeholder="Your Message" required></textarea>
-                </div>
-                <button type="submit" class="submit-btn">Send Message</button>
-            </form>
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-inner">
+    <p class="section-tag">About Me</p>
+    <h2 class="section-title">From Army to<br>Instagram Growth</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I'm <strong>Hronak</strong> — a former Indian Army soldier turned Instagram Coach
+          based in Delhi. My journey taught me that discipline, consistency, and the right mindset
+          are the real foundations of any successful brand.
+        </p>
+        <p>
+          After serving my country, I channelled the same dedication into the digital space —
+          helping creators like you grow organically, build authority, and monetize your passion
+          without shortcuts.
+        </p>
+        <p>
+          Whether you're a beginner or looking to scale, I provide proven frameworks around
+          <strong>content creation</strong>, <strong>personal branding</strong>, and
+          <strong>business mindset</strong> that actually work.
+        </p>
+      </div>
+      <div class="about-highlights">
+        <div class="highlight-card">
+          <h4>🪖 Military Background</h4>
+          <p>Ex-Indian Army — bringing discipline and mental toughness to every strategy.</p>
         </div>
-    </section>
-
-    <!-- Footer -->
-    <footer>
-        <div class="social-links">
-            <a href="https://www.instagram.com/artncraftindia/"><i class="fa-brands fa-instagram"></i></a>
-            <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
-            <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+        <div class="highlight-card">
+          <h4>📈 Organic Growth Expert</h4>
+          <p>Helping creators grow without paid ads — real followers, real engagement.</p>
         </div>
-        <p class="footer-text">&copy; 2026 ArtNCraft India. All rights reserved.</p>
-        <p class="footer-text" style="font-size: 0.8rem; margin-top: 0.5rem; opacity: 0.7;">Rooted in the heart of Jodhpur's old city. 100% Handcrafted.</p>
-    </footer>
+        <div class="highlight-card">
+          <h4>🧠 Business & Mindset</h4>
+          <p>Founder of HronakDigital023 — combining fitness philosophy with digital strategy.</p>
+        </div>
+        <div class="highlight-card">
+          <h4>🎥 YouTube Educator</h4>
+          <p>Sharing free value on YouTube for creators who want to grow with intention.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <script>
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+<div class="divider"></div>
 
-        // Simple scroll reveal
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <p class="section-tag">What I Offer</p>
+    <h2 class="section-title">Services</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">📸</div>
+        <h3>Instagram Coaching</h3>
+        <p>One-on-one personalised coaching to grow your Instagram account organically — from content strategy to profile optimisation and engagement tactics.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🧠</div>
+        <h3>Business Mindset</h3>
+        <p>Build the mental framework of a successful entrepreneur. Learn how discipline, focus, and consistency translate into a thriving digital business.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💪</div>
+        <h3>Fitness Philosophy</h3>
+        <p>Integrate physical discipline into your creator journey. A fit body fuels a focused mind — and I show you how to balance both.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎯</div>
+        <h3>Personal Branding</h3>
+        <p>Define who you are, what you stand for, and how to communicate it powerfully across Instagram and beyond.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🎬</div>
+        <h3>Content Creation Strategy</h3>
+        <p>Craft content that converts — from reels to carousels — with a clear editorial direction that attracts your ideal audience.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">📣</div>
+        <h3>Promotions & Collabs</h3>
+        <p>Looking to promote your brand or collaborate? Reach out for tailored promotions and partnerships aligned with my audience.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = "1";
-                    entry.target.style.transform = "translateY(0)";
-                }
-            });
-        }, observerOptions);
+<div class="divider"></div>
 
-        document.querySelectorAll('.product-card, .info-item, .contact-method').forEach(el => {
-            el.style.opacity = "0";
-            el.style.transform = "translateY(20px)";
-            el.style.transition = "all 0.6s ease-out";
-            observer.observe(el);
-        });
-    </script>
+<!-- TOPICS -->
+<section id="topics">
+  <div class="section-inner">
+    <p class="section-tag">Content Themes</p>
+    <h2 class="section-title">What I Talk About</h2>
+    <div class="topics-grid">
+      <div class="topic-pill">🪖 Army Life</div>
+      <div class="topic-pill">📈 Instagram Growth</div>
+      <div class="topic-pill">🧠 Mindset</div>
+      <div class="topic-pill">💼 Business</div>
+      <div class="topic-pill">💪 Fitness</div>
+      <div class="topic-pill">🏔 Uttarakhand</div>
+      <div class="topic-pill">🎉 Delhi 2025</div>
+      <div class="topic-pill">⭐ Few Fun Facts</div>
+      <div class="topic-pill">🌟 With Fame</div>
+      <div class="topic-pill">🎤 Personal Brand</div>
+      <div class="topic-pill">📹 Content Creation</div>
+      <div class="topic-pill">🚀 Creator Economy</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <p class="section-tag">Get In Touch</p>
+    <h2 class="section-title">Let's Work<br>Together</h2>
+    <div class="contact-grid">
+      <div class="contact-intro">
+        <p>
+          Ready to grow your Instagram, build your brand, or collaborate?
+          DM me on Instagram or drop a message below.
+          I personally respond to every inquiry.
+        </p>
+        <div class="contact-links">
+          <a href="https://www.instagram.com/hronak_4.01" target="_blank" class="contact-link">
+            <div class="link-icon">📸</div>
+            <div class="link-info">
+              <div class="link-label">Instagram</div>
+              <div class="link-value">@hronak_4.01</div>
+            </div>
+            <div class="link-arrow">↗</div>
+          </a>
+          <a href="mailto:tikalimbu0123@gmail.com" class="contact-link">
+            <div class="link-icon">✉️</div>
+            <div class="link-info">
+              <div class="link-label">Email (Promotions)</div>
+              <div class="link-value">tikalimbu0123@gmail.com</div>
+            </div>
+            <div class="link-arrow">↗</div>
+          </a>
+          <a href="https://youtube.com/@growwith_hronak" target="_blank" class="contact-link">
+            <div class="link-icon">▶️</div>
+            <div class="link-info">
+              <div class="link-label">YouTube</div>
+              <div class="link-value">@growwith_hronak</div>
+            </div>
+            <div class="link-arrow">↗</div>
+          </a>
+          <a href="https://www.instagram.com/HronakDigital023" target="_blank" class="contact-link">
+            <div class="link-icon">💼</div>
+            <div class="link-info">
+              <div class="link-label">Business Page</div>
+              <div class="link-value">HronakDigital023</div>
+            </div>
+            <div class="link-arrow">↗</div>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="contact-form" id="contactForm">
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" placeholder="Enter your name" id="nameInput">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" placeholder="your@email.com" id="emailInput">
+          </div>
+          <div class="form-group">
+            <label>Subject</label>
+            <input type="text" placeholder="1:1 Coaching / Promotion / Collab" id="subjectInput">
+          </div>
+          <div class="form-group">
+            <label>Message</label>
+            <textarea placeholder="Tell me about your goals..." id="msgInput"></textarea>
+          </div>
+          <button class="form-submit" onclick="handleSubmit()">Send Message →</button>
+          <div id="formMsg" style="display:none; padding:0.8rem 1rem; border-radius:4px; font-size:0.85rem; margin-top:0.5rem;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Hronak</div>
+  <div class="footer-copy">© 2025 HronakDigital023 · All rights reserved</div>
+  <div class="footer-socials">
+    <a href="https://www.instagram.com/hronak_4.01" target="_blank">Instagram</a>
+    <a href="https://youtube.com/@growwith_hronak" target="_blank">YouTube</a>
+    <a href="mailto:tikalimbu0123@gmail.com">Email</a>
+  </div>
+</footer>
+
+<script>
+  // Form handler — opens mailto
+  function handleSubmit() {
+    const name = document.getElementById('nameInput').value.trim();
+    const email = document.getElementById('emailInput').value.trim();
+    const subject = document.getElementById('subjectInput').value.trim();
+    const msg = document.getElementById('msgInput').value.trim();
+    const div = document.getElementById('formMsg');
+
+    if (!name || !email || !msg) {
+      div.style.display = 'block';
+      div.style.background = 'rgba(255,80,80,0.1)';
+      div.style.border = '1px solid rgba(255,80,80,0.3)';
+      div.style.color = '#ff8080';
+      div.textContent = 'Please fill in your name, email, and message.';
+      return;
+    }
+
+    const mailBody = `Hi Hronak,\n\nMy name is ${name}.\n\n${msg}\n\nContact me at: ${email}`;
+    const mailLink = `mailto:tikalimbu0123@gmail.com?subject=${encodeURIComponent(subject || 'Enquiry from Portfolio')}&body=${encodeURIComponent(mailBody)}`;
+    window.location.href = mailLink;
+
+    div.style.display = 'block';
+    div.style.background = 'rgba(201,168,76,0.1)';
+    div.style.border = '1px solid rgba(201,168,76,0.3)';
+    div.style.color = '#c9a84c';
+    div.textContent = '✓ Opening your mail client...';
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .highlight-card, .topic-pill, .contact-link').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+    observer.observe(el);
+  });
+</script>
 </body>
 </html>
