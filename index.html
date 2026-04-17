@@ -1,748 +1,1338 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TOMETO – Find Food You Love</title>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Loopa — Be in the Moment</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap"
+    rel="stylesheet" />
   <style>
-    :root {
-      --red: #e8292a;
-      --orange: #ff6b35;
-      --cream: #fff8f0;
-      --dark: #1a0a00;
-      --mid: #4a2c10;
-      --light: #f5ece3;
-      --accent: #ffcc29;
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green: #1a7a3c;
+      --green-mid: #2ea855;
+      --green-light: #5dd67a;
+      --green-pale: #d4f5dd;
+      --lime: #b6e828;
+      --lime-dark: #7db800;
+      --black: #0d1a0f;
+      --white: #f5fff7;
+      --gray: #e8f5eb;
+      --gold: #e8c84a;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       font-family: 'DM Sans', sans-serif;
-      background: var(--cream);
-      color: var(--dark);
+      background: var(--black);
+      color: var(--white);
       overflow-x: hidden;
     }
 
-    /* ── NAVBAR ── */
+    /* NAV */
     nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 60px;
-      background: rgba(255,248,240,0.9);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(232,41,42,0.1);
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: rgba(13, 26, 15, 0.85);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(94, 214, 122, 0.15);
+      animation: slideDown 0.6s ease;
     }
-    .logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 2rem; font-weight: 800;
-      color: var(--red);
-      letter-spacing: -1px;
-    }
-    .logo span { color: var(--orange); }
-    .nav-links { display: flex; gap: 36px; align-items: center; }
-    .nav-links a {
-      text-decoration: none; color: var(--mid);
-      font-weight: 500; font-size: 0.95rem;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--red); }
-    .nav-btn {
-      background: var(--red); color: #fff;
-      border: none; padding: 10px 26px;
-      border-radius: 30px; font-size: 0.9rem;
-      font-weight: 600; cursor: pointer;
-      font-family: 'DM Sans', sans-serif;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .nav-btn:hover { background: #c41f20; transform: scale(1.04); }
 
-    /* ── HERO ── */
+    @keyframes slideDown {
+      from {
+        transform: translateY(-100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--green-light);
+      letter-spacing: 2px;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: rgba(245, 255, 247, 0.7);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: var(--green-light);
+    }
+
+    .nav-cta {
+      background: var(--green-mid);
+      color: var(--white);
+      padding: 0.55rem 1.4rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: background 0.3s, transform 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+
+    .nav-cta:hover {
+      background: var(--green-light);
+      transform: scale(1.04);
+    }
+
+    /* HERO */
     .hero {
       min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 120px 40px 60px;
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       position: relative;
       overflow: hidden;
+      padding: 6rem 2rem 4rem;
+      background: radial-gradient(ellipse at 60% 40%, rgba(46, 168, 85, 0.25) 0%, transparent 65%),
+        radial-gradient(ellipse at 20% 80%, rgba(26, 122, 60, 0.2) 0%, transparent 55%),
+        var(--black);
     }
-    .hero-bg {
-      position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 70% 30%, rgba(255,107,53,0.15) 0%, transparent 60%),
-                  radial-gradient(ellipse at 20% 80%, rgba(232,41,42,0.1) 0%, transparent 50%);
+
+    .hero-bg-circles {
+      position: absolute;
+      inset: 0;
       pointer-events: none;
+      z-index: 0;
     }
-    .blob {
+
+    .hero-bg-circles span {
       position: absolute;
       border-radius: 50%;
-      filter: blur(60px);
-      opacity: 0.25;
-      animation: float 8s ease-in-out infinite;
-    }
-    .blob1 { width: 380px; height: 380px; background: var(--red); top: 5%; left: -10%; animation-delay: 0s; }
-    .blob2 { width: 260px; height: 260px; background: var(--orange); bottom: 10%; right: -5%; animation-delay: 3s; }
-    .blob3 { width: 180px; height: 180px; background: var(--accent); top: 50%; left: 60%; animation-delay: 5s; }
-    @keyframes float {
-      0%, 100% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-30px) scale(1.05); }
+      border: 1px solid rgba(94, 214, 122, 0.1);
+      animation: pulse 4s ease-in-out infinite;
     }
 
-    .hero-tag {
-      background: var(--accent);
-      color: var(--dark);
-      font-size: 0.78rem; font-weight: 700;
-      letter-spacing: 2px; text-transform: uppercase;
-      padding: 6px 18px; border-radius: 20px;
-      display: inline-block; margin-bottom: 28px;
-      animation: fadeUp 0.6s ease both;
-    }
-    .hero h1 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(3rem, 7vw, 6rem);
-      font-weight: 800; line-height: 1.05;
-      color: var(--dark);
-      animation: fadeUp 0.7s 0.1s ease both;
-    }
-    .hero h1 em { color: var(--red); font-style: normal; }
-    .hero p {
-      max-width: 540px; margin: 24px auto 0;
-      font-size: 1.15rem; color: var(--mid);
-      line-height: 1.7;
-      animation: fadeUp 0.7s 0.2s ease both;
+    .hero-bg-circles span:nth-child(1) {
+      width: 500px;
+      height: 500px;
+      top: 10%;
+      left: 55%;
+      animation-delay: 0s;
     }
 
-    .search-bar {
-      display: flex; align-items: center;
-      background: #fff; border: 2px solid rgba(232,41,42,0.2);
-      border-radius: 60px; overflow: hidden;
-      max-width: 640px; width: 100%; margin: 40px auto 0;
-      box-shadow: 0 12px 40px rgba(232,41,42,0.12);
-      animation: fadeUp 0.7s 0.3s ease both;
+    .hero-bg-circles span:nth-child(2) {
+      width: 350px;
+      height: 350px;
+      top: 25%;
+      left: 62%;
+      animation-delay: 1s;
     }
-    .search-location {
-      display: flex; align-items: center; gap: 8px;
-      padding: 0 20px; border-right: 1px solid #eee;
-      color: var(--mid); font-size: 0.9rem; white-space: nowrap;
-    }
-    .search-location svg { color: var(--red); flex-shrink: 0; }
-    .search-bar input {
-      flex: 1; border: none; outline: none;
-      padding: 18px 20px; font-size: 1rem;
-      font-family: 'DM Sans', sans-serif;
-      background: transparent; color: var(--dark);
-    }
-    .search-bar input::placeholder { color: #bbb; }
-    .search-bar button {
-      background: var(--red); color: #fff;
-      border: none; padding: 18px 32px;
-      font-size: 1rem; font-weight: 600;
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-      transition: background 0.2s;
-      white-space: nowrap;
-    }
-    .search-bar button:hover { background: #c41f20; }
 
-    .hero-stats {
-      display: flex; gap: 48px; margin-top: 52px;
-      animation: fadeUp 0.7s 0.4s ease both;
+    .hero-bg-circles span:nth-child(3) {
+      width: 200px;
+      height: 200px;
+      top: 40%;
+      left: 69%;
+      animation-delay: 2s;
     }
-    .stat { text-align: center; }
-    .stat-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.9rem; font-weight: 800;
-      color: var(--red);
-    }
-    .stat-label { font-size: 0.82rem; color: var(--mid); margin-top: 4px; }
 
-    /* Food emoji strip */
-    .food-strip {
-      display: flex; gap: 0; overflow: hidden;
-      margin-top: 60px; width: 100%;
-      animation: fadeUp 0.7s 0.5s ease both;
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 0.4;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 0.8;
+        transform: scale(1.03);
+      }
     }
-    .food-emoji {
-      font-size: 2.2rem; padding: 10px 20px;
-      background: var(--light); border-radius: 50%;
-      margin: 0 8px;
-      animation: popIn 0.5s ease both;
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      max-width: 1100px;
+      width: 100%;
+    }
+
+    .hero-text {
+      animation: fadeUp 0.8s ease 0.2s both;
     }
 
     @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes popIn {
-      from { transform: scale(0.5); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
-    /* ── CATEGORIES ── */
-    section { padding: 80px 60px; }
-    .section-label {
-      font-size: 0.78rem; letter-spacing: 2.5px; text-transform: uppercase;
-      color: var(--red); font-weight: 700; margin-bottom: 12px;
-    }
-    .section-title {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(1.8rem, 3vw, 2.6rem);
-      font-weight: 800; color: var(--dark);
-      margin-bottom: 44px;
+    .hero-badge {
+      display: inline-block;
+      background: rgba(46, 168, 85, 0.2);
+      border: 1px solid var(--green-mid);
+      color: var(--green-light);
+      padding: 0.3rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 1.2rem;
     }
 
-    .cat-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-      gap: 20px;
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5.5rem);
+      line-height: 1.05;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
     }
-    .cat-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: 28px 16px;
-      text-align: center;
+
+    .hero-title span {
+      color: var(--green-light);
+      font-style: italic;
+    }
+
+    .hero-subtitle {
+      font-size: 1.05rem;
+      color: rgba(245, 255, 247, 0.65);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      max-width: 420px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+      color: var(--black);
+      font-weight: 700;
+      font-size: 0.95rem;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      border: none;
       cursor: pointer;
-      transition: all 0.25s;
-      border: 2px solid transparent;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.3s;
+      text-decoration: none;
+      display: inline-block;
+      box-shadow: 0 4px 20px rgba(46, 168, 85, 0.4);
     }
-    .cat-card:hover {
-      border-color: var(--red);
-      transform: translateY(-6px);
-      box-shadow: 0 16px 40px rgba(232,41,42,0.14);
-    }
-    .cat-icon { font-size: 2.4rem; margin-bottom: 12px; }
-    .cat-name { font-size: 0.85rem; font-weight: 600; color: var(--mid); }
 
-    /* ── RESTAURANT CARDS ── */
-    .rest-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 28px;
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(46, 168, 85, 0.55);
     }
-    .rest-card {
-      background: #fff; border-radius: 20px; overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.07);
-      transition: all 0.25s; cursor: pointer;
-    }
-    .rest-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.12);
-    }
-    .rest-img {
-      width: 100%; height: 190px; object-fit: cover;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 5rem;
-    }
-    .r1 { background: linear-gradient(135deg, #ffedd5, #fdd5b5); }
-    .r2 { background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
-    .r3 { background: linear-gradient(135deg, #fce7f3, #fbcfe8); }
-    .r4 { background: linear-gradient(135deg, #ede9fe, #ddd6fe); }
-    .r5 { background: linear-gradient(135deg, #fef3c7, #fde68a); }
-    .r6 { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
 
-    .rest-info { padding: 20px; }
-    .rest-name {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.1rem; font-weight: 700; color: var(--dark);
+    .btn-ghost {
+      background: transparent;
+      color: var(--green-light);
+      border: 1.5px solid var(--green-mid);
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
     }
-    .rest-meta {
-      display: flex; align-items: center; gap: 12px;
-      margin-top: 8px; font-size: 0.83rem; color: #888;
-    }
-    .rest-badge {
-      display: inline-flex; align-items: center; gap: 4px;
-      background: #22c55e; color: #fff;
-      font-size: 0.78rem; font-weight: 700;
-      padding: 3px 8px; border-radius: 6px;
-    }
-    .rest-tags { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
-    .tag {
-      font-size: 0.75rem; color: var(--mid);
-      background: var(--light); padding: 3px 10px; border-radius: 20px;
-    }
-    .offer-badge {
-      position: absolute; top: 12px; left: 12px;
-      background: var(--red); color: #fff;
-      font-size: 0.75rem; font-weight: 700;
-      padding: 4px 12px; border-radius: 20px;
-      letter-spacing: 0.5px;
-    }
-    .rest-img-wrap { position: relative; }
 
-    /* ── HOW IT WORKS ── */
-    .how-section { background: var(--dark); color: var(--cream); }
-    .how-section .section-title { color: var(--cream); }
-    .how-section .section-label { color: var(--accent); }
-    .steps-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 40px; margin-top: 50px;
+    .btn-ghost:hover {
+      background: rgba(46, 168, 85, 0.15);
+      transform: translateY(-2px);
     }
-    .step { text-align: center; }
-    .step-icon {
-      width: 80px; height: 80px; border-radius: 24px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2.2rem; margin: 0 auto 20px;
-    }
-    .s1 { background: rgba(232,41,42,0.3); }
-    .s2 { background: rgba(255,107,53,0.3); }
-    .s3 { background: rgba(255,204,41,0.3); }
-    .s4 { background: rgba(34,197,94,0.2); }
-    .step h3 {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.15rem; font-weight: 700;
-      margin-bottom: 10px; color: #fff;
-    }
-    .step p { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.7; }
 
-    /* ── PROMO BANNER ── */
-    .promo-section {
-      background: linear-gradient(135deg, var(--red), var(--orange));
-      color: #fff; padding: 70px 60px;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 40px; flex-wrap: wrap;
+    .hero-bottle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      animation: fadeUp 0.8s ease 0.4s both;
     }
-    .promo-text h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; line-height: 1.1;
+
+    .bottle-wrapper {
+      position: relative;
+      width: 260px;
+      height: 400px;
     }
-    .promo-text p { margin-top: 14px; opacity: 0.85; font-size: 1rem; }
-    .promo-btn {
-      background: #fff; color: var(--red);
-      border: none; padding: 16px 36px;
-      border-radius: 40px; font-size: 1rem; font-weight: 700;
-      cursor: pointer; font-family: 'DM Sans', sans-serif;
-      transition: transform 0.2s, box-shadow 0.2s;
+
+    .bottle-glow {
+      position: absolute;
+      inset: -30px;
+      background: radial-gradient(circle, rgba(46, 168, 85, 0.35) 0%, transparent 65%);
+      border-radius: 50%;
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+
+      0%,
+      100% {
+        opacity: 0.6;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.08);
+      }
+    }
+
+    .bottle-svg {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      animation: floatBottle 3s ease-in-out infinite;
+    }
+
+    @keyframes floatBottle {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-14px);
+      }
+    }
+
+    /* TAGLINE STRIP */
+    .tagline-strip {
+      background: var(--green-mid);
+      padding: 1rem 0;
+      overflow: hidden;
       white-space: nowrap;
     }
-    .promo-btn:hover { transform: scale(1.05); box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
 
-    /* ── TESTIMONIALS ── */
+    .tagline-scroll {
+      display: inline-block;
+      animation: scroll 18s linear infinite;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    @keyframes scroll {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    /* PRODUCTS */
+    .section {
+      padding: 6rem 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 0.5rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 700;
+      margin-bottom: 3rem;
+      line-height: 1.2;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .product-card {
+      background: rgba(26, 122, 60, 0.1);
+      border: 1px solid rgba(46, 168, 85, 0.2);
+      border-radius: 20px;
+      padding: 2rem 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.35s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .product-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(46, 168, 85, 0.15), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .product-card:hover {
+      border-color: var(--green-light);
+      transform: translateY(-6px);
+      box-shadow: 0 20px 50px rgba(46, 168, 85, 0.25);
+    }
+
+    .product-card:hover::before {
+      opacity: 1;
+    }
+
+    .product-emoji {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      filter: drop-shadow(0 4px 12px rgba(46, 168, 85, 0.5));
+      animation: floatBottle 3s ease-in-out infinite;
+    }
+
+    .product-card:nth-child(2) .product-emoji {
+      animation-delay: 0.5s;
+    }
+
+    .product-card:nth-child(3) .product-emoji {
+      animation-delay: 1s;
+    }
+
+    .product-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: var(--white);
+    }
+
+    .product-desc {
+      font-size: 0.88rem;
+      color: rgba(245, 255, 247, 0.6);
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+
+    .product-tags {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.4rem;
+    }
+
+    .tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.2rem 0.7rem;
+      border-radius: 50px;
+      background: rgba(182, 232, 40, 0.15);
+      color: var(--lime);
+      border: 1px solid rgba(182, 232, 40, 0.3);
+      letter-spacing: 0.5px;
+    }
+
+    .product-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--green-light);
+      margin-bottom: 1rem;
+    }
+
+    .product-price span {
+      font-size: 0.85rem;
+      color: rgba(245, 255, 247, 0.5);
+      font-weight: 400;
+    }
+
+    .add-to-cart {
+      width: 100%;
+      background: rgba(46, 168, 85, 0.2);
+      border: 1px solid var(--green-mid);
+      color: var(--green-light);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.7rem 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .add-to-cart:hover {
+      background: var(--green-mid);
+      color: var(--black);
+    }
+
+    .add-to-cart.added {
+      background: var(--green-mid);
+      color: var(--black);
+    }
+
+    /* FEATURES */
+    .features-section {
+      background: rgba(26, 122, 60, 0.06);
+      padding: 6rem 2rem;
+      border-top: 1px solid rgba(46, 168, 85, 0.1);
+      border-bottom: 1px solid rgba(46, 168, 85, 0.1);
+    }
+
+    .features-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-item {
+      text-align: center;
+    }
+
+    .feature-icon {
+      width: 64px;
+      height: 64px;
+      margin: 0 auto 1rem;
+      background: rgba(46, 168, 85, 0.15);
+      border: 1px solid rgba(46, 168, 85, 0.3);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      transition: transform 0.3s;
+    }
+
+    .feature-item:hover .feature-icon {
+      transform: scale(1.1) rotate(5deg);
+    }
+
+    .feature-title {
+      font-weight: 600;
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .feature-text {
+      font-size: 0.88rem;
+      color: rgba(245, 255, 247, 0.6);
+      line-height: 1.6;
+    }
+
+    /* TESTIMONIALS */
     .reviews-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
     }
+
     .review-card {
-      background: #fff; border-radius: 20px;
-      padding: 28px; border: 1px solid #f0e8e0;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-    }
-    .stars { color: var(--accent); font-size: 1.1rem; margin-bottom: 14px; }
-    .review-text { font-size: 0.92rem; color: #555; line-height: 1.7; font-style: italic; }
-    .reviewer {
-      display: flex; align-items: center; gap: 12px; margin-top: 20px;
-    }
-    .avatar {
-      width: 44px; height: 44px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.2rem;
-    }
-    .a1 { background: #fde68a; }
-    .a2 { background: #a7f3d0; }
-    .a3 { background: #fbcfe8; }
-    .reviewer-info strong { font-size: 0.9rem; font-weight: 700; color: var(--dark); display: block; }
-    .reviewer-info span { font-size: 0.78rem; color: #aaa; }
-
-    /* ── APP SECTION ── */
-    .app-section {
-      background: var(--light);
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 60px; flex-wrap: wrap; padding: 80px 60px;
-    }
-    .app-text { flex: 1; min-width: 260px; }
-    .app-text h2 {
-      font-family: 'Syne', sans-serif;
-      font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 800; line-height: 1.15;
-    }
-    .app-text p { margin-top: 16px; color: var(--mid); line-height: 1.7; }
-    .app-btns { display: flex; gap: 16px; margin-top: 28px; flex-wrap: wrap; }
-    .app-btn {
-      display: flex; align-items: center; gap: 12px;
-      background: var(--dark); color: #fff;
-      padding: 14px 24px; border-radius: 14px;
-      cursor: pointer; border: none; font-family: 'DM Sans', sans-serif;
-      transition: background 0.2s, transform 0.15s;
-    }
-    .app-btn:hover { background: var(--red); transform: translateY(-3px); }
-    .app-btn-icon { font-size: 1.8rem; }
-    .app-btn-text { text-align: left; }
-    .app-btn-text small { font-size: 0.7rem; opacity: 0.7; display: block; }
-    .app-btn-text span { font-size: 0.95rem; font-weight: 600; }
-    .app-visual {
-      font-size: 9rem; flex-shrink: 0;
-      animation: float 6s ease-in-out infinite;
+      background: rgba(26, 122, 60, 0.1);
+      border: 1px solid rgba(46, 168, 85, 0.15);
+      border-radius: 16px;
+      padding: 1.5rem;
+      transition: border-color 0.3s, transform 0.3s;
     }
 
-    /* ── FOOTER ── */
+    .review-card:hover {
+      border-color: var(--green-mid);
+      transform: translateY(-4px);
+    }
+
+    .review-stars {
+      color: var(--gold);
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .review-text {
+      font-size: 0.92rem;
+      color: rgba(245, 255, 247, 0.8);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+
+    .review-author {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--green-light);
+    }
+
+    .review-location {
+      font-size: 0.78rem;
+      color: rgba(245, 255, 247, 0.45);
+    }
+
+    /* ORDER FORM */
+    .order-section {
+      background: radial-gradient(ellipse at center, rgba(46, 168, 85, 0.15) 0%, transparent 70%), var(--black);
+      padding: 6rem 2rem;
+    }
+
+    .order-inner {
+      max-width: 650px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .order-form {
+      background: rgba(26, 122, 60, 0.1);
+      border: 1px solid rgba(46, 168, 85, 0.2);
+      border-radius: 24px;
+      padding: 2.5rem;
+      margin-top: 2.5rem;
+      text-align: left;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--green-light);
+      margin-bottom: 0.4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(46, 168, 85, 0.25);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.7rem 1rem;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--green-light);
+      box-shadow: 0 0 0 3px rgba(94, 214, 122, 0.15);
+    }
+
+    select option {
+      background: #0d2b14;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--green-mid), var(--green-light));
+      color: var(--black);
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 0.5rem;
+      box-shadow: 0 4px 20px rgba(46, 168, 85, 0.4);
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(46, 168, 85, 0.55);
+    }
+
+    /* CART */
+    .cart-bubble {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 200;
+      background: var(--green-mid);
+      color: var(--black);
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(46, 168, 85, 0.5);
+      transition: transform 0.3s;
+      border: none;
+    }
+
+    .cart-bubble:hover {
+      transform: scale(1.1);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: var(--lime-dark);
+      color: var(--white);
+      border-radius: 50%;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    /* CONTACT / INSTAGRAM */
+    .contact-section {
+      padding: 6rem 2rem;
+      background: rgba(26, 122, 60, 0.06);
+      border-top: 1px solid rgba(46, 168, 85, 0.1);
+    }
+
+    .contact-inner {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .contact-card {
+      background: linear-gradient(135deg, rgba(26, 122, 60, 0.3), rgba(46, 168, 85, 0.1));
+      border: 1px solid rgba(46, 168, 85, 0.3);
+      border-radius: 24px;
+      padding: 3rem 2rem;
+      margin-top: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(46, 168, 85, 0.2), transparent 70%);
+      pointer-events: none;
+    }
+
+    .contact-desc {
+      font-size: 1.05rem;
+      color: rgba(245, 255, 247, 0.7);
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .insta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.7rem;
+      background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+      color: #fff;
+      font-weight: 700;
+      font-size: 1rem;
+      padding: 0.9rem 2.2rem;
+      border-radius: 50px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      box-shadow: 0 6px 24px rgba(131, 58, 180, 0.4);
+      transition: all 0.3s;
+    }
+
+    .insta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 36px rgba(131, 58, 180, 0.5);
+    }
+
+    .insta-handle {
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: rgba(245, 255, 247, 0.5);
+    }
+
+    /* FOOTER */
     footer {
-      background: var(--dark); color: rgba(255,255,255,0.5);
-      padding: 60px; display: flex; flex-wrap: wrap; gap: 48px;
+      background: rgba(0, 0, 0, 0.4);
+      border-top: 1px solid rgba(46, 168, 85, 0.15);
+      padding: 2rem;
+      text-align: center;
     }
-    .footer-brand { flex: 2; min-width: 200px; }
+
     .footer-logo {
-      font-family: 'Syne', sans-serif;
-      font-size: 1.8rem; font-weight: 800; color: var(--red);
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--green-light);
+      margin-bottom: 0.5rem;
     }
-    .footer-logo span { color: var(--orange); }
-    .footer-brand p { margin-top: 12px; font-size: 0.88rem; line-height: 1.7; max-width: 280px; }
-    .footer-col { flex: 1; min-width: 140px; }
-    .footer-col h4 {
-      font-family: 'Syne', sans-serif;
-      color: #fff; font-size: 0.95rem; margin-bottom: 18px;
-    }
-    .footer-col ul { list-style: none; }
-    .footer-col ul li { margin-bottom: 10px; }
-    .footer-col ul li a {
-      text-decoration: none; color: rgba(255,255,255,0.45);
-      font-size: 0.85rem; transition: color 0.2s;
-    }
-    .footer-col ul li a:hover { color: var(--orange); }
-    .footer-bottom {
-      background: #0f0400; text-align: center;
-      padding: 20px; color: rgba(255,255,255,0.3); font-size: 0.82rem;
-    }
-    .footer-bottom span { color: var(--red); }
 
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--cream); }
-    ::-webkit-scrollbar-thumb { background: var(--red); border-radius: 3px; }
+    .footer-tagline {
+      font-size: 0.85rem;
+      color: rgba(245, 255, 247, 0.45);
+      margin-bottom: 1rem;
+    }
 
-    @media (max-width: 768px) {
-      nav { padding: 14px 24px; }
-      .nav-links { display: none; }
-      section { padding: 60px 24px; }
-      .promo-section, .app-section, footer { padding: 60px 24px; }
-      .hero-stats { gap: 28px; }
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 0.82rem;
+      color: rgba(245, 255, 247, 0.5);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .footer-links a:hover {
+      color: var(--green-light);
+    }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      top: 5rem;
+      right: 1.5rem;
+      z-index: 300;
+      background: var(--green-mid);
+      color: var(--black);
+      font-weight: 600;
+      padding: 0.8rem 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+      transform: translateX(120%);
+      transition: transform 0.4s ease;
+      font-size: 0.9rem;
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    /* SUCCESS */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .success-msg.show {
+      display: block;
+    }
+
+    .success-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .success-text {
+      font-size: 1.1rem;
+      color: var(--green-light);
+      font-weight: 600;
+    }
+
+    @media (max-width: 700px) {
+      .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-bottle {
+        order: -1;
+      }
+
+      .bottle-wrapper {
+        width: 180px;
+        height: 280px;
+      }
+
+      .hero-actions {
+        justify-content: center;
+      }
+
+      nav {
+        padding: 1rem 1.2rem;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<!-- NAVBAR -->
-<nav>
-  <div class="logo">TOM<span>ETO</span></div>
-  <div class="nav-links">
-    <a href="#">Restaurants</a>
-    <a href="#">Offers</a>
-    <a href="#">Order Online</a>
-    <a href="#">Pro Membership</a>
-    <button class="nav-btn">Sign In</button>
-  </div>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="blob blob1"></div>
-  <div class="blob blob2"></div>
-  <div class="blob blob3"></div>
-  <div class="hero-tag">🍅 Fresh. Fast. Delicious.</div>
-  <h1>Find Food You<br><em>Absolutely Love</em></h1>
-  <p>Order from the best restaurants around you. Discover new cuisines, top-rated spots, and doorstep delivery in under 30 minutes.</p>
-
-  <div class="search-bar">
-    <div class="search-location">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-      Mumbai
-    </div>
-    <input type="text" placeholder="Search restaurants or cuisines…" />
-    <button>Search</button>
-  </div>
-
-  <div class="hero-stats">
-    <div class="stat"><div class="stat-num">15K+</div><div class="stat-label">Restaurants</div></div>
-    <div class="stat"><div class="stat-num">2M+</div><div class="stat-label">Happy Users</div></div>
-    <div class="stat"><div class="stat-num">25 min</div><div class="stat-label">Avg Delivery</div></div>
-    <div class="stat"><div class="stat-num">4.8★</div><div class="stat-label">Avg Rating</div></div>
-  </div>
-</section>
-
-<!-- CATEGORIES -->
-<section>
-  <div class="section-label">Browse by Category</div>
-  <div class="section-title">What's on your mind?</div>
-  <div class="cat-grid">
-    <div class="cat-card"><div class="cat-icon">🍕</div><div class="cat-name">Pizza</div></div>
-    <div class="cat-card"><div class="cat-icon">🍔</div><div class="cat-name">Burgers</div></div>
-    <div class="cat-card"><div class="cat-icon">🍜</div><div class="cat-name">Noodles</div></div>
-    <div class="cat-card"><div class="cat-icon">🍣</div><div class="cat-name">Sushi</div></div>
-    <div class="cat-card"><div class="cat-icon">🥗</div><div class="cat-name">Healthy</div></div>
-    <div class="cat-card"><div class="cat-icon">🍛</div><div class="cat-name">Biryani</div></div>
-    <div class="cat-card"><div class="cat-icon">🍩</div><div class="cat-name">Desserts</div></div>
-    <div class="cat-card"><div class="cat-icon">☕</div><div class="cat-name">Cafe</div></div>
-    <div class="cat-card"><div class="cat-icon">🥪</div><div class="cat-name">Sandwich</div></div>
-    <div class="cat-card"><div class="cat-icon">🌮</div><div class="cat-name">Wraps</div></div>
-    <div class="cat-card"><div class="cat-icon">🍦</div><div class="cat-name">Ice Cream</div></div>
-    <div class="cat-card"><div class="cat-icon">🥤</div><div class="cat-name">Beverages</div></div>
-  </div>
-</section>
-
-<!-- TOP RESTAURANTS -->
-<section style="background: var(--light);">
-  <div class="section-label">Top Picks</div>
-  <div class="section-title">Best Restaurants Near You</div>
-  <div class="rest-grid">
-
-    <div class="rest-card">
-      <div class="rest-img-wrap">
-        <div class="rest-img r1">🍕</div>
-        <div class="offer-badge">50% OFF up to ₹100</div>
-      </div>
-      <div class="rest-info">
-        <div class="rest-name">Pizza Palace</div>
-        <div class="rest-meta">
-          <span class="rest-badge">★ 4.5</span>
-          <span>35–45 min</span>
-          <span>₹200 for two</span>
-        </div>
-        <div class="rest-tags">
-          <span class="tag">Pizza</span><span class="tag">Italian</span><span class="tag">Fast Food</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="rest-card">
-      <div class="rest-img-wrap">
-        <div class="rest-img r2">🥗</div>
-      </div>
-      <div class="rest-info">
-        <div class="rest-name">Green Bowl</div>
-        <div class="rest-meta">
-          <span class="rest-badge">★ 4.7</span>
-          <span>25–35 min</span>
-          <span>₹350 for two</span>
-        </div>
-        <div class="rest-tags">
-          <span class="tag">Healthy</span><span class="tag">Vegan</span><span class="tag">Salads</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="rest-card">
-      <div class="rest-img-wrap">
-        <div class="rest-img r3">🍜</div>
-        <div class="offer-badge">Free Delivery</div>
-      </div>
-      <div class="rest-info">
-        <div class="rest-name">Noodle House</div>
-        <div class="rest-meta">
-          <span class="rest-badge">★ 4.3</span>
-          <span>30–40 min</span>
-          <span>₹280 for two</span>
-        </div>
-        <div class="rest-tags">
-          <span class="tag">Chinese</span><span class="tag">Asian</span><span class="tag">Noodles</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="rest-card">
-      <div class="rest-img-wrap">
-        <div class="rest-img r4">🍔</div>
-      </div>
-      <div class="rest-info">
-        <div class="rest-name">The Burger Lab</div>
-        <div class="rest-meta">
-          <span class="rest-badge">★ 4.6</span>
-          <span>20–30 min</span>
-          <span>₹320 for two</span>
-        </div>
-        <div class="rest-tags">
-          <span class="tag">Burgers</span><span class="tag">American</span><span class="tag">Shakes</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="rest-card">
-      <div class="rest-img-wrap">
-        <div class="rest-img r5">🍛</div>
-        <div class="offer-badge">20% OFF</div>
-      </div>
-      <div class="rest-info">
-        <div class="rest-name">Biryani Bros</div>
-        <div class="rest-meta">
-          <span class="rest-badge">★ 4.8</span>
-          <span>40–50 min</span>
-          <span>₹400 for two</span>
-        </div>
-        <div class="rest-tags">
-          <span class="tag">Biryani</span><span class="tag">North Indian</span><span class="tag">Mughlai</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="rest-card">
-      <div class="rest-img-wrap">
-        <div class="rest-img r6">🍣</div>
-      </div>
-      <div class="rest-info">
-        <div class="rest-name">Sushi & More</div>
-        <div class="rest-meta">
-          <span class="rest-badge">★ 4.4</span>
-          <span>30–45 min</span>
-          <span>₹600 for two</span>
-        </div>
-        <div class="rest-tags">
-          <span class="tag">Sushi</span><span class="tag">Japanese</span><span class="tag">Asian</span>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- HOW IT WORKS -->
-<section class="how-section">
-  <div class="section-label">Simple Steps</div>
-  <div class="section-title">How TOMETO Works</div>
-  <div class="steps-grid">
-    <div class="step">
-      <div class="step-icon s1">📍</div>
-      <h3>Set Location</h3>
-      <p>Share your location and we'll show you the best restaurants near you.</p>
-    </div>
-    <div class="step">
-      <div class="step-icon s2">🍽️</div>
-      <h3>Choose Restaurant</h3>
-      <p>Browse menus, read reviews, and pick your favourite spot.</p>
-    </div>
-    <div class="step">
-      <div class="step-icon s3">🛒</div>
-      <h3>Add to Cart</h3>
-      <p>Select your dishes, customise your order, and apply offers.</p>
-    </div>
-    <div class="step">
-      <div class="step-icon s4">🚴</div>
-      <h3>Fast Delivery</h3>
-      <p>Track your order in real-time as our riders bring it to your door.</p>
-    </div>
-  </div>
-</section>
-
-<!-- PROMO BANNER -->
-<div class="promo-section">
-  <div class="promo-text">
-    <h2>Get 50% OFF Your<br>First Order! 🎉</h2>
-    <p>Use code <strong>TOMETO50</strong> at checkout. Valid for new users only.</p>
-  </div>
-  <button class="promo-btn">Claim Your Offer →</button>
-</div>
-
-<!-- REVIEWS -->
-<section>
-  <div class="section-label">Customer Love</div>
-  <div class="section-title">What people are saying</div>
-  <div class="reviews-grid">
-    <div class="review-card">
-      <div class="stars">★★★★★</div>
-      <div class="review-text">"TOMETO is my go-to for late-night cravings. Super fast delivery and the food always arrives hot!"</div>
-      <div class="reviewer">
-        <div class="avatar a1">😊</div>
-        <div class="reviewer-info">
-          <strong>Priya S.</strong>
-          <span>Mumbai</span>
-        </div>
-      </div>
-    </div>
-    <div class="review-card">
-      <div class="stars">★★★★★</div>
-      <div class="review-text">"Incredible variety of restaurants. Found a hidden gem biryani place I never knew existed!"</div>
-      <div class="reviewer">
-        <div class="avatar a2">🙂</div>
-        <div class="reviewer-info">
-          <strong>Rahul M.</strong>
-          <span>Bangalore</span>
-        </div>
-      </div>
-    </div>
-    <div class="review-card">
-      <div class="stars">★★★★☆</div>
-      <div class="review-text">"The app is so clean and easy to use. Love the real-time tracking feature. Worth every rupee!"</div>
-      <div class="reviewer">
-        <div class="avatar a3">😄</div>
-        <div class="reviewer-info">
-          <strong>Ananya K.</strong>
-          <span>Delhi</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- APP DOWNLOAD -->
-<div class="app-section">
-  <div class="app-text">
-    <div class="section-label">Download the App</div>
-    <h2>Hunger sorted in<br>your pocket 📱</h2>
-    <p>Order food anytime, anywhere with the TOMETO app. Exclusive app-only deals, live order tracking, and one-tap reorder.</p>
-    <div class="app-btns">
-      <button class="app-btn">
-        <div class="app-btn-icon">🍎</div>
-        <div class="app-btn-text">
-          <small>Download on the</small>
-          <span>App Store</span>
-        </div>
-      </button>
-      <button class="app-btn">
-        <div class="app-btn-icon">▶</div>
-        <div class="app-btn-text">
-          <small>Get it on</small>
-          <span>Google Play</span>
-        </div>
-      </button>
-    </div>
-  </div>
-  <div class="app-visual">🍅</div>
-</div>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-brand">
-    <div class="footer-logo">TOM<span>ETO</span></div>
-    <p>Your neighbourhood food delivery platform. Fresh food from the best restaurants, delivered fast.</p>
-  </div>
-  <div class="footer-col">
-    <h4>Explore</h4>
-    <ul>
-      <li><a href="#">Restaurants Near Me</a></li>
-      <li><a href="#">Order Online</a></li>
-      <li><a href="#">Offers & Deals</a></li>
-      <li><a href="#">TOMETO Pro</a></li>
-      <li><a href="#">Gift Cards</a></li>
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">LOOPA</a>
+    <ul class="nav-links">
+      <li><a href="#products">Products</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#reviews">Reviews</a></li>
+      <li><a href="#order">Order</a></li>
+      <li><a href="#contact">Contact</a></li>
     </ul>
-  </div>
-  <div class="footer-col">
-    <h4>Company</h4>
-    <ul>
-      <li><a href="#">About Us</a></li>
-      <li><a href="#">Careers</a></li>
-      <li><a href="#">Blog</a></li>
-      <li><a href="#">Press</a></li>
-      <li><a href="#">Contact</a></li>
-    </ul>
-  </div>
-  <div class="footer-col">
-    <h4>For Partners</h4>
-    <ul>
-      <li><a href="#">Add Restaurant</a></li>
-      <li><a href="#">Advertise</a></li>
-      <li><a href="#">Delivery Partner</a></li>
-      <li><a href="#">Investor Relations</a></li>
-    </ul>
-  </div>
-  <div class="footer-col">
-    <h4>Legal</h4>
-    <ul>
-      <li><a href="#">Privacy Policy</a></li>
-      <li><a href="#">Terms of Use</a></li>
-      <li><a href="#">Refund Policy</a></li>
-      <li><a href="#">Cookie Policy</a></li>
-    </ul>
-  </div>
-</footer>
-<div class="footer-bottom">
-  © 2026 <span>TOMETO</span> Technologies Pvt. Ltd. — Made with ❤️ & 🍅
-</div>
+    <a href="#order" class="nav-cta">Buy Now</a>
+  </nav>
 
+  <!-- CART BUBBLE -->
+  <button class="cart-bubble" onclick="toggleCart()" title="Cart">
+    🛒
+    <span class="cart-count" id="cartCount">0</span>
+  </button>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg-circles">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-badge">Classic Mojito Drink</div>
+        <h1 class="hero-title">
+          Be in the<br /><span>Moment.</span>
+        </h1>
+        <p class="hero-subtitle">
+          Chill the mind. Live happy. Loopa is your everyday freshness companion — no artificial flavours, no added
+          sugar, just pure good vibes in a bottle.
+        </p>
+        <div class="hero-actions">
+          <a href="#order" class="btn-primary">Order Now</a>
+          <a href="#products" class="btn-ghost">Explore Flavours</a>
+        </div>
+      </div>
+      <div class="hero-bottle">
+        <div class="bottle-wrapper">
+          <div class="bottle-glow"></div>
+          <svg class="bottle-svg" viewBox="0 0 200 380" xmlns="http://www.w3.org/2000/svg">
+            <!-- bottle cap -->
+            <rect x="72" y="10" width="56" height="30" rx="6" fill="#111" />
+            <rect x="78" y="6" width="44" height="12" rx="4" fill="#1a1a1a" />
+            <!-- bottle neck -->
+            <path d="M78 40 Q80 70 65 90 L65 300 Q65 340 100 345 Q135 340 135 300 L135 90 Q120 70 122 40 Z"
+              fill="#1fb34a" />
+            <!-- lime green overlay -->
+            <path d="M82 42 Q84 68 70 88 L70 295 Q70 330 100 335 Q130 330 130 295 L130 88 Q116 68 118 42 Z"
+              fill="#2ea855" opacity="0.8" />
+            <!-- lime slice -->
+            <ellipse cx="100" cy="195" rx="42" ry="42" fill="#b6e828" opacity="0.15" />
+            <ellipse cx="100" cy="195" rx="35" ry="35" fill="#b6e828" opacity="0.2" />
+            <!-- lime segments -->
+            <g opacity="0.7">
+              <path d="M100 165 L100 195" stroke="#7db800" stroke-width="1.5" fill="none" />
+              <path d="M100 195 L72 210" stroke="#7db800" stroke-width="1.5" fill="none" />
+              <path d="M100 195 L128 210" stroke="#7db800" stroke-width="1.5" fill="none" />
+              <path d="M100 195 L80 175" stroke="#7db800" stroke-width="1.5" fill="none" />
+              <path d="M100 195 L120 175" stroke="#7db800" stroke-width="1.5" fill="none" />
+              <path d="M100 195 L72 190" stroke="#7db800" stroke-width="1.5" fill="none" />
+              <path d="M100 195 L128 190" stroke="#7db800" stroke-width="1.5" fill="none" />
+              <ellipse cx="100" cy="195" rx="12" ry="12" fill="#7db800" opacity="0.6" />
+            </g>
+            <!-- label area -->
+            <rect x="73" y="235" width="54" height="55" rx="4" fill="rgba(0,0,0,0.3)" />
+            <text x="100" y="255" text-anchor="middle" font-family="'Playfair Display',serif" font-size="11"
+              font-weight="700" fill="#b6e828">LOOPA</text>
+            <text x="100" y="268" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="6"
+              fill="#d4f5dd">CLASSIC MOJITO</text>
+            <text x="100" y="278" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="5"
+              fill="rgba(255,255,255,0.5)">SUGAR-FREE MINT DRINK</text>
+            <!-- circles on label -->
+            <circle cx="84" cy="288" r="5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" />
+            <circle cx="100" cy="288" r="5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" />
+            <circle cx="116" cy="288" r="5" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" />
+            <!-- smiley face on bottle -->
+            <ellipse cx="100" cy="135" rx="28" ry="26" fill="#0d1a0f" opacity="0.7" />
+            <!-- sunglasses -->
+            <rect x="79" y="126" width="16" height="11" rx="4" fill="#111" />
+            <rect x="100" y="126" width="16" height="11" rx="4" fill="#111" />
+            <line x1="95" y1="131" x2="100" y2="131" stroke="#444" stroke-width="1.5" />
+            <!-- lightning bolts on glasses -->
+            <path d="M84 127 L82 131 L85 131 L83 135" stroke="#b6e828" stroke-width="1.2" fill="none" />
+            <path d="M107 127 L105 131 L108 131 L106 135" stroke="#b6e828" stroke-width="1.2" fill="none" />
+            <!-- smile -->
+            <path d="M88 146 Q100 154 112 146" stroke="#b6e828" stroke-width="2" fill="none" stroke-linecap="round" />
+            <!-- bubble effects -->
+            <circle cx="82" cy="170" r="3" fill="rgba(255,255,255,0.15)" opacity="0.8" />
+            <circle cx="118" cy="160" r="2" fill="rgba(255,255,255,0.12)" />
+            <circle cx="75" cy="200" r="2.5" fill="rgba(255,255,255,0.12)" />
+            <circle cx="125" cy="220" r="2" fill="rgba(255,255,255,0.1)" />
+            <!-- shine -->
+            <path d="M78 90 Q76 130 76 170" stroke="rgba(255,255,255,0.2)" stroke-width="3" fill="none"
+              stroke-linecap="round" />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAGLINE STRIP -->
+  <div class="tagline-strip">
+    <span class="tagline-scroll">
+      ⚡ Be In The Moment &nbsp;•&nbsp; No Artificial Flavour &nbsp;•&nbsp; No Added Sugar &nbsp;•&nbsp; No Artificial
+      Sweetener &nbsp;•&nbsp; Classic Mojito &nbsp;•&nbsp; Chill The Mind &nbsp;•&nbsp; Live Happy &nbsp;•&nbsp;
+      ⚡ Be In The Moment &nbsp;•&nbsp; No Artificial Flavour &nbsp;•&nbsp; No Added Sugar &nbsp;•&nbsp; No Artificial
+      Sweetener &nbsp;•&nbsp; Classic Mojito &nbsp;•&nbsp; Chill The Mind &nbsp;•&nbsp; Live Happy &nbsp;•&nbsp;
+    </span>
+  </div>
+
+  <!-- PRODUCTS -->
+  <section id="products">
+    <div class="section">
+      <div class="section-label">Our Range</div>
+      <h2 class="section-title">Pick Your Vibe</h2>
+      <div class="products-grid">
+        <div class="product-card">
+          <span class="product-emoji">🍃</span>
+          <div class="product-name">Classic Mojito</div>
+          <div class="product-desc">The OG. Crisp mint, tangy lime, refreshing finish. Your go-to daily companion.</div>
+          <div class="product-tags">
+            <span class="tag">No Sugar</span>
+            <span class="tag">No Artificial</span>
+            <span class="tag">500ml</span>
+          </div>
+          <div class="product-price">₹35 <span>/ bottle</span></div>
+          <button class="add-to-cart" onclick="addToCart('Classic Mojito', 35, this)">Add to Cart</button>
+        </div>
+        <div class="product-card">
+          <span class="product-emoji">🍋</span>
+          <div class="product-name">Lemon Mint</div>
+          <div class="product-desc">Zesty lemon with a cool mint kick. The energy booster for your afternoon slump.
+          </div>
+          <div class="product-tags">
+            <span class="tag">No Sugar</span>
+            <span class="tag">Natural</span>
+            <span class="tag">500ml</span>
+          </div>
+          <div class="product-price">₹35 <span>/ bottle</span></div>
+          <button class="add-to-cart" onclick="addToCart('Lemon Mint', 35, this)">Add to Cart</button>
+        </div>
+        <div class="product-card">
+          <span class="product-emoji">🌿</span>
+          <div class="product-name">Loopa Pack (6)</div>
+          <div class="product-desc">Stock up for the week. Six bottles of pure refreshment. Share the vibe.</div>
+          <div class="product-tags">
+            <span class="tag">Best Value</span>
+            <span class="tag">Mix</span>
+            <span class="tag">6×500ml</span>
+          </div>
+          <div class="product-price">₹199 <span>/ pack</span></div>
+          <button class="add-to-cart" onclick="addToCart('Loopa Pack (6)', 199, this)">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features-section" id="about">
+    <div class="features-inner">
+      <div class="section-label">Why Loopa</div>
+      <h2 class="section-title">Loopa Life, Simplified</h2>
+      <div class="features-grid">
+        <div class="feature-item">
+          <div class="feature-icon">🚫</div>
+          <div class="feature-title">No Artificial Flavour</div>
+          <div class="feature-text">What you taste is real. No synthetic shortcuts, just clean refreshment every sip.
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🍬</div>
+          <div class="feature-title">No Added Sugar</div>
+          <div class="feature-text">Sweet the natural way. Enjoy guilt-free without the sugar crash afterward.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🧪</div>
+          <div class="feature-title">No Sweeteners</div>
+          <div class="feature-text">Zero artificial sweeteners. Loopa keeps it honest with your taste buds.</div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-title">Instant Chill</div>
+          <div class="feature-text">Pop it open and you're already in the moment. Loopa resets your vibe instantly.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REVIEWS -->
+  <section id="reviews">
+    <div class="section">
+      <div class="section-label">What People Say</div>
+      <h2 class="section-title">The Loopa Love</h2>
+      <div class="reviews-grid">
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">"This thing is insane! I've replaced my cola habit with Loopa. Tastes like summer in
+            Kochi."</div>
+          <div class="review-author">Arjun M.</div>
+          <div class="review-location">Kochi, Kerala</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">"My gym bag now always has a Loopa. No sugar, great taste — what more do you need?"
+          </div>
+          <div class="review-author">Divya R.</div>
+          <div class="review-location">Thiruvananthapuram</div>
+        </div>
+        <div class="review-card">
+          <div class="review-stars">★★★★★</div>
+          <div class="review-text">"The Vishu post got me curious. Tried it and now I'm placing bulk orders every week!"
+          </div>
+          <div class="review-author">Rahul K.</div>
+          <div class="review-location">Thrissur, Kerala</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ORDER SECTION -->
+  <section class="order-section" id="order">
+    <div class="order-inner">
+      <div class="section-label">Place Your Order</div>
+      <h2 class="section-title">Get Loopa Delivered</h2>
+
+      <div class="order-form" id="orderForm">
+        <div class="form-row">
+          <div class="form-group">
+            <label>First Name</label>
+            <input type="text" id="fname" placeholder="Arjun" />
+          </div>
+          <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" id="lname" placeholder="Menon" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Phone Number</label>
+          <input type="tel" id="phone" placeholder="+91 98765 43210" />
+        </div>
+        <div class="form-group">
+          <label>Delivery Address</label>
+          <textarea id="address" rows="2" placeholder="House No, Street, City, Kerala..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product</label>
+            <select id="product">
+              <option value="">Select a flavour</option>
+              <option value="Classic Mojito">Classic Mojito (₹35)</option>
+              <option value="Lemon Mint">Lemon Mint (₹35)</option>
+              <option value="Loopa Pack 6">Loopa Pack of 6 (₹199)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Quantity</label>
+            <select id="qty">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="6">6</option>
+              <option value="12">12</option>
+              <option value="24">24</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Special Note (optional)</label>
+          <input type="text" id="note" placeholder="Anything you'd like us to know..." />
+        </div>
+        <button class="submit-btn" onclick="submitOrder()">🚀 Place Order</button>
+      </div>
+
+      <div class="success-msg" id="successMsg">
+        <div class="success-icon">🎉</div>
+        <div class="success-text">Order Received! We'll contact you soon on WhatsApp to confirm delivery.</div>
+        <p style="color:rgba(245,255,247,0.5); font-size:0.9rem; margin-top:0.5rem;">Be in the moment — Loopa's coming
+          to you!</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact-section" id="contact">
+    <div class="contact-inner">
+      <div class="section-label">Get In Touch</div>
+      <h2 class="section-title">Slide Into Our DMs</h2>
+      <div class="contact-card">
+        <p class="contact-desc">
+          Got questions? Want to collaborate? Or just want to share how much you love Loopa?<br />
+          Hit us up on Instagram — we're always in the moment!
+        </p>
+        <a href="https://www.instagram.com/this_is_loopa" target="_blank" class="insta-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+            <path
+              d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+          </svg>
+          Message @this_is_loopa
+        </a>
+        <div class="insta-handle">@this_is_loopa on Instagram</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">LOOPA</div>
+    <div class="footer-tagline">Be in the Moment. Chill the Mind. Live Happy. 💚</div>
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#products">Products</a>
+      <a href="#about">About</a>
+      <a href="#order">Order</a>
+      <a href="https://www.instagram.com/this_is_loopa" target="_blank">Instagram</a>
+    </div>
+    <p style="margin-top:1.5rem; font-size:0.75rem; color:rgba(245,255,247,0.25);">© 2026 Loopa. It's Loopa Life.</p>
+  </footer>
+
+  <script>
+    let cartItems = [];
+    let cartCount = 0;
+
+    function addToCart(name, price, btn) {
+      cartItems.push({ name, price });
+      cartCount++;
+      document.getElementById('cartCount').textContent = cartCount;
+      btn.textContent = '✓ Added!';
+      btn.classList.add('added');
+      setTimeout(() => {
+        btn.textContent = 'Add to Cart';
+        btn.classList.remove('added');
+      }, 2000);
+      showToast(name + ' added to cart! 🛒');
+    }
+
+    function toggleCart() {
+      if (cartCount === 0) {
+        showToast('Your cart is empty. Add some Loopa! 🍃');
+      } else {
+        const total = cartItems.reduce((sum, i) => sum + i.price, 0);
+        showToast('Cart: ' + cartCount + ' item(s) — ₹' + total + '. Go to Order! ⬆');
+        setTimeout(() => {
+          document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+        }, 1500);
+      }
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    function submitOrder() {
+      const fname = document.getElementById('fname').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const address = document.getElementById('address').value.trim();
+      const product = document.getElementById('product').value;
+
+      if (!fname || !phone || !address || !product) {
+        showToast('Please fill all required fields! 📝');
+        return;
+      }
+
+      document.getElementById('orderForm').style.display = 'none';
+      document.getElementById('successMsg').classList.add('show');
+      showToast('Order placed! 🎉 Loopa is on its way!');
+    }
+
+    // Intersection observer for fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.product-card, .feature-item, .review-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      observer.observe(el);
+    });
+  </script>
 </body>
+
 </html>
