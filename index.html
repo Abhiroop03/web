@@ -1,1022 +1,1989 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReVolt Tech — Premium Refurbished Devices</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-<style>
-  :root {
-    --black: #0a0a0a;
-    --white: #f5f2ee;
-    --cream: #ede8e0;
-    --accent: #e8470a;
-    --accent2: #f5a623;
-    --mid: #1a1a1a;
-    --glass: rgba(245,242,238,0.05);
-    --border: rgba(245,242,238,0.12);
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DOMINATOR — Video Editor</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080808;
+      --surface: #101010;
+      --surface2: #181818;
+      --text: #f0ede8;
+      --muted: #6b6560;
+      --accent: #e8c547;
+      --accent2: #ff4d2e;
+      --border: rgba(240, 237, 232, 0.08);
+      --glow: rgba(232, 197, 71, 0.15);
+      --radius: 2px;
+      --transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    [data-theme="light"] {
+      --bg: #f5f2ee;
+      --surface: #ebe7e0;
+      --surface2: #e0dcd5;
+      --text: #1a1816;
+      --muted: #7a7470;
+      --accent: #c9a800;
+      --accent2: #e03a1e;
+      --border: rgba(26, 24, 22, 0.1);
+      --glow: rgba(201, 168, 0, 0.12);
+    }
 
-  html { scroll-behavior: smooth; }
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-  body {
-    background: var(--black);
-    color: var(--white);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
+    html {
+      scroll-behavior: smooth;
+    }
 
-  /* CURSOR */
-  .cursor {
-    position: fixed; width: 12px; height: 12px;
-    background: var(--accent); border-radius: 50%;
-    pointer-events: none; z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
-  }
-  .cursor-follower {
-    position: fixed; width: 36px; height: 36px;
-    border: 1.5px solid var(--accent); border-radius: 50%;
-    pointer-events: none; z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: left 0.12s ease, top 0.12s ease, width 0.3s, height 0.3s;
-    opacity: 0.6;
-  }
-  body:hover .cursor { opacity: 1; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      cursor: none;
+      transition: background var(--transition), color var(--transition);
+    }
 
-  /* NOISE OVERLAY */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-    opacity: 0.025; pointer-events: none; z-index: 1000;
-  }
+    /* CUSTOM CURSOR */
+    .cursor {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      mix-blend-mode: difference;
+      transition: transform 0.1s;
+    }
 
-  /* NAV */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 500;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 1.2rem 3rem;
-    background: rgba(10,10,10,0.7);
-    backdrop-filter: blur(18px);
-    border-bottom: 1px solid var(--border);
-    transition: all 0.4s;
-  }
-  nav.scrolled { padding: 0.8rem 3rem; }
-  .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.8rem; letter-spacing: 0.12em;
-    color: var(--white);
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 2.5rem; list-style: none; }
-  .nav-links a {
-    color: var(--white); text-decoration: none;
-    font-size: 0.82rem; font-weight: 500; letter-spacing: 0.08em;
-    text-transform: uppercase; opacity: 0.7;
-    transition: opacity 0.3s, color 0.3s;
-    position: relative;
-  }
-  .nav-links a::after {
-    content: ''; position: absolute; bottom: -4px; left: 0; right: 0;
-    height: 1px; background: var(--accent);
-    transform: scaleX(0); transition: transform 0.3s;
-  }
-  .nav-links a:hover { opacity: 1; }
-  .nav-links a:hover::after { transform: scaleX(1); }
-  .nav-cta {
-    background: var(--accent); color: var(--white);
-    padding: 0.6rem 1.6rem; border-radius: 2px;
-    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.1em;
-    text-transform: uppercase; text-decoration: none;
-    transition: background 0.3s, transform 0.2s;
-  }
-  .nav-cta:hover { background: #c73a06; transform: translateY(-1px); }
+    .cursor-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 10000;
+      transition: transform 0.08s;
+    }
 
-  /* HERO */
-  .hero {
-    min-height: 100vh; display: flex; flex-direction: column;
-    justify-content: center; padding: 8rem 3rem 4rem;
-    position: relative; overflow: hidden;
-  }
-  .hero-grid {
-    position: absolute; inset: 0;
-    background-image: linear-gradient(var(--border) 1px, transparent 1px),
-                      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 60px 60px;
-    opacity: 0.4;
-  }
-  .hero-glow {
-    position: absolute; top: -20%; right: -10%;
-    width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(232,71,10,0.18) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: pulse 6s ease-in-out infinite;
-  }
-  .hero-glow2 {
-    position: absolute; bottom: -10%; left: -5%;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(245,166,35,0.1) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: pulse 8s ease-in-out infinite reverse;
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.15); opacity: 0.7; }
-  }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    background: var(--glass); border: 1px solid var(--border);
-    padding: 0.4rem 1rem; border-radius: 2px;
-    font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase;
-    color: var(--accent2); font-weight: 600; margin-bottom: 2rem;
-    width: fit-content;
-    animation: fadeUp 0.8s ease both;
-  }
-  .hero-tag::before {
-    content: ''; width: 6px; height: 6px;
-    background: var(--accent2); border-radius: 50%;
-    animation: blink 1.5s ease infinite;
-  }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(5rem, 12vw, 11rem);
-    line-height: 0.92; letter-spacing: 0.02em;
-    animation: fadeUp 0.9s ease 0.1s both;
-  }
-  .hero-title .line2 { color: var(--accent); -webkit-text-stroke: 2px var(--accent); }
-  .hero-title .line3 { -webkit-text-fill-color: transparent; -webkit-text-stroke: 1.5px var(--white); opacity: 0.4; }
-  .hero-sub {
-    max-width: 480px; margin-top: 2rem;
-    font-size: 1.05rem; line-height: 1.75; opacity: 0.65;
-    animation: fadeUp 1s ease 0.2s both;
-  }
-  .hero-actions {
-    display: flex; align-items: center; gap: 1.5rem; margin-top: 3rem;
-    animation: fadeUp 1s ease 0.35s both;
-  }
-  .btn-primary {
-    display: inline-flex; align-items: center; gap: 0.6rem;
-    background: var(--accent); color: var(--white);
-    padding: 1rem 2.2rem; border-radius: 2px;
-    font-size: 0.9rem; font-weight: 600; letter-spacing: 0.06em;
-    text-transform: uppercase; text-decoration: none;
-    transition: all 0.3s; border: none; cursor: none;
-  }
-  .btn-primary:hover { background: #c73a06; transform: translateY(-2px); box-shadow: 0 12px 36px rgba(232,71,10,0.35); }
-  .btn-outline {
-    display: inline-flex; align-items: center; gap: 0.6rem;
-    background: transparent; color: var(--white);
-    padding: 1rem 2.2rem; border-radius: 2px;
-    font-size: 0.9rem; font-weight: 500; letter-spacing: 0.06em;
-    text-transform: uppercase; text-decoration: none;
-    border: 1px solid var(--border); transition: all 0.3s; cursor: none;
-  }
-  .btn-outline:hover { border-color: var(--white); transform: translateY(-2px); }
-  .hero-stats {
-    display: flex; gap: 4rem; margin-top: 5rem;
-    animation: fadeUp 1s ease 0.5s both;
-    border-top: 1px solid var(--border); padding-top: 2.5rem;
-  }
-  .stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.8rem; color: var(--accent); line-height: 1;
-  }
-  .stat-label { font-size: 0.75rem; opacity: 0.5; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.3rem; }
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+    .cursor-ring {
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 9999;
+      transition: all 0.15s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
+      opacity: 0.7;
+    }
 
-  /* MARQUEE */
-  .marquee-wrap {
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-    overflow: hidden; padding: 1rem 0;
-    background: var(--mid);
-  }
-  .marquee-track {
-    display: flex; gap: 3rem; width: max-content;
-    animation: marquee 20s linear infinite;
-  }
-  @keyframes marquee { to { transform: translateX(-50%); } }
-  .marquee-item {
-    display: flex; align-items: center; gap: 1rem;
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem;
-    letter-spacing: 0.12em; white-space: nowrap; opacity: 0.6;
-  }
-  .marquee-item span { color: var(--accent); font-size: 1.4rem; }
+    body.hovering .cursor-ring {
+      width: 60px;
+      height: 60px;
+      border-color: var(--accent2);
+      opacity: 1;
+    }
 
-  /* SECTION COMMONS */
-  section { padding: 7rem 3rem; }
-  .section-label {
-    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
-    color: var(--accent); font-weight: 700; margin-bottom: 1rem;
-    display: flex; align-items: center; gap: 0.7rem;
-  }
-  .section-label::before { content: '—'; }
-  .section-title {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(2.2rem, 5vw, 3.8rem);
-    font-weight: 800; line-height: 1.1; margin-bottom: 1.2rem;
-  }
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 20px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(20px);
+      background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
+      transition: background var(--transition);
+    }
 
-  /* CATEGORIES */
-  #categories { background: var(--mid); }
-  .cat-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1px; margin-top: 3.5rem;
-    border: 1px solid var(--border);
-  }
-  .cat-card {
-    background: var(--black); padding: 2.5rem 2rem;
-    position: relative; overflow: hidden;
-    transition: all 0.4s; cursor: none;
-    border-right: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-  .cat-card::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(135deg, var(--accent), transparent);
-    opacity: 0; transition: opacity 0.4s;
-  }
-  .cat-card:hover::before { opacity: 0.08; }
-  .cat-card:hover { transform: translateY(-4px); }
-  .cat-icon {
-    font-size: 2.5rem; margin-bottom: 1.5rem;
-    display: block; transition: transform 0.3s;
-  }
-  .cat-card:hover .cat-icon { transform: scale(1.15) rotate(-5deg); }
-  .cat-name {
-    font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 700;
-    margin-bottom: 0.4rem;
-  }
-  .cat-count { font-size: 0.8rem; opacity: 0.45; letter-spacing: 0.05em; }
-  .cat-arrow {
-    position: absolute; right: 1.5rem; bottom: 1.5rem;
-    width: 36px; height: 36px; border: 1px solid var(--border);
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: 0.8rem; transition: all 0.3s; color: var(--accent);
-  }
-  .cat-card:hover .cat-arrow { background: var(--accent); color: var(--white); border-color: var(--accent); }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 4px;
+      color: var(--accent);
+      text-decoration: none;
+    }
 
-  /* PRODUCTS */
-  #products { background: var(--black); }
-  .filter-bar {
-    display: flex; gap: 0.8rem; flex-wrap: wrap; margin: 2.5rem 0;
-  }
-  .filter-btn {
-    padding: 0.55rem 1.4rem; border-radius: 2px;
-    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em;
-    text-transform: uppercase; border: 1px solid var(--border);
-    background: transparent; color: var(--white); cursor: none;
-    transition: all 0.3s;
-  }
-  .filter-btn.active, .filter-btn:hover {
-    background: var(--accent); border-color: var(--accent); color: var(--white);
-  }
-  .product-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 1.5px;
-  }
-  .product-card {
-    background: var(--mid); position: relative; overflow: hidden;
-    transition: all 0.4s; cursor: none;
-    border: 1px solid var(--border);
-  }
-  .product-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-  .product-img {
-    width: 100%; aspect-ratio: 4/3;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 5rem; background: linear-gradient(135deg, #111 0%, #1e1e1e 100%);
-    position: relative; overflow: hidden;
-  }
-  .product-img::after {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(to bottom, transparent 50%, var(--mid) 100%);
-  }
-  .product-badge {
-    position: absolute; top: 1rem; left: 1rem; z-index: 2;
-    background: var(--accent); color: var(--white);
-    padding: 0.25rem 0.7rem; border-radius: 2px;
-    font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  }
-  .product-badge.like-new { background: #16a34a; }
-  .product-badge.good { background: #2563eb; }
-  .product-info { padding: 1.5rem; }
-  .product-name {
-    font-family: 'Syne', sans-serif; font-size: 1.05rem; font-weight: 700;
-    margin-bottom: 0.3rem;
-  }
-  .product-spec { font-size: 0.78rem; opacity: 0.45; margin-bottom: 1rem; }
-  .product-price {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--accent);
-    line-height: 1;
-  }
-  .product-price .original {
-    font-size: 1rem; opacity: 0.4; text-decoration: line-through;
-    color: var(--white); margin-left: 0.5rem; font-family: 'DM Sans', sans-serif;
-  }
-  .product-actions {
-    display: flex; gap: 0.5rem; margin-top: 1rem;
-  }
-  .btn-buy {
-    flex: 1; padding: 0.7rem; background: var(--accent); color: var(--white);
-    border: none; border-radius: 2px; font-size: 0.78rem; font-weight: 700;
-    letter-spacing: 0.08em; text-transform: uppercase; cursor: none;
-    transition: all 0.3s;
-  }
-  .btn-buy:hover { background: #c73a06; }
-  .btn-wish {
-    padding: 0.7rem 1rem; background: transparent; color: var(--white);
-    border: 1px solid var(--border); border-radius: 2px; cursor: none;
-    transition: all 0.3s; font-size: 0.9rem;
-  }
-  .btn-wish:hover { border-color: #e53e3e; color: #e53e3e; }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
 
-  /* WHY US */
-  #why { background: var(--mid); }
-  .why-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 4rem; align-items: center; margin-top: 4rem;
-  }
-  .why-list { list-style: none; display: flex; flex-direction: column; gap: 2rem; }
-  .why-item {
-    display: flex; gap: 1.5rem; align-items: flex-start;
-    padding: 1.5rem; border: 1px solid var(--border);
-    border-radius: 2px; transition: all 0.4s;
-    cursor: none;
-  }
-  .why-item:hover { border-color: var(--accent); background: rgba(232,71,10,0.05); }
-  .why-icon {
-    width: 48px; height: 48px; min-width: 48px;
-    background: rgba(232,71,10,0.12); border-radius: 2px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem; color: var(--accent);
-  }
-  .why-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 1.05rem; margin-bottom: 0.3rem; }
-  .why-text { font-size: 0.85rem; opacity: 0.55; line-height: 1.65; }
-  .why-visual {
-    position: relative; display: flex; align-items: center; justify-content: center;
-    height: 400px;
-  }
-  .why-ring {
-    position: absolute; border: 1px solid var(--border); border-radius: 50%;
-    animation: spin 30s linear infinite;
-  }
-  .why-ring:nth-child(1) { width: 350px; height: 350px; }
-  .why-ring:nth-child(2) { width: 250px; height: 250px; animation-duration: 20s; animation-direction: reverse; }
-  .why-ring:nth-child(3) { width: 150px; height: 150px; animation-duration: 12s; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .why-center {
-    width: 80px; height: 80px;
-    background: var(--accent); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2.2rem; z-index: 2;
-    box-shadow: 0 0 40px rgba(232,71,10,0.5);
-    animation: pulse 3s ease infinite;
-  }
+    .nav-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
 
-  /* TESTIMONIALS */
-  #testimonials { background: var(--black); }
-  .testimonial-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem; margin-top: 3.5rem;
-  }
-  .testimonial-card {
-    background: var(--mid); padding: 2rem;
-    border: 1px solid var(--border); border-radius: 2px;
-    transition: all 0.4s;
-  }
-  .testimonial-card:hover { border-color: var(--accent); transform: translateY(-3px); }
-  .stars { color: var(--accent2); font-size: 0.9rem; margin-bottom: 1rem; }
-  .testimonial-text { font-size: 0.9rem; line-height: 1.75; opacity: 0.7; margin-bottom: 1.5rem; font-style: italic; }
-  .testimonial-author { display: flex; align-items: center; gap: 1rem; }
-  .avatar {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 0.85rem;
-  }
-  .author-name { font-weight: 600; font-size: 0.9rem; }
-  .author-city { font-size: 0.75rem; opacity: 0.45; }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.3s;
+    }
 
-  /* CONTACT */
-  #contact { background: var(--mid); }
-  .contact-wrap {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 5rem; margin-top: 4rem;
-  }
-  .contact-info { display: flex; flex-direction: column; gap: 2rem; }
-  .contact-item { display: flex; gap: 1.2rem; align-items: flex-start; }
-  .contact-icon {
-    width: 46px; height: 46px; min-width: 46px;
-    background: rgba(232,71,10,0.12); border: 1px solid rgba(232,71,10,0.3);
-    border-radius: 2px; display: flex; align-items: center; justify-content: center;
-    color: var(--accent); font-size: 1rem;
-  }
-  .contact-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.4; margin-bottom: 0.3rem; }
-  .contact-val { font-size: 0.95rem; font-weight: 500; }
-  .contact-val a { color: var(--white); text-decoration: none; transition: color 0.3s; }
-  .contact-val a:hover { color: var(--accent); }
-  .social-row { display: flex; gap: 1rem; margin-top: 0.5rem; }
-  .social-btn {
-    display: inline-flex; align-items: center; gap: 0.6rem;
-    padding: 0.6rem 1.2rem; border: 1px solid var(--border);
-    border-radius: 2px; color: var(--white); text-decoration: none;
-    font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
-    transition: all 0.3s; cursor: none;
-  }
-  .social-btn:hover { background: var(--accent); border-color: var(--accent); }
-  .social-btn.yt:hover { background: #ff0000; border-color: #ff0000; }
+    .nav-links a:hover {
+      color: var(--text);
+    }
 
-  /* CONTACT FORM */
-  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
-  .form-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.5; }
-  .form-input, .form-textarea {
-    background: var(--black); border: 1px solid var(--border);
-    color: var(--white); padding: 0.85rem 1rem; border-radius: 2px;
-    font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
-    transition: border-color 0.3s; outline: none;
-    resize: none;
-  }
-  .form-input:focus, .form-textarea:focus { border-color: var(--accent); }
-  .form-textarea { height: 130px; }
-  .form-submit {
-    display: inline-flex; align-items: center; gap: 0.6rem;
-    background: var(--accent); color: var(--white); border: none;
-    padding: 1rem 2.5rem; border-radius: 2px;
-    font-size: 0.88rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
-    cursor: none; transition: all 0.3s; width: fit-content;
-  }
-  .form-submit:hover { background: #c73a06; transform: translateY(-2px); box-shadow: 0 12px 36px rgba(232,71,10,0.3); }
+    .nav-links a:hover::after {
+      width: 100%;
+    }
 
-  /* MAP PLACEHOLDER */
-  .map-placeholder {
-    border: 1px solid var(--border); border-radius: 2px;
-    height: 220px; margin-top: 2rem;
-    background: var(--black); display: flex; align-items: center; justify-content: center;
-    flex-direction: column; gap: 1rem;
-    background-image: linear-gradient(var(--border) 1px, transparent 1px),
-                      linear-gradient(90deg, var(--border) 1px, transparent 1px);
-    background-size: 30px 30px;
-    position: relative; overflow: hidden;
-  }
-  .map-pin { font-size: 2.5rem; animation: bounce 2s ease infinite; }
-  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
-  .map-label { font-size: 0.85rem; opacity: 0.5; text-align: center; }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
 
-  /* FOOTER */
-  footer {
-    background: var(--black); border-top: 1px solid var(--border);
-    padding: 3rem; display: flex;
-    align-items: center; justify-content: space-between; flex-wrap: gap;
-  }
-  .footer-logo {
-    font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.12em;
-  }
-  .footer-logo span { color: var(--accent); }
-  .footer-copy { font-size: 0.78rem; opacity: 0.35; }
-  .footer-links { display: flex; gap: 2rem; }
-  .footer-links a { color: var(--white); text-decoration: none; font-size: 0.78rem; opacity: 0.45; transition: opacity 0.3s; }
-  .footer-links a:hover { opacity: 1; }
+    /* THEME TOGGLE */
+    .theme-btn {
+      width: 44px;
+      height: 24px;
+      border-radius: 12px;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      position: relative;
+      transition: background 0.3s;
+      display: flex;
+      align-items: center;
+      padding: 0 3px;
+    }
 
-  /* TOAST */
-  .toast {
-    position: fixed; bottom: 2rem; right: 2rem; z-index: 999;
-    background: var(--accent); color: var(--white);
-    padding: 1rem 1.8rem; border-radius: 2px;
-    font-size: 0.88rem; font-weight: 600;
-    transform: translateY(120%); opacity: 0;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    display: flex; align-items: center; gap: 0.6rem;
-  }
-  .toast.show { transform: translateY(0); opacity: 1; }
+    .theme-btn::before {
+      content: '';
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      transition: transform 0.3s;
+      display: block;
+    }
 
-  /* SCROLL INDICATOR */
-  .scroll-indicator {
-    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.4;
-    animation: fadeUp 1s ease 1s both, scrollFade 0.3s ease forwards;
-    z-index: 10;
-  }
-  .scroll-line { width: 1px; height: 40px; background: var(--white); animation: scrollLine 2s ease infinite; }
-  @keyframes scrollLine { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+    [data-theme="light"] .theme-btn::before {
+      transform: translateX(20px);
+    }
 
-  /* MOBILE */
-  @media (max-width: 768px) {
-    nav { padding: 1rem 1.5rem; }
-    .nav-links { display: none; }
-    section { padding: 5rem 1.5rem; }
-    .hero { padding: 7rem 1.5rem 3rem; }
-    .hero-stats { gap: 2rem; }
-    .why-grid, .contact-wrap { grid-template-columns: 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    .why-visual { display: none; }
-    footer { flex-direction: column; gap: 1.5rem; text-align: center; }
-    .footer-links { flex-wrap: wrap; justify-content: center; }
-  }
+    .theme-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 1px;
+    }
 
-  /* REVEAL ANIMATION */
-  .reveal { opacity: 0; transform: translateY(30px); transition: all 0.7s ease; }
-  .reveal.in-view { opacity: 1; transform: translateY(0); }
-</style>
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .hero-bg-text {
+      position: absolute;
+      bottom: -60px;
+      right: -20px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(120px, 18vw, 280px);
+      color: var(--border);
+      letter-spacing: -8px;
+      white-space: nowrap;
+      user-select: none;
+      animation: driftText 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes driftText {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-40px);
+      }
+    }
+
+    .grain {
+      position: absolute;
+      inset: 0;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      animation: fadeUp 0.8s 0.2s forwards;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 32px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(64px, 10vw, 140px);
+      line-height: 0.9;
+      letter-spacing: 2px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.35s forwards;
+    }
+
+    .hero-name span {
+      color: var(--accent);
+    }
+
+    .hero-name .line2 {
+      color: var(--accent2);
+    }
+
+    .hero-desc {
+      max-width: 480px;
+      margin-top: 32px;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--muted);
+      font-weight: 300;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.5s forwards;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 16px;
+      margin-top: 48px;
+      opacity: 0;
+      animation: fadeUp 0.9s 0.65s forwards;
+    }
+
+    .btn-primary {
+      padding: 14px 36px;
+      background: var(--accent);
+      color: #080808;
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px var(--glow);
+    }
+
+    .btn-outline {
+      padding: 14px 36px;
+      background: transparent;
+      color: var(--text);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+
+    .btn-outline:hover {
+      border-color: var(--text);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 48px;
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      opacity: 0;
+      animation: fadeUp 0.9s 0.8s forwards;
+    }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 52px;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .stat-num span {
+      color: var(--accent);
+      font-size: 32px;
+    }
+
+    .stat-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-top: 4px;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* SCROLL INDICATOR */
+    .scroll-hint {
+      position: absolute;
+      bottom: 40px;
+      left: 48px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeUp 1s 1.2s forwards;
+    }
+
+    .scroll-line {
+      width: 1px;
+      height: 60px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+
+      0%,
+      100% {
+        opacity: 0.3
+      }
+
+      50% {
+        opacity: 1
+      }
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 100px 48px;
+      position: relative;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-bottom: 64px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .section-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(42px, 6vw, 80px);
+      letter-spacing: 2px;
+      line-height: 0.9;
+    }
+
+    .section-sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      color: var(--muted);
+      max-width: 260px;
+      text-align: right;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    /* ABOUT */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .about-photo {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+    }
+
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      background: var(--surface2);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 2px;
+      border: 1px solid var(--border);
+    }
+
+    .photo-icon {
+      font-size: 48px;
+      opacity: 0.3;
+    }
+
+    .photo-frame {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      bottom: 12px;
+      left: 12px;
+      border: 1px solid var(--accent);
+      z-index: -1;
+      transition: var(--transition);
+    }
+
+    .about-photo:hover .photo-frame {
+      top: -18px;
+      right: -18px;
+      bottom: 18px;
+      left: 18px;
+    }
+
+    .about-content {
+      padding-top: 20px;
+    }
+
+    .about-intro {
+      font-size: 22px;
+      line-height: 1.5;
+      font-weight: 300;
+      margin-bottom: 32px;
+    }
+
+    .about-intro strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .about-body {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+
+    .skill-tag {
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color 0.2s, color 0.2s;
+      background: var(--surface);
+    }
+
+    .skill-tag:hover {
+      border-color: var(--accent);
+      color: var(--text);
+    }
+
+    .skill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    /* EXPERIENCE */
+    .experience {
+      background: var(--surface);
+    }
+
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 160px 1fr auto;
+      gap: 48px;
+      padding: 40px 0;
+      border-bottom: 1px solid var(--border);
+      align-items: start;
+      transition: background 0.2s;
+      cursor: default;
+    }
+
+    .exp-item:hover {
+      padding-left: 16px;
+    }
+
+    .exp-year {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--accent);
+      padding-top: 4px;
+    }
+
+    .exp-role {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .exp-company {
+      font-size: 13px;
+      color: var(--accent2);
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .exp-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 500px;
+    }
+
+    .exp-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .exp-tag {
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      background: var(--surface2);
+    }
+
+    .exp-arrow {
+      font-size: 20px;
+      color: var(--muted);
+      transition: transform 0.2s, color 0.2s;
+      padding-top: 4px;
+    }
+
+    .exp-item:hover .exp-arrow {
+      transform: translateX(6px);
+      color: var(--accent);
+    }
+
+    /* VIDEO REEL */
+    .reel {
+      background: var(--bg);
+      overflow: hidden;
+    }
+
+    .reel-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+
+    .reel-header .section-num {
+      justify-content: center;
+      display: flex;
+    }
+
+    .reel-header .section-title {
+      text-align: center;
+    }
+
+    .video-slider {
+      position: relative;
+    }
+
+    .video-track {
+      display: flex;
+      gap: 24px;
+      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+      padding-bottom: 8px;
+    }
+
+    .video-card {
+      flex: 0 0 calc(50% - 12px);
+      position: relative;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      group: true;
+    }
+
+    .video-thumb {
+      aspect-ratio: 16/9;
+      background: var(--surface2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .video-gradient {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, var(--surface2) 0%, #1a1208 50%, #0d0d0d 100%);
+    }
+
+    .video-play {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 24px;
+      z-index: 1;
+      position: relative;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .video-card:hover .video-play {
+      background: var(--accent);
+      color: #080808;
+      transform: scale(1.1);
+    }
+
+    .video-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(232, 197, 71, 0.08);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .video-card:hover .video-overlay {
+      opacity: 1;
+    }
+
+    .video-info {
+      padding: 24px 28px;
+    }
+
+    .video-cat {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--accent2);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .video-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .video-meta {
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      gap: 16px;
+    }
+
+    .slider-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    .slider-btn {
+      width: 48px;
+      height: 48px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .slider-btn:hover {
+      border-color: var(--accent);
+      background: var(--surface2);
+    }
+
+    .slider-dots {
+      display: flex;
+      gap: 8px;
+    }
+
+    .slider-dot {
+      width: 24px;
+      height: 2px;
+      background: var(--border);
+      cursor: pointer;
+      transition: background 0.3s, width 0.3s;
+    }
+
+    .slider-dot.active {
+      background: var(--accent);
+      width: 48px;
+    }
+
+    /* PROJECTS */
+    .projects {
+      background: var(--surface);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .project-card {
+      background: var(--surface2);
+      padding: 40px 32px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      transition: var(--transition);
+      cursor: default;
+    }
+
+    .project-card::before {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .project-card:hover::before {
+      transform: scaleX(1);
+    }
+
+    .project-card:hover {
+      background: var(--surface);
+    }
+
+    .project-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 80px;
+      color: var(--border);
+      line-height: 1;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      transition: color 0.3s;
+    }
+
+    .project-card:hover .project-num {
+      color: rgba(232, 197, 71, 0.08);
+    }
+
+    .project-cat {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+
+    .project-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 30px;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      line-height: 1;
+    }
+
+    .project-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 24px;
+    }
+
+    .project-tools {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .project-tool {
+      padding: 3px 8px;
+      border: 1px solid var(--border);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    /* CONTACT */
+    .contact {
+      background: var(--bg);
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .contact-info {}
+
+    .contact-tagline {
+      font-size: 20px;
+      line-height: 1.6;
+      font-weight: 300;
+      margin-bottom: 48px;
+    }
+
+    .contact-detail {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-icon {
+      width: 44px;
+      height: 44px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .contact-key {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .contact-val {
+      font-size: 15px;
+      color: var(--text);
+    }
+
+    .contact-val a {
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .contact-val a:hover {
+      color: var(--accent);
+    }
+
+    /* FORM */
+    .contact-form {}
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+      resize: none;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      border-color: var(--accent);
+      background: var(--surface2);
+    }
+
+    .form-select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6560' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+    }
+
+    .form-textarea {
+      min-height: 120px;
+    }
+
+    .form-submit {
+      width: 100%;
+      padding: 18px;
+      background: var(--accent);
+      color: #080808;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 4px;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .form-submit::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--accent2);
+      transform: translateX(-100%);
+      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .form-submit:hover::before {
+      transform: translateX(0);
+    }
+
+    .form-submit span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .form-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 48px var(--glow);
+    }
+
+    .form-note {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 1px;
+      color: var(--muted);
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--surface);
+      padding: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 24px;
+      letter-spacing: 4px;
+      color: var(--accent);
+    }
+
+    .footer-copy {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 1px;
+      color: var(--muted);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    /* MARQUEE */
+    .marquee-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 18px 0;
+      background: var(--surface2);
+    }
+
+    .marquee-track {
+      display: flex;
+      gap: 0;
+      white-space: nowrap;
+      animation: marquee 20s linear infinite;
+    }
+
+    .marquee-item {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 4px;
+      color: var(--muted);
+      padding: 0 40px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .marquee-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    @keyframes marquee {
+      0% {
+        transform: translateX(0)
+      }
+
+      100% {
+        transform: translateX(-50%)
+      }
+    }
+
+    /* SCROLL REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+      backdrop-filter: blur(8px);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .modal-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 40px;
+      max-width: 700px;
+      width: 90%;
+      position: relative;
+      transform: scale(0.95);
+      transition: transform 0.3s;
+    }
+
+    .modal-overlay.open .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: var(--accent2);
+    }
+
+    .modal-video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 900px) {
+      nav {
+        padding: 16px 24px;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      section {
+        padding: 80px 24px;
+      }
+
+      .hero {
+        padding: 100px 24px 60px;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .exp-item {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      footer {
+        flex-direction: column;
+        gap: 24px;
+        text-align: center;
+      }
+
+      .video-card {
+        flex: 0 0 85%;
+      }
+
+      .hero-stats {
+        flex-wrap: wrap;
+        gap: 32px;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .section-sub {
+        text-align: left;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- CURSOR -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-follower" id="follower"></div>
+  <!-- Cursor -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
 
-<!-- NAV -->
-<nav id="nav">
-  <a href="#" class="nav-logo">Re<span>Volt</span> Tech</a>
-  <ul class="nav-links">
-    <li><a href="#categories">Devices</a></li>
-    <li><a href="#products">Shop</a></li>
-    <li><a href="#why">Why Us</a></li>
-    <li><a href="#testimonials">Reviews</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <a href="#contact" class="nav-cta">Sell Your Device</a>
-</nav>
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">DOM.</a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#reel">Reel</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="nav-right">
+      <span class="theme-label" id="themeLabel">DARK</span>
+      <button class="theme-btn" id="themeBtn" title="Toggle theme"></button>
+    </div>
+  </nav>
 
-<!-- HERO -->
-<section class="hero" id="home">
-  <div class="hero-grid"></div>
-  <div class="hero-glow"></div>
-  <div class="hero-glow2"></div>
-  <div class="hero-tag">🔥 Trusted Local Store — Guwahati</div>
-  <h1 class="hero-title">
-    <div>Premium</div>
-    <div class="line2">Refurbished</div>
-    <div class="line3">Devices.</div>
-  </h1>
-  <p class="hero-sub">Buy and sell certified second-hand iPhones, laptops, tablets & more — at unbeatable prices. Every device tested, verified & warranty-backed.</p>
-  <div class="hero-actions">
-    <a href="#products" class="btn-primary"><i class="fas fa-bolt"></i> Browse Devices</a>
-    <a href="#contact" class="btn-outline"><i class="fas fa-tag"></i> Sell Your Device</a>
-  </div>
-  <div class="hero-stats">
-    <div>
-      <div class="stat-num" data-target="2000">0</div>
-      <div class="stat-label">Devices Sold</div>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <div class="grain"></div>
+      <div class="hero-bg-text">EDITOR</div>
     </div>
-    <div>
-      <div class="stat-num" data-target="98">0</div>
-      <div class="stat-label">% Customer Satisfaction</div>
+    <div style="position:relative;z-index:1">
+      <div class="hero-tag">Freelance Video Editor · Est. 2020</div>
+      <h1 class="hero-name">
+        DOMINATOR<br>
+        <span class="line2">V2X</span>
+      </h1>
+      <p class="hero-desc">
+        Crafting visual stories that hit different. From cinematic cuts to viral reels —
+        every frame is intentional, every transition is felt.
+      </p>
+      <div class="hero-cta">
+        <a href="#reel" class="btn-primary"><span>▶</span> Watch Reel</a>
+        <a href="#contact" class="btn-outline">Let's Work →</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">4<span>+</span></div>
+          <div class="stat-label">Years Experience</div>
+        </div>
+        <div>
+          <div class="stat-num">120<span>+</span></div>
+          <div class="stat-label">Projects Delivered</div>
+        </div>
+        <div>
+          <div class="stat-num">40<span>+</span></div>
+          <div class="stat-label">Happy Clients</div>
+        </div>
+        <div>
+          <div class="stat-num">15<span>M</span></div>
+          <div class="stat-label">Views Generated</div>
+        </div>
+      </div>
     </div>
-    <div>
-      <div class="stat-num" data-target="5">0</div>
-      <div class="stat-label">Years in Business</div>
+    <div class="scroll-hint">
+      <div class="scroll-line"></div>
+      Scroll to explore
     </div>
-    <div>
-      <div class="stat-num" data-target="30">0</div>
-      <div class="stat-label">Day Warranty</div>
-    </div>
-  </div>
-  <div class="scroll-indicator" id="scrollInd">
-    <div class="scroll-line"></div>
-    <span>Scroll</span>
-  </div>
-</section>
+  </section>
 
-<!-- MARQUEE -->
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <div class="marquee-item"><span>✦</span> iPhone 15 Pro</div>
-    <div class="marquee-item"><span>✦</span> MacBook Air M2</div>
-    <div class="marquee-item"><span>✦</span> Samsung Galaxy S24</div>
-    <div class="marquee-item"><span>✦</span> iPad Pro 12.9"</div>
-    <div class="marquee-item"><span>✦</span> Dell XPS 15</div>
-    <div class="marquee-item"><span>✦</span> OnePlus 12</div>
-    <div class="marquee-item"><span>✦</span> Apple Watch Series 9</div>
-    <div class="marquee-item"><span>✦</span> Sony WH-1000XM5</div>
-    <div class="marquee-item"><span>✦</span> iPhone 15 Pro</div>
-    <div class="marquee-item"><span>✦</span> MacBook Air M2</div>
-    <div class="marquee-item"><span>✦</span> Samsung Galaxy S24</div>
-    <div class="marquee-item"><span>✦</span> iPad Pro 12.9"</div>
-    <div class="marquee-item"><span>✦</span> Dell XPS 15</div>
-    <div class="marquee-item"><span>✦</span> OnePlus 12</div>
-    <div class="marquee-item"><span>✦</span> Apple Watch Series 9</div>
-    <div class="marquee-item"><span>✦</span> Sony WH-1000XM5</div>
-  </div>
-</div>
-
-<!-- CATEGORIES -->
-<section id="categories">
-  <p class="section-label reveal">What We Stock</p>
-  <h2 class="section-title reveal">Shop By Category</h2>
-  <div class="cat-grid reveal">
-    <div class="cat-card" onclick="filterProducts('iphone')">
-      <span class="cat-icon">📱</span>
-      <div class="cat-name">iPhones</div>
-      <div class="cat-count">iPhone 11 — 15 Pro Max</div>
-      <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="cat-card" onclick="filterProducts('android')">
-      <span class="cat-icon">🤖</span>
-      <div class="cat-name">Android Phones</div>
-      <div class="cat-count">Samsung, OnePlus, Pixel</div>
-      <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="cat-card" onclick="filterProducts('laptop')">
-      <span class="cat-icon">💻</span>
-      <div class="cat-name">Laptops</div>
-      <div class="cat-count">MacBook, Dell, HP, Lenovo</div>
-      <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="cat-card" onclick="filterProducts('tablet')">
-      <span class="cat-icon">🖥️</span>
-      <div class="cat-name">Tablets</div>
-      <div class="cat-count">iPad, Samsung Tab, Surface</div>
-      <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="cat-card" onclick="filterProducts('watch')">
-      <span class="cat-icon">⌚</span>
-      <div class="cat-name">Smartwatches</div>
-      <div class="cat-count">Apple Watch, Galaxy Watch</div>
-      <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
-    </div>
-    <div class="cat-card" onclick="filterProducts('audio')">
-      <span class="cat-icon">🎧</span>
-      <div class="cat-name">Audio & More</div>
-      <div class="cat-count">AirPods, Headphones, TWS</div>
-      <div class="cat-arrow"><i class="fas fa-arrow-right"></i></div>
+  <!-- MARQUEE -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>PREMIERE PRO
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>AFTER EFFECTS
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>DAVINCI RESOLVE
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>MOTION GRAPHICS
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>COLOR GRADING
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>SOUND DESIGN
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>CINEMATIC EDITING
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>REELS & SHORTS
+      </div>
+      <!-- Duplicate -->
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>PREMIERE PRO
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>AFTER EFFECTS
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>DAVINCI RESOLVE
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>MOTION GRAPHICS
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>COLOR GRADING
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>SOUND DESIGN
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>CINEMATIC EDITING
+      </div>
+      <div class="marquee-item">
+        <div class="marquee-dot"></div>REELS & SHORTS
+      </div>
     </div>
   </div>
-</section>
 
-<!-- PRODUCTS -->
-<section id="products">
-  <p class="section-label reveal">Handpicked Deals</p>
-  <h2 class="section-title reveal">Featured Devices</h2>
-  <div class="filter-bar reveal" id="filterBar">
-    <button class="filter-btn active" onclick="filterProducts('all', this)">All</button>
-    <button class="filter-btn" onclick="filterProducts('iphone', this)">iPhones</button>
-    <button class="filter-btn" onclick="filterProducts('android', this)">Android</button>
-    <button class="filter-btn" onclick="filterProducts('laptop', this)">Laptops</button>
-    <button class="filter-btn" onclick="filterProducts('tablet', this)">Tablets</button>
-    <button class="filter-btn" onclick="filterProducts('watch', this)">Watches</button>
-    <button class="filter-btn" onclick="filterProducts('audio', this)">Audio</button>
-  </div>
-  <div class="product-grid" id="productGrid"></div>
-</section>
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-num">01 / ABOUT</div>
+        <h2 class="section-title">THE<br>EDITOR</h2>
+      </div>
+      <p class="section-sub">Turning raw footage into stories that move people.</p>
+    </div>
+    <div class="about-grid">
+      <div class="about-photo reveal">
+        <div class="photo-placeholder">
+          <div class="photo-icon">📷</div>
+          <div>YOUR PHOTO HERE</div>
+        </div>
+        <div class="photo-frame"></div>
+      </div>
+      <div class="about-content reveal">
+        <p class="about-intro">
+          I'm <strong>Dominatorv2x</strong> — a freelance video editor obsessed with
+          the craft of visual storytelling.
+        </p>
+        <p class="about-body">
+          Based in India, I work with creators, brands, and agencies worldwide to transform raw footage into polished,
+          high-impact content. My approach blends technical precision with a deep understanding of narrative flow —
+          every cut serves the story, every transition earns its place.<br><br>
+          Whether it's a cinematic brand film, a punchy YouTube video, or viral short-form content,
+          I bring the same level of care and intentionality to every frame.
+        </p>
+        <div class="skills-grid">
+          <div class="skill-tag">
+            <div class="skill-dot"></div>Adobe Premiere Pro
+          </div>
+          <div class="skill-tag">
+            <div class="skill-dot"></div>After Effects
+          </div>
+          <div class="skill-tag">
+            <div class="skill-dot"></div>DaVinci Resolve
+          </div>
+          <div class="skill-tag">
+            <div class="skill-dot"></div>Color Grading
+          </div>
+          <div class="skill-tag">
+            <div class="skill-dot"></div>Motion Graphics
+          </div>
+          <div class="skill-tag">
+            <div class="skill-dot"></div>Sound Design
+          </div>
+          <div class="skill-tag">
+            <div class="skill-dot"></div>Short-Form Reels
+          </div>
+          <div class="skill-tag">
+            <div class="skill-dot"></div>VFX Compositing
+          </div>
+        </div>
+        <a href="#contact" class="btn-primary">Start a Project →</a>
+      </div>
+    </div>
+  </section>
 
-<!-- WHY US -->
-<section id="why">
-  <div class="why-grid">
-    <div>
-      <p class="section-label reveal">Our Promise</p>
-      <h2 class="section-title reveal">Why Choose ReVolt Tech?</h2>
-      <p class="reveal" style="opacity:0.6;line-height:1.75;margin-bottom:2rem;font-size:0.9rem;">We're not just a shop — we're your trusted tech partner in Guwahati. Every device goes through a rigorous 50-point quality check before it reaches you.</p>
-      <ul class="why-list">
-        <li class="why-item reveal">
-          <div class="why-icon"><i class="fas fa-shield-alt"></i></div>
+  <!-- EXPERIENCE -->
+  <section class="experience" id="experience">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-num">02 / EXPERIENCE</div>
+        <h2 class="section-title">WHERE<br>I'VE BEEN</h2>
+      </div>
+      <p class="section-sub">A timeline of projects and collaborations.</p>
+    </div>
+    <div class="exp-list">
+      <div class="exp-item reveal">
+        <div class="exp-year">2023 — NOW</div>
+        <div>
+          <div class="exp-role">Senior Freelance Editor</div>
+          <div class="exp-company">Self-Employed · Remote</div>
+          <p class="exp-desc">Working directly with YouTubers, brands, and agencies. Delivering 10+ projects monthly
+            ranging from short-form reels to full-length cinematic productions. Specializing in retention-optimized
+            edits that maximize watch time.</p>
+          <div class="exp-tags">
+            <div class="exp-tag">YouTube</div>
+            <div class="exp-tag">Reels</div>
+            <div class="exp-tag">Brand Films</div>
+            <div class="exp-tag">Documentaries</div>
+          </div>
+        </div>
+        <div class="exp-arrow">→</div>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-year">2022 — 2023</div>
+        <div>
+          <div class="exp-role">Content Editor</div>
+          <div class="exp-company">Digital Agency · Contract</div>
+          <p class="exp-desc">Managed post-production for a portfolio of social media clients. Developed signature
+            editing styles for 20+ creator accounts. Improved average video retention by 34% through strategic pacing
+            and hook optimization.</p>
+          <div class="exp-tags">
+            <div class="exp-tag">Social Media</div>
+            <div class="exp-tag">Motion Graphics</div>
+            <div class="exp-tag">Thumbnails</div>
+          </div>
+        </div>
+        <div class="exp-arrow">→</div>
+      </div>
+      <div class="exp-item reveal">
+        <div class="exp-year">2020 — 2022</div>
+        <div>
+          <div class="exp-role">Junior Editor</div>
+          <div class="exp-company">Local Production House</div>
+          <p class="exp-desc">Started my professional journey editing wedding films, events, and commercial ads.
+            Mastered color grading, audio mixing, and client communication while building a diverse editing vocabulary.
+          </p>
+          <div class="exp-tags">
+            <div class="exp-tag">Wedding Films</div>
+            <div class="exp-tag">Ads</div>
+            <div class="exp-tag">Events</div>
+          </div>
+        </div>
+        <div class="exp-arrow">→</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO REEL -->
+  <section class="reel" id="reel">
+    <div class="reel-header reveal">
+      <div class="section-num">03 / SHOWREEL</div>
+      <h2 class="section-title">SELECTED<br>WORKS</h2>
+    </div>
+    <div class="video-slider reveal">
+      <div class="video-track" id="videoTrack">
+        <div class="video-card" onclick="openModal(0)">
+          <div class="video-thumb">
+            <div class="video-gradient" style="background:linear-gradient(135deg,#1a0a0a,#2d1000,#0d0d0d)"></div>
+            <div class="video-play">▶</div>
+            <div class="video-overlay"></div>
+          </div>
+          <div class="video-info">
+            <div class="video-cat">Brand Film</div>
+            <div class="video-title">CINEMATIC REEL 2024</div>
+            <div class="video-meta"><span>⏱ 2:34</span><span>🎬 Brand · Commercial</span></div>
+          </div>
+        </div>
+        <div class="video-card" onclick="openModal(1)">
+          <div class="video-thumb">
+            <div class="video-gradient" style="background:linear-gradient(135deg,#0a1a0a,#002d10,#0d0d0d)"></div>
+            <div class="video-play">▶</div>
+            <div class="video-overlay"></div>
+          </div>
+          <div class="video-info">
+            <div class="video-cat">YouTube Edit</div>
+            <div class="video-title">VIRAL LONG-FORM CUT</div>
+            <div class="video-meta"><span>⏱ 18:22</span><span>🎬 YouTube · Vlog</span></div>
+          </div>
+        </div>
+        <div class="video-card" onclick="openModal(2)">
+          <div class="video-thumb">
+            <div class="video-gradient" style="background:linear-gradient(135deg,#0a0a1a,#10002d,#0d0d0d)"></div>
+            <div class="video-play">▶</div>
+            <div class="video-overlay"></div>
+          </div>
+          <div class="video-info">
+            <div class="video-cat">Short Form</div>
+            <div class="video-title">REELS COMPILATION</div>
+            <div class="video-meta"><span>⏱ 0:45</span><span>🎬 Instagram · Reels</span></div>
+          </div>
+        </div>
+        <div class="video-card" onclick="openModal(3)">
+          <div class="video-thumb">
+            <div class="video-gradient" style="background:linear-gradient(135deg,#1a1a0a,#2d2d00,#0d0d0d)"></div>
+            <div class="video-play">▶</div>
+            <div class="video-overlay"></div>
+          </div>
+          <div class="video-info">
+            <div class="video-cat">Motion Design</div>
+            <div class="video-title">MOTION GRAPHICS REEL</div>
+            <div class="video-meta"><span>⏱ 1:18</span><span>🎬 After Effects</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="slider-controls">
+      <button class="slider-btn" id="prevBtn">←</button>
+      <div class="slider-dots" id="sliderDots">
+        <div class="slider-dot active" onclick="goToSlide(0)"></div>
+        <div class="slider-dot" onclick="goToSlide(1)"></div>
+        <div class="slider-dot" onclick="goToSlide(2)"></div>
+        <div class="slider-dot" onclick="goToSlide(3)"></div>
+      </div>
+      <button class="slider-btn" id="nextBtn">→</button>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="projects" id="projects">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-num">04 / PROJECTS</div>
+        <h2 class="section-title">THE<br>WORK</h2>
+      </div>
+      <p class="section-sub">A selection of notable edits across genres.</p>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card reveal">
+        <div class="project-num">01</div>
+        <div class="project-cat">Commercial</div>
+        <div class="project-title">BRAND LAUNCH CAMPAIGN</div>
+        <p class="project-desc">Full commercial package for a D2C brand launch — 3 hero videos, 8 social cuts, and 12
+          story formats delivering 2M+ organic views.</p>
+        <div class="project-tools">
+          <div class="project-tool">Premiere Pro</div>
+          <div class="project-tool">After Effects</div>
+          <div class="project-tool">Photoshop</div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">02</div>
+        <div class="project-cat">YouTube</div>
+        <div class="project-title">CREATOR CHANNEL OVERHAUL</div>
+        <p class="project-desc">Redesigned editing style for a 500K subscriber channel. Increased average view duration
+          by 42% in 60 days through strategic pacing.</p>
+        <div class="project-tools">
+          <div class="project-tool">Premiere Pro</div>
+          <div class="project-tool">DaVinci</div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">03</div>
+        <div class="project-cat">Documentary</div>
+        <div class="project-title">REGIONAL DOC SHORT</div>
+        <p class="project-desc">20-minute documentary short selected for regional festival circuit. End-to-end
+          post-production from rough cut to final grade.</p>
+        <div class="project-tools">
+          <div class="project-tool">DaVinci Resolve</div>
+          <div class="project-tool">Audition</div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">04</div>
+        <div class="project-cat">Sports</div>
+        <div class="project-title">ESPORTS HIGHLIGHT PACK</div>
+        <p class="project-desc">Monthly highlight packages for an esports org — fast-paced edits designed for maximum
+          hype and social shareability.</p>
+        <div class="project-tools">
+          <div class="project-tool">Premiere Pro</div>
+          <div class="project-tool">After Effects</div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">05</div>
+        <div class="project-cat">Music Video</div>
+        <div class="project-title">MUSIC VIDEO PRODUCTION</div>
+        <p class="project-desc">Directed and edited a music video for an indie artist. Creative concept, shoot
+          coordination, and complete post-production pipeline.</p>
+        <div class="project-tools">
+          <div class="project-tool">Premiere Pro</div>
+          <div class="project-tool">After Effects</div>
+          <div class="project-tool">Color</div>
+        </div>
+      </div>
+      <div class="project-card reveal">
+        <div class="project-num">06</div>
+        <div class="project-cat">Event</div>
+        <div class="project-title">CORPORATE EVENT FILMS</div>
+        <p class="project-desc">Cinematic event coverage and same-day edit delivery for corporate conferences and
+          product launches across India.</p>
+        <div class="project-tools">
+          <div class="project-tool">Premiere Pro</div>
+          <div class="project-tool">Resolve</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-header reveal">
+      <div>
+        <div class="section-num">05 / CONTACT</div>
+        <h2 class="section-title">LET'S<br>CREATE</h2>
+      </div>
+      <p class="section-sub">Got a project? Let's make something great together.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <p class="contact-tagline">
+          I'm always open to new projects, creative ideas, or just a good conversation about editing.
+        </p>
+        <div class="contact-detail">
+          <div class="contact-icon">✉</div>
           <div>
-            <div class="why-title">Quality Certified</div>
-            <div class="why-text">Every device undergoes a 50-point inspection. What you see in the listing is exactly what you get — no surprises.</div>
+            <div class="contact-key">Email</div>
+            <div class="contact-val"><a href="mailto:youremail@gmail.com">youremail@gmail.com</a></div>
           </div>
-        </li>
-        <li class="why-item reveal">
-          <div class="why-icon"><i class="fas fa-undo-alt"></i></div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">📱</div>
           <div>
-            <div class="why-title">30-Day Warranty</div>
-            <div class="why-text">Not satisfied? Return within 30 days, no questions asked. We stand behind every sale we make.</div>
+            <div class="contact-key">WhatsApp / Call</div>
+            <div class="contact-val"><a href="https://wa.me/919362131252" target="_blank">+91 93621 31252</a></div>
           </div>
-        </li>
-        <li class="why-item reveal">
-          <div class="why-icon"><i class="fas fa-rupee-sign"></i></div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">📸</div>
           <div>
-            <div class="why-title">Best Price Guaranteed</div>
-            <div class="why-text">We match or beat any competitor's price on comparable certified refurbished devices in Guwahati.</div>
+            <div class="contact-key">Instagram</div>
+            <div class="contact-val"><a href="https://instagram.com/dominatorv2x" target="_blank">@dominatorv2x</a>
+            </div>
           </div>
-        </li>
-        <li class="why-item reveal">
-          <div class="why-icon"><i class="fas fa-tools"></i></div>
-          <div>
-            <div class="why-title">Repair & Upgrade</div>
-            <div class="why-text">Need a screen fix, battery swap, or RAM upgrade? Our in-house technicians handle it all quickly and affordably.</div>
+        </div>
+        <div style="margin-top:40px;">
+          <div class="contact-key" style="margin-bottom:12px;">AVAILABILITY</div>
+          <div style="display:flex;align-items:center;gap:12px;font-size:15px;">
+            <div
+              style="width:10px;height:10px;border-radius:50%;background:#4caf50;box-shadow:0 0 12px #4caf50;animation:pulse 2s infinite;flex-shrink:0;">
+            </div>
+            Currently Available for Projects
           </div>
-        </li>
-      </ul>
-    </div>
-    <div class="why-visual">
-      <div class="why-ring"></div>
-      <div class="why-ring"></div>
-      <div class="why-ring"></div>
-      <div class="why-center">♻️</div>
-    </div>
-  </div>
-</section>
+          <style>
+            @keyframes pulse {
 
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <p class="section-label reveal">What People Say</p>
-  <h2 class="section-title reveal">Happy Customers</h2>
-  <div class="testimonial-grid">
-    <div class="testimonial-card reveal">
-      <div class="stars">★★★★★</div>
-      <div class="testimonial-text">"Got an iPhone 14 Pro for almost half the price. Battery health was 96% and the phone looked brand new. Couldn't be happier!"</div>
-      <div class="testimonial-author">
-        <div class="avatar">RB</div>
-        <div><div class="author-name">Ranjit Bora</div><div class="author-city">Guwahati, Assam</div></div>
-      </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <div class="stars">★★★★★</div>
-      <div class="testimonial-text">"Sold my old Samsung here and got a great price on the spot. The process was super smooth. Will definitely be back for my next purchase!"</div>
-      <div class="testimonial-author">
-        <div class="avatar">PD</div>
-        <div><div class="author-name">Priya Das</div><div class="author-city">Jorhat, Assam</div></div>
-      </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <div class="stars">★★★★★</div>
-      <div class="testimonial-text">"The MacBook Air I got from ReVolt Tech runs perfectly. The 30-day warranty gave me complete peace of mind. Highly recommended!"</div>
-      <div class="testimonial-author">
-        <div class="avatar">SK</div>
-        <div><div class="author-name">Saurav Kalita</div><div class="author-city">Guwahati, Assam</div></div>
-      </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <div class="stars">★★★★☆</div>
-      <div class="testimonial-text">"Amazing collection of tablets. Got a Samsung Tab S8 at a steal. Staff was helpful and transparent about every detail. Will recommend to friends."</div>
-      <div class="testimonial-author">
-        <div class="avatar">MN</div>
-        <div><div class="author-name">Mousumi Nath</div><div class="author-city">Dibrugarh, Assam</div></div>
-      </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <div class="stars">★★★★★</div>
-      <div class="testimonial-text">"Best second-hand store in Guwahati! Got AirPods Pro for ₹8,500 in mint condition. They even let me test it before buying. 10/10!"</div>
-      <div class="testimonial-author">
-        <div class="avatar">AR</div>
-        <div><div class="author-name">Ankita Roy</div><div class="author-city">Silchar, Assam</div></div>
-      </div>
-    </div>
-    <div class="testimonial-card reveal">
-      <div class="stars">★★★★★</div>
-      <div class="testimonial-text">"Came in to sell my old laptop and walked out with cash in hand within 20 minutes. Fair price, zero hassle. ReVolt Tech is the real deal."</div>
-      <div class="testimonial-author">
-        <div class="avatar">BG</div>
-        <div><div class="author-name">Bikram Gogoi</div><div class="author-city">Tezpur, Assam</div></div>
-      </div>
-    </div>
-  </div>
-</section>
+              0%,
+              100% {
+                opacity: 1
+              }
 
-<!-- CONTACT -->
-<section id="contact">
-  <p class="section-label reveal">Get In Touch</p>
-  <h2 class="section-title reveal">Visit Us / Contact Us</h2>
-  <div class="contact-wrap">
-    <div class="contact-info reveal">
-      <div class="contact-item">
-        <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
-        <div>
-          <div class="contact-label">Store Address</div>
-          <div class="contact-val">Shop No. 12, GS Road, Bhangagarh<br>Guwahati, Assam — 781005</div>
+              50% {
+                opacity: 0.5
+              }
+            }
+          </style>
         </div>
       </div>
-      <div class="contact-item">
-        <div class="contact-icon"><i class="fas fa-phone-alt"></i></div>
-        <div>
-          <div class="contact-label">Call / WhatsApp</div>
-          <div class="contact-val"><a href="tel:+919876543210">+91 98765 43210</a></div>
-        </div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon"><i class="fas fa-envelope"></i></div>
-        <div>
-          <div class="contact-label">Email</div>
-          <div class="contact-val"><a href="mailto:hello@revolttech.in">hello@revolttech.in</a></div>
-        </div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon"><i class="fas fa-clock"></i></div>
-        <div>
-          <div class="contact-label">Store Hours</div>
-          <div class="contact-val">Mon – Sat: 10:00 AM – 8:00 PM<br>Sunday: 11:00 AM – 5:00 PM</div>
-        </div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon"><i class="fab fa-instagram"></i></div>
-        <div>
-          <div class="contact-label">Social Media</div>
-          <div class="social-row">
-            <a href="https://instagram.com/revolttech" target="_blank" class="social-btn">
-              <i class="fab fa-instagram"></i> @RevoltTech
-            </a>
-            <a href="https://youtube.com/@revolttech" target="_blank" class="social-btn yt">
-              <i class="fab fa-youtube"></i> ReVolt Tech
-            </a>
-          </div>
-        </div>
-      </div>
-      <div class="map-placeholder">
-        <div class="map-pin">📍</div>
-        <div class="map-label">GS Road, Bhangagarh, Guwahati</div>
-      </div>
-    </div>
-    <div class="reveal">
-      <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="contact-form reveal">
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Your Name</label>
-            <input type="text" class="form-input" placeholder="Ranjit Bora" required>
+            <label class="form-label">Your Name *</label>
+            <input type="text" class="form-input" id="fname" placeholder="Full Name">
           </div>
           <div class="form-group">
             <label class="form-label">Phone Number</label>
-            <input type="tel" class="form-input" placeholder="+91 98765 43210" required>
+            <input type="tel" class="form-input" id="fphone" placeholder="+91 00000 00000">
           </div>
         </div>
         <div class="form-group">
-          <label class="form-label">Email Address</label>
-          <input type="email" class="form-input" placeholder="you@email.com">
+          <label class="form-label">Email Address *</label>
+          <input type="email" class="form-input" id="femail" placeholder="your@email.com">
         </div>
         <div class="form-group">
-          <label class="form-label">I'm interested in...</label>
-          <select class="form-input" style="cursor:none;">
-            <option value="">Select an option</option>
-            <option>Buying a device</option>
-            <option>Selling my device</option>
-            <option>Repair / Service</option>
-            <option>Price enquiry</option>
+          <label class="form-label">Project Type *</label>
+          <select class="form-select form-input" id="ftype">
+            <option value="" disabled selected>Select a project type</option>
+            <option>YouTube Video Editing</option>
+            <option>Instagram Reels / Short Form</option>
+            <option>Brand / Commercial Film</option>
+            <option>Wedding / Event Film</option>
+            <option>Documentary</option>
+            <option>Music Video</option>
+            <option>Motion Graphics</option>
             <option>Other</option>
           </select>
         </div>
-        <div class="form-group">
-          <label class="form-label">Message</label>
-          <textarea class="form-textarea" placeholder="Tell us about the device you're looking to buy or sell..."></textarea>
-        </div>
-        <button type="submit" class="form-submit">
-          <i class="fas fa-paper-plane"></i> Send Message
-        </button>
-      </form>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">Re<span>Volt</span> Tech</div>
-  <div class="footer-copy">© 2025 ReVolt Tech, Guwahati. All rights reserved.</div>
-  <div class="footer-links">
-    <a href="#home">Home</a>
-    <a href="#products">Shop</a>
-    <a href="#contact">Contact</a>
-    <a href="https://instagram.com/revolttech" target="_blank"><i class="fab fa-instagram"></i></a>
-    <a href="https://youtube.com/@revolttech" target="_blank"><i class="fab fa-youtube"></i></a>
-  </div>
-</footer>
-
-<!-- TOAST -->
-<div class="toast" id="toast">✅ Message sent! We'll contact you soon.</div>
-
-<script>
-  // CURSOR
-  const cursor = document.getElementById('cursor');
-  const follower = document.getElementById('follower');
-  let fx = 0, fy = 0;
-  document.addEventListener('mousemove', e => {
-    cursor.style.left = e.clientX + 'px';
-    cursor.style.top = e.clientY + 'px';
-    fx += (e.clientX - fx) * 0.12;
-    fy += (e.clientY - fy) * 0.12;
-    follower.style.left = e.clientX + 'px';
-    follower.style.top = e.clientY + 'px';
-  });
-  document.querySelectorAll('a,button,.cat-card,.why-item,.product-card').forEach(el => {
-    el.addEventListener('mouseenter', () => { cursor.style.width = '20px'; cursor.style.height = '20px'; follower.style.width = '56px'; follower.style.height = '56px'; });
-    el.addEventListener('mouseleave', () => { cursor.style.width = '12px'; cursor.style.height = '12px'; follower.style.width = '36px'; follower.style.height = '36px'; });
-  });
-
-  // NAV SCROLL
-  window.addEventListener('scroll', () => {
-    document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
-    if (window.scrollY > 300) document.getElementById('scrollInd').style.opacity = '0';
-  });
-
-  // REVEAL
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in-view'); } });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-  // COUNTER ANIMATION
-  function animateCounter(el, target) {
-    let start = 0; const dur = 2000; const step = 16;
-    const inc = target / (dur / step);
-    const timer = setInterval(() => {
-      start = Math.min(start + inc, target);
-      el.textContent = Math.floor(start) + (target >= 90 && target <= 100 ? '%' : target === 30 ? '' : '+');
-      if (start >= target) { el.textContent = target + (target >= 90 && target <= 100 ? '%' : target === 30 ? '' : '+'); clearInterval(timer); }
-    }, step);
-  }
-  const counterObs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        document.querySelectorAll('.stat-num').forEach(el => animateCounter(el, +el.dataset.target));
-        counterObs.disconnect();
-      }
-    });
-  }, { threshold: 0.5 });
-  const statsEl = document.querySelector('.hero-stats');
-  if (statsEl) counterObs.observe(statsEl);
-
-  // PRODUCTS DATA
-  const products = [
-    { id:1, cat:'iphone', name:'iPhone 14 Pro Max', spec:'256GB · Deep Purple · 91% Battery', price:'₹62,999', original:'₹1,34,900', emoji:'📱', badge:'Like New', badgeClass:'like-new' },
-    { id:2, cat:'iphone', name:'iPhone 13', spec:'128GB · Midnight · 88% Battery', price:'₹38,500', original:'₹79,900', emoji:'📱', badge:'Good', badgeClass:'good' },
-    { id:3, cat:'iphone', name:'iPhone 15 Pro', spec:'256GB · Natural Titanium · 97% Battery', price:'₹79,999', original:'₹1,34,900', emoji:'📱', badge:'Like New', badgeClass:'like-new' },
-    { id:4, cat:'android', name:'Samsung Galaxy S23 Ultra', spec:'256GB · Phantom Black · 93% Battery', price:'₹54,999', original:'₹1,24,999', emoji:'📲', badge:'Like New', badgeClass:'like-new' },
-    { id:5, cat:'android', name:'OnePlus 12', spec:'256GB · Silky Black · 96% Battery', price:'₹42,000', original:'₹69,999', emoji:'📲', badge:'Like New', badgeClass:'like-new' },
-    { id:6, cat:'android', name:'Google Pixel 8 Pro', spec:'128GB · Porcelain · 91% Battery', price:'₹49,500', original:'₹1,06,999', emoji:'📲', badge:'Good', badgeClass:'good' },
-    { id:7, cat:'laptop', name:'MacBook Air M2', spec:'8GB RAM · 256GB SSD · Space Gray', price:'₹72,999', original:'₹1,14,900', emoji:'💻', badge:'Like New', badgeClass:'like-new' },
-    { id:8, cat:'laptop', name:'Dell XPS 15', spec:'16GB RAM · 512GB SSD · i7 13th Gen', price:'₹58,000', original:'₹1,29,990', emoji:'💻', badge:'Good', badgeClass:'good' },
-    { id:9, cat:'laptop', name:'Lenovo ThinkPad X1 Carbon', spec:'16GB RAM · 512GB · Intel Evo', price:'₹44,999', original:'₹1,05,000', emoji:'💻', badge:'Good', badgeClass:'good' },
-    { id:10, cat:'tablet', name:'iPad Pro 12.9" M2', spec:'Wi-Fi · 256GB · Space Gray', price:'₹67,000', original:'₹1,12,900', emoji:'🖥️', badge:'Like New', badgeClass:'like-new' },
-    { id:11, cat:'tablet', name:'Samsung Galaxy Tab S8+', spec:'Wi-Fi · 128GB · Silver', price:'₹38,000', original:'₹84,999', emoji:'🖥️', badge:'Good', badgeClass:'good' },
-    { id:12, cat:'watch', name:'Apple Watch Series 9 GPS', spec:'45mm · Midnight · Battery 94%', price:'₹27,500', original:'₹44,900', emoji:'⌚', badge:'Like New', badgeClass:'like-new' },
-    { id:13, cat:'watch', name:'Samsung Galaxy Watch 6 Classic', spec:'47mm · Black · LTE', price:'₹18,999', original:'₹42,499', emoji:'⌚', badge:'Like New', badgeClass:'like-new' },
-    { id:14, cat:'audio', name:'AirPods Pro 2nd Gen', spec:'USB-C · Active Noise Cancellation', price:'₹12,999', original:'₹24,900', emoji:'🎧', badge:'Like New', badgeClass:'like-new' },
-    { id:15, cat:'audio', name:'Sony WH-1000XM5', spec:'Wireless · 30hr Battery · Black', price:'₹16,500', original:'₹34,990', emoji:'🎧', badge:'Good', badgeClass:'good' },
-  ];
-
-  let currentFilter = 'all';
-
-  function renderProducts(filter) {
-    const grid = document.getElementById('productGrid');
-    const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
-    grid.innerHTML = filtered.map(p => `
-      <div class="product-card" data-cat="${p.cat}" style="animation: fadeUp 0.5s ease both;">
-        <div class="product-img">
-          <span class="product-badge ${p.badgeClass}">${p.badge}</span>
-          <span>${p.emoji}</span>
-        </div>
-        <div class="product-info">
-          <div class="product-name">${p.name}</div>
-          <div class="product-spec">${p.spec}</div>
-          <div class="product-price">${p.price} <span class="original">${p.original}</span></div>
-          <div class="product-actions">
-            <button class="btn-buy" onclick="enquire('${p.name}')">Enquire Now</button>
-            <button class="btn-wish" onclick="wishlist(this)"><i class="far fa-heart"></i></button>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Budget Range</label>
+            <select class="form-select form-input" id="fbudget">
+              <option value="" disabled selected>Budget</option>
+              <option>Under ₹5,000</option>
+              <option>₹5,000 – ₹15,000</option>
+              <option>₹15,000 – ₹50,000</option>
+              <option>₹50,000+</option>
+              <option>Let's Discuss</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Timeline</label>
+            <select class="form-select form-input" id="ftimeline">
+              <option value="" disabled selected>When?</option>
+              <option>ASAP</option>
+              <option>Within 1 Week</option>
+              <option>Within 1 Month</option>
+              <option>Flexible</option>
+            </select>
           </div>
         </div>
+        <div class="form-group">
+          <label class="form-label">Project Details *</label>
+          <textarea class="form-textarea" id="fmessage"
+            placeholder="Tell me about your project — what do you need, what style are you going for, any references?"></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">
+          <span>SEND TO WHATSAPP →</span>
+        </button>
+        <p class="form-note">* You'll be redirected to WhatsApp with your info pre-filled</p>
       </div>
-    `).join('');
-  }
+    </div>
+  </section>
 
-  function filterProducts(cat, btn) {
-    currentFilter = cat;
-    renderProducts(cat);
-    if (btn) {
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">DOM.</div>
+    <div class="footer-copy">© 2024 Dominatorv2x · All Rights Reserved</div>
+    <div class="footer-links">
+      <a href="mailto:youremail@gmail.com">Email</a>
+      <a href="https://wa.me/919362131252" target="_blank">WhatsApp</a>
+      <a href="https://instagram.com/dominatorv2x" target="_blank">Instagram</a>
+    </div>
+  </footer>
+
+  <!-- VIDEO MODAL -->
+  <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeModal()">✕</button>
+      <div class="modal-video" id="modalContent">
+        <div style="text-align:center">
+          <div style="font-size:48px;margin-bottom:16px;">🎬</div>
+          <div>Add your YouTube/Vimeo embed here</div>
+        </div>
+      </div>
+      <div id="modalTitle"
+        style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:8px;"></div>
+      <div id="modalDesc" style="font-size:14px;color:var(--muted);line-height:1.6;"></div>
+    </div>
+  </div>
+
+  <script>
+    // CURSOR
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+    let mx = 0, my = 0, rx = 0, ry = 0;
+    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+    function animCursor() {
+      dot.style.left = (mx - 4) + 'px'; dot.style.top = (my - 4) + 'px';
+      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+      ring.style.left = (rx - 20) + 'px'; ring.style.top = (ry - 20) + 'px';
+      requestAnimationFrame(animCursor);
     }
-    if (cat !== 'all') {
-      document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
+    animCursor();
+    document.querySelectorAll('a,button,.video-card,.project-card,.exp-item,.theme-btn').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+    });
+
+    // THEME TOGGLE
+    const themeBtn = document.getElementById('themeBtn');
+    const themeLabel = document.getElementById('themeLabel');
+    let isDark = true;
+    themeBtn.addEventListener('click', () => {
+      isDark = !isDark;
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      themeLabel.textContent = isDark ? 'DARK' : 'LIGHT';
+    });
+
+    // SCROLL REVEAL
+    const reveals = document.querySelectorAll('.reveal');
+    const revObs = new IntersectionObserver((entries) => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          setTimeout(() => e.target.classList.add('visible'), i * 80);
+          revObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    reveals.forEach(r => revObs.observe(r));
+
+    // VIDEO SLIDER
+    let current = 0;
+    const total = 4;
+    const track = document.getElementById('videoTrack');
+    const dots = document.querySelectorAll('.slider-dot');
+
+    function updateSlider() {
+      const card = track.querySelector('.video-card');
+      const cardW = card.offsetWidth + 24;
+      const maxOffset = Math.max(0, (total * cardW) - track.parentElement.offsetWidth);
+      const offset = Math.min(current * cardW, maxOffset);
+      track.style.transform = `translateX(-${offset}px)`;
+      dots.forEach((d, i) => d.classList.toggle('active', i === current));
     }
-  }
 
-  function enquire(name) {
-    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
-    showToast(`💬 Enquiring about ${name}...`);
-  }
+    document.getElementById('nextBtn').onclick = () => { current = (current + 1) % total; updateSlider(); };
+    document.getElementById('prevBtn').onclick = () => { current = (current - 1 + total) % total; updateSlider(); };
+    function goToSlide(i) { current = i; updateSlider(); }
 
-  function wishlist(btn) {
-    const icon = btn.querySelector('i');
-    icon.classList.toggle('far');
-    icon.classList.toggle('fas');
-    btn.style.color = icon.classList.contains('fas') ? '#e53e3e' : '';
-    btn.style.borderColor = icon.classList.contains('fas') ? '#e53e3e' : '';
-    showToast(icon.classList.contains('fas') ? '❤️ Added to wishlist!' : '🤍 Removed from wishlist');
-  }
+    // Auto slide
+    setInterval(() => { current = (current + 1) % total; updateSlider(); }, 4000);
 
-  function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3000);
-  }
+    // MODAL
+    const videos = [
+      { title: 'CINEMATIC REEL 2024', desc: 'A compilation of my best brand and commercial work from 2024. Color graded in DaVinci Resolve.' },
+      { title: 'VIRAL LONG-FORM CUT', desc: 'An 18-minute YouTube edit optimized for retention with strategic pacing and hook design.' },
+      { title: 'REELS COMPILATION', desc: 'Short-form reels edited for Instagram — punchy cuts, trending sounds, high engagement.' },
+      { title: 'MOTION GRAPHICS REEL', desc: 'After Effects motion graphics work — kinetic typography, logo animations, and visual effects.' },
+    ];
+    function openModal(i) {
+      document.getElementById('modalTitle').textContent = videos[i].title;
+      document.getElementById('modalDesc').textContent = videos[i].desc;
+      document.getElementById('modal').classList.add('open');
+    }
+    function closeModal() { document.getElementById('modal').classList.remove('open'); }
+    function closeModalOutside(e) { if (e.target.id === 'modal') closeModal(); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    showToast('✅ Message sent! We\'ll contact you soon.');
-    e.target.reset();
-  }
+    // CONTACT FORM → WHATSAPP
+    function submitForm() {
+      const name = document.getElementById('fname').value.trim();
+      const phone = document.getElementById('fphone').value.trim();
+      const email = document.getElementById('femail').value.trim();
+      const type = document.getElementById('ftype').value;
+      const budget = document.getElementById('fbudget').value;
+      const timeline = document.getElementById('ftimeline').value;
+      const message = document.getElementById('fmessage').value.trim();
 
-  renderProducts('all');
-</script>
+      if (!name || !email || !type || !message) {
+        alert('Please fill in all required fields (Name, Email, Project Type, Details).');
+        return;
+      }
+
+      const text = `*New Project Inquiry — Dominatorv2x Portfolio*%0A%0A` +
+        `*Name:* ${encodeURIComponent(name)}%0A` +
+        `*Phone:* ${encodeURIComponent(phone || 'Not provided')}%0A` +
+        `*Email:* ${encodeURIComponent(email)}%0A` +
+        `*Project Type:* ${encodeURIComponent(type)}%0A` +
+        `*Budget:* ${encodeURIComponent(budget || 'Not specified')}%0A` +
+        `*Timeline:* ${encodeURIComponent(timeline || 'Not specified')}%0A%0A` +
+        `*Project Details:*%0A${encodeURIComponent(message)}`;
+
+      window.open(`https://wa.me/919362131252?text=${text}`, '_blank');
+    }
+
+    // Nav active state on scroll
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
+      document.querySelectorAll('.nav-links a').forEach(a => {
+        a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--accent)' : '';
+      });
+    });
+  </script>
 </body>
+
 </html>
