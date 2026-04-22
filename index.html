@@ -1,1989 +1,1550 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
-
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DOMINATOR — Video Editor</title>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap"
-    rel="stylesheet">
-  <style>
-    :root {
-      --bg: #080808;
-      --surface: #101010;
-      --surface2: #181818;
-      --text: #f0ede8;
-      --muted: #6b6560;
-      --accent: #e8c547;
-      --accent2: #ff4d2e;
-      --border: rgba(240, 237, 232, 0.08);
-      --glow: rgba(232, 197, 71, 0.15);
-      --radius: 2px;
-      --transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-
-    [data-theme="light"] {
-      --bg: #f5f2ee;
-      --surface: #ebe7e0;
-      --surface2: #e0dcd5;
-      --text: #1a1816;
-      --muted: #7a7470;
-      --accent: #c9a800;
-      --accent2: #e03a1e;
-      --border: rgba(26, 24, 22, 0.1);
-      --glow: rgba(201, 168, 0, 0.12);
-    }
-
-    *,
-    *::before,
-    *::after {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-      cursor: none;
-      transition: background var(--transition), color var(--transition);
-    }
-
-    /* CUSTOM CURSOR */
-    .cursor {
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      mix-blend-mode: difference;
-      transition: transform 0.1s;
-    }
-
-    .cursor-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 10000;
-      transition: transform 0.08s;
-    }
-
-    .cursor-ring {
-      width: 40px;
-      height: 40px;
-      border: 1.5px solid var(--accent);
-      border-radius: 50%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 9999;
-      transition: all 0.15s ease-out, width 0.3s, height 0.3s, border-color 0.3s;
-      opacity: 0.7;
-    }
-
-    body.hovering .cursor-ring {
-      width: 60px;
-      height: 60px;
-      border-color: var(--accent2);
-      opacity: 1;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 1000;
-      padding: 20px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      backdrop-filter: blur(20px);
-      background: linear-gradient(to bottom, var(--bg) 0%, transparent 100%);
-      transition: background var(--transition);
-    }
-
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      letter-spacing: 4px;
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 36px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.2s;
-      position: relative;
-    }
-
-    .nav-links a::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--accent);
-      transition: width 0.3s;
-    }
-
-    .nav-links a:hover {
-      color: var(--text);
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    .nav-right {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    /* THEME TOGGLE */
-    .theme-btn {
-      width: 44px;
-      height: 24px;
-      border-radius: 12px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      cursor: pointer;
-      position: relative;
-      transition: background 0.3s;
-      display: flex;
-      align-items: center;
-      padding: 0 3px;
-    }
-
-    .theme-btn::before {
-      content: '';
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      background: var(--accent);
-      transition: transform 0.3s;
-      display: block;
-    }
-
-    [data-theme="light"] .theme-btn::before {
-      transform: translateX(20px);
-    }
-
-    .theme-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 1px;
-    }
-
-    /* HERO */
-    .hero {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 120px 48px 80px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      z-index: 0;
-    }
-
-    .hero-bg-text {
-      position: absolute;
-      bottom: -60px;
-      right: -20px;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(120px, 18vw, 280px);
-      color: var(--border);
-      letter-spacing: -8px;
-      white-space: nowrap;
-      user-select: none;
-      animation: driftText 20s ease-in-out infinite alternate;
-    }
-
-    @keyframes driftText {
-      0% {
-        transform: translateX(0);
-      }
-
-      100% {
-        transform: translateX(-40px);
-      }
-    }
-
-    .grain {
-      position: absolute;
-      inset: 0;
-      opacity: 0.04;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      pointer-events: none;
-    }
-
-    .hero-tag {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 24px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      opacity: 0;
-      animation: fadeUp 0.8s 0.2s forwards;
-    }
-
-    .hero-tag::before {
-      content: '';
-      width: 32px;
-      height: 1px;
-      background: var(--accent);
-    }
-
-    .hero-name {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(64px, 10vw, 140px);
-      line-height: 0.9;
-      letter-spacing: 2px;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.35s forwards;
-    }
-
-    .hero-name span {
-      color: var(--accent);
-    }
-
-    .hero-name .line2 {
-      color: var(--accent2);
-    }
-
-    .hero-desc {
-      max-width: 480px;
-      margin-top: 32px;
-      font-size: 16px;
-      line-height: 1.7;
-      color: var(--muted);
-      font-weight: 300;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.5s forwards;
-    }
-
-    .hero-cta {
-      display: flex;
-      gap: 16px;
-      margin-top: 48px;
-      opacity: 0;
-      animation: fadeUp 0.9s 0.65s forwards;
-    }
-
-    .btn-primary {
-      padding: 14px 36px;
-      background: var(--accent);
-      color: #080808;
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: transform 0.2s, box-shadow 0.2s;
-      font-weight: 700;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px var(--glow);
-    }
-
-    .btn-outline {
-      padding: 14px 36px;
-      background: transparent;
-      color: var(--text);
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border: 1px solid var(--border);
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      transition: border-color 0.2s, color 0.2s;
-    }
-
-    .btn-outline:hover {
-      border-color: var(--text);
-    }
-
-    .hero-stats {
-      display: flex;
-      gap: 48px;
-      margin-top: 80px;
-      padding-top: 40px;
-      border-top: 1px solid var(--border);
-      opacity: 0;
-      animation: fadeUp 0.9s 0.8s forwards;
-    }
-
-    .stat-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 52px;
-      line-height: 1;
-      color: var(--text);
-    }
-
-    .stat-num span {
-      color: var(--accent);
-      font-size: 32px;
-    }
-
-    .stat-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-top: 4px;
-    }
-
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* SCROLL INDICATOR */
-    .scroll-hint {
-      position: absolute;
-      bottom: 40px;
-      left: 48px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: var(--muted);
-      text-transform: uppercase;
-      opacity: 0;
-      animation: fadeUp 1s 1.2s forwards;
-    }
-
-    .scroll-line {
-      width: 1px;
-      height: 60px;
-      background: linear-gradient(to bottom, var(--accent), transparent);
-      animation: scrollPulse 2s ease-in-out infinite;
-    }
-
-    @keyframes scrollPulse {
-
-      0%,
-      100% {
-        opacity: 0.3
-      }
-
-      50% {
-        opacity: 1
-      }
-    }
-
-    /* SECTIONS */
-    section {
-      padding: 100px 48px;
-      position: relative;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      margin-bottom: 64px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .section-num {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 3px;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
-
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(42px, 6vw, 80px);
-      letter-spacing: 2px;
-      line-height: 0.9;
-    }
-
-    .section-sub {
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      color: var(--muted);
-      max-width: 260px;
-      text-align: right;
-      font-weight: 300;
-      line-height: 1.6;
-    }
-
-    /* ABOUT */
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 80px;
-      align-items: start;
-    }
-
-    .about-photo {
-      position: relative;
-      aspect-ratio: 3/4;
-      overflow: hidden;
-    }
-
-    .photo-placeholder {
-      width: 100%;
-      height: 100%;
-      background: var(--surface2);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      color: var(--muted);
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 2px;
-      border: 1px solid var(--border);
-    }
-
-    .photo-icon {
-      font-size: 48px;
-      opacity: 0.3;
-    }
-
-    .photo-frame {
-      position: absolute;
-      top: -12px;
-      right: -12px;
-      bottom: 12px;
-      left: 12px;
-      border: 1px solid var(--accent);
-      z-index: -1;
-      transition: var(--transition);
-    }
-
-    .about-photo:hover .photo-frame {
-      top: -18px;
-      right: -18px;
-      bottom: 18px;
-      left: 18px;
-    }
-
-    .about-content {
-      padding-top: 20px;
-    }
-
-    .about-intro {
-      font-size: 22px;
-      line-height: 1.5;
-      font-weight: 300;
-      margin-bottom: 32px;
-    }
-
-    .about-intro strong {
-      color: var(--accent);
-      font-weight: 500;
-    }
-
-    .about-body {
-      font-size: 15px;
-      line-height: 1.8;
-      color: var(--muted);
-      margin-bottom: 40px;
-    }
-
-    .skills-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 40px;
-    }
-
-    .skill-tag {
-      padding: 10px 16px;
-      border: 1px solid var(--border);
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 1px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      transition: border-color 0.2s, color 0.2s;
-      background: var(--surface);
-    }
-
-    .skill-tag:hover {
-      border-color: var(--accent);
-      color: var(--text);
-    }
-
-    .skill-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      flex-shrink: 0;
-    }
-
-    /* EXPERIENCE */
-    .experience {
-      background: var(--surface);
-    }
-
-    .exp-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .exp-item {
-      display: grid;
-      grid-template-columns: 160px 1fr auto;
-      gap: 48px;
-      padding: 40px 0;
-      border-bottom: 1px solid var(--border);
-      align-items: start;
-      transition: background 0.2s;
-      cursor: default;
-    }
-
-    .exp-item:hover {
-      padding-left: 16px;
-    }
-
-    .exp-year {
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      letter-spacing: 2px;
-      color: var(--accent);
-      padding-top: 4px;
-    }
-
-    .exp-role {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 28px;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-    }
-
-    .exp-company {
-      font-size: 13px;
-      color: var(--accent2);
-      letter-spacing: 1px;
-      margin-bottom: 12px;
-    }
-
-    .exp-desc {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 500px;
-    }
-
-    .exp-tags {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: 16px;
-    }
-
-    .exp-tag {
-      padding: 4px 10px;
-      border: 1px solid var(--border);
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 1px;
-      color: var(--muted);
-      background: var(--surface2);
-    }
-
-    .exp-arrow {
-      font-size: 20px;
-      color: var(--muted);
-      transition: transform 0.2s, color 0.2s;
-      padding-top: 4px;
-    }
-
-    .exp-item:hover .exp-arrow {
-      transform: translateX(6px);
-      color: var(--accent);
-    }
-
-    /* VIDEO REEL */
-    .reel {
-      background: var(--bg);
-      overflow: hidden;
-    }
-
-    .reel-header {
-      text-align: center;
-      margin-bottom: 64px;
-    }
-
-    .reel-header .section-num {
-      justify-content: center;
-      display: flex;
-    }
-
-    .reel-header .section-title {
-      text-align: center;
-    }
-
-    .video-slider {
-      position: relative;
-    }
-
-    .video-track {
-      display: flex;
-      gap: 24px;
-      transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-      padding-bottom: 8px;
-    }
-
-    .video-card {
-      flex: 0 0 calc(50% - 12px);
-      position: relative;
-      overflow: hidden;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      cursor: pointer;
-      group: true;
-    }
-
-    .video-thumb {
-      aspect-ratio: 16/9;
-      background: var(--surface2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .video-gradient {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, var(--surface2) 0%, #1a1208 50%, #0d0d0d 100%);
-    }
-
-    .video-play {
-      width: 64px;
-      height: 64px;
-      border-radius: 50%;
-      border: 2px solid var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent);
-      font-size: 24px;
-      z-index: 1;
-      position: relative;
-      transition: background 0.3s, transform 0.2s;
-    }
-
-    .video-card:hover .video-play {
-      background: var(--accent);
-      color: #080808;
-      transform: scale(1.1);
-    }
-
-    .video-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(232, 197, 71, 0.08);
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .video-card:hover .video-overlay {
-      opacity: 1;
-    }
-
-    .video-info {
-      padding: 24px 28px;
-    }
-
-    .video-cat {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 3px;
-      color: var(--accent2);
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .video-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 24px;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
-    }
-
-    .video-meta {
-      font-size: 13px;
-      color: var(--muted);
-      display: flex;
-      gap: 16px;
-    }
-
-    .slider-controls {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      margin-top: 40px;
-    }
-
-    .slider-btn {
-      width: 48px;
-      height: 48px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      cursor: pointer;
-      font-size: 18px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: border-color 0.2s, background 0.2s;
-    }
-
-    .slider-btn:hover {
-      border-color: var(--accent);
-      background: var(--surface2);
-    }
-
-    .slider-dots {
-      display: flex;
-      gap: 8px;
-    }
-
-    .slider-dot {
-      width: 24px;
-      height: 2px;
-      background: var(--border);
-      cursor: pointer;
-      transition: background 0.3s, width 0.3s;
-    }
-
-    .slider-dot.active {
-      background: var(--accent);
-      width: 48px;
-    }
-
-    /* PROJECTS */
-    .projects {
-      background: var(--surface);
-    }
-
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 2px;
-    }
-
-    .project-card {
-      background: var(--surface2);
-      padding: 40px 32px;
-      border: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
-      transition: var(--transition);
-      cursor: default;
-    }
-
-    .project-card::before {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: var(--accent);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-
-    .project-card:hover::before {
-      transform: scaleX(1);
-    }
-
-    .project-card:hover {
-      background: var(--surface);
-    }
-
-    .project-num {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 80px;
-      color: var(--border);
-      line-height: 1;
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      transition: color 0.3s;
-    }
-
-    .project-card:hover .project-num {
-      color: rgba(232, 197, 71, 0.08);
-    }
-
-    .project-cat {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 3px;
-      color: var(--accent);
-      text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-
-    .project-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 30px;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-      line-height: 1;
-    }
-
-    .project-desc {
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 24px;
-    }
-
-    .project-tools {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-
-    .project-tool {
-      padding: 3px 8px;
-      border: 1px solid var(--border);
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    /* CONTACT */
-    .contact {
-      background: var(--bg);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.2fr;
-      gap: 80px;
-      align-items: start;
-    }
-
-    .contact-info {}
-
-    .contact-tagline {
-      font-size: 20px;
-      line-height: 1.6;
-      font-weight: 300;
-      margin-bottom: 48px;
-    }
-
-    .contact-detail {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      padding: 20px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .contact-icon {
-      width: 44px;
-      height: 44px;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--accent);
-      font-size: 18px;
-      flex-shrink: 0;
-    }
-
-    .contact-key {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
-
-    .contact-val {
-      font-size: 15px;
-      color: var(--text);
-    }
-
-    .contact-val a {
-      color: var(--text);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .contact-val a:hover {
-      color: var(--accent);
-    }
-
-    /* FORM */
-    .contact-form {}
-
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-    }
-
-    .form-label {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: var(--muted);
-      text-transform: uppercase;
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .form-input,
-    .form-select,
-    .form-textarea {
-      width: 100%;
-      padding: 14px 18px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      outline: none;
-      transition: border-color 0.2s, background 0.2s;
-      -webkit-appearance: none;
-      appearance: none;
-      resize: none;
-    }
-
-    .form-input:focus,
-    .form-select:focus,
-    .form-textarea:focus {
-      border-color: var(--accent);
-      background: var(--surface2);
-    }
-
-    .form-select {
-      cursor: pointer;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6560' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 16px center;
-    }
-
-    .form-textarea {
-      min-height: 120px;
-    }
-
-    .form-submit {
-      width: 100%;
-      padding: 18px;
-      background: var(--accent);
-      color: #080808;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
-      letter-spacing: 4px;
-      border: none;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .form-submit::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: var(--accent2);
-      transform: translateX(-100%);
-      transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-
-    .form-submit:hover::before {
-      transform: translateX(0);
-    }
-
-    .form-submit span {
-      position: relative;
-      z-index: 1;
-    }
-
-    .form-submit:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 48px var(--glow);
-    }
-
-    .form-note {
-      font-family: 'Space Mono', monospace;
-      font-size: 10px;
-      letter-spacing: 1px;
-      color: var(--muted);
-      margin-top: 12px;
-      text-align: center;
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--surface);
-      padding: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 24px;
-      letter-spacing: 4px;
-      color: var(--accent);
-    }
-
-    .footer-copy {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      letter-spacing: 1px;
-      color: var(--muted);
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 24px;
-    }
-
-    .footer-links a {
-      font-family: 'Space Mono', monospace;
-      font-size: 11px;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 1px;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover {
-      color: var(--accent);
-    }
-
-    /* MARQUEE */
-    .marquee-wrap {
-      overflow: hidden;
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 18px 0;
-      background: var(--surface2);
-    }
-
-    .marquee-track {
-      display: flex;
-      gap: 0;
-      white-space: nowrap;
-      animation: marquee 20s linear infinite;
-    }
-
-    .marquee-item {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 22px;
-      letter-spacing: 4px;
-      color: var(--muted);
-      padding: 0 40px;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .marquee-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-    }
-
-    @keyframes marquee {
-      0% {
-        transform: translateX(0)
-      }
-
-      100% {
-        transform: translateX(-50%)
-      }
-    }
-
-    /* SCROLL REVEAL */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1), transform 0.8s cubic-bezier(0.23, 1, 0.32, 1);
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* MODAL */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      z-index: 2000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-      backdrop-filter: blur(8px);
-    }
-
-    .modal-overlay.open {
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    .modal-content {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 40px;
-      max-width: 700px;
-      width: 90%;
-      position: relative;
-      transform: scale(0.95);
-      transition: transform 0.3s;
-    }
-
-    .modal-overlay.open .modal-content {
-      transform: scale(1);
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 20px;
-      right: 20px;
-      background: none;
-      border: none;
-      color: var(--muted);
-      font-size: 24px;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    .modal-close:hover {
-      color: var(--accent2);
-    }
-
-    .modal-video {
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: #000;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--muted);
-      font-family: 'Space Mono', monospace;
-      font-size: 12px;
-      letter-spacing: 2px;
-      margin-bottom: 24px;
-    }
-
-    @media (max-width: 900px) {
-      nav {
-        padding: 16px 24px;
-      }
-
-      .nav-links {
-        display: none;
-      }
-
-      section {
-        padding: 80px 24px;
-      }
-
-      .hero {
-        padding: 100px 24px 60px;
-      }
-
-      .about-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-
-      .exp-item {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-
-      .projects-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .contact-grid {
-        grid-template-columns: 1fr;
-        gap: 48px;
-      }
-
-      .form-row {
-        grid-template-columns: 1fr;
-      }
-
-      footer {
-        flex-direction: column;
-        gap: 24px;
-        text-align: center;
-      }
-
-      .video-card {
-        flex: 0 0 85%;
-      }
-
-      .hero-stats {
-        flex-wrap: wrap;
-        gap: 32px;
-      }
-
-      .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
-      }
-
-      .section-sub {
-        text-align: left;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Ink Tattoo Studio | Agartala</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0D0D0D;
+    --charcoal: #1A1A1A;
+    --charcoal2: #222222;
+    --gold: #C9A646;
+    --gold-light: #e8c96a;
+    --red: #8B0000;
+    --white: #F5F0E8;
+    --gray: #888;
+    --border: rgba(201,166,70,0.2);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%,-50%);
+    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
+    mix-blend-mode: difference;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99998;
+    transform: translate(-50%,-50%);
+    transition: transform 0.18s ease, width 0.3s, height 0.3s;
+    opacity: 0.6;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 60px;
+    background: rgba(13,13,13,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    transition: padding 0.4s;
+  }
+  nav.scrolled { padding: 12px 60px; }
+
+  .nav-logo {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.3rem;
+    color: var(--gold);
+    text-decoration: none;
+    letter-spacing: 2px;
+  }
+  .nav-logo span { color: var(--white); }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    position: relative;
+    transition: color 0.3s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-book {
+    background: var(--gold);
+    color: var(--black) !important;
+    padding: 10px 24px;
+    border-radius: 2px;
+    font-weight: 700 !important;
+    transition: background 0.3s, transform 0.2s !important;
+  }
+  .nav-book::after { display: none !important; }
+  .nav-book:hover { background: var(--gold-light) !important; transform: translateY(-1px); }
+
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .hamburger span {
+    width: 26px; height: 2px;
+    background: var(--gold);
+    transition: 0.3s;
+    display: block;
+  }
+
+  /* ── HERO ── */
+  #hero {
+    position: relative;
+    height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+
+  /* ── IMAGE CONFIG: HERO BACKGROUND ── */
+  /* 🖼️ TO CHANGE HERO IMAGE: Replace the URL below in .hero-bg */
+  .hero-bg {
+    position: absolute; inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=1600&q=80');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.3) saturate(0.8);
+    transform: scale(1.05);
+    animation: heroZoom 12s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom { from { transform: scale(1.05); } to { transform: scale(1.12); } }
+
+  .hero-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(13,13,13,0.7) 0%, rgba(139,0,0,0.15) 50%, rgba(13,13,13,0.9) 100%);
+  }
+
+  .hero-content {
+    position: relative; z-index: 2;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 20px;
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.3s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    line-height: 1.05;
+    font-weight: 900;
+    color: var(--white);
+    opacity: 0;
+    animation: fadeUp 0.9s 0.5s forwards;
+  }
+  .hero-title .gold { color: var(--gold); }
+
+  .hero-sub {
+    font-size: clamp(0.9rem, 2vw, 1.1rem);
+    color: rgba(245,240,232,0.6);
+    margin: 28px 0 48px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.7s forwards;
+  }
+
+  .hero-ctas {
+    display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.9s forwards;
+  }
+
+  .btn-primary {
+    background: var(--gold);
+    color: var(--black);
+    padding: 16px 40px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: var(--gold-light);
+    transform: translateX(-100%) skewX(-15deg);
+    transition: transform 0.4s;
+  }
+  .btn-primary:hover::before { transform: translateX(0) skewX(-15deg); }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(201,166,70,0.3); }
+  .btn-primary span { position: relative; z-index: 1; }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--white);
+    padding: 15px 40px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    border: 1px solid rgba(245,240,232,0.4);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: border-color 0.3s, color 0.3s, transform 0.3s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 40px; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px;
+    opacity: 0;
+    animation: fadeIn 1s 1.5s forwards;
+    z-index: 2;
+  }
+  .hero-scroll span { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gray); }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 1.8s infinite;
+  }
+  @keyframes scrollPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ── SECTIONS ── */
+  section { padding: 120px 60px; }
+
+  .section-eyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .section-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.15;
+    color: var(--white);
+    margin-bottom: 20px;
+  }
+  .section-title .accent { color: var(--gold); }
+  .section-line {
+    width: 60px; height: 2px;
+    background: var(--gold);
+    margin-bottom: 40px;
+  }
+
+  /* reveal on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(60px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── STYLES STRIP ── */
+  #styles {
+    background: var(--charcoal);
+    padding: 80px 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  #styles::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+
+  .styles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 2px;
+    margin-top: 60px;
+  }
+
+  .style-card {
+    position: relative;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: var(--charcoal2);
+    cursor: pointer;
+  }
+  /* 🖼️ TO CHANGE STYLE CARD IMAGES: Replace URLs in .style-card[data-style] */
+  .style-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.5) saturate(0.7);
+    transition: transform 0.6s, filter 0.6s;
+  }
+  .style-card:hover::before { transform: scale(1.1); filter: brightness(0.35) saturate(1); }
+
+  .style-card[data-img="1"]::before { background-image: url('https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=600&q=80'); }
+  .style-card[data-img="2"]::before { background-image: url('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=80'); }
+  .style-card[data-img="3"]::before { background-image: url('https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=600&q=80'); }
+  .style-card[data-img="4"]::before { background-image: url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&q=80'); }
+  .style-card[data-img="5"]::before { background-image: url('https://images.unsplash.com/photo-1612833603922-5e9f4f8d1e1f?w=600&q=80'); }
+  .style-card[data-img="6"]::before { background-image: url('https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=600&q=80'); }
+
+  .style-card-inner {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 24px 20px;
+    background: linear-gradient(to top, rgba(13,13,13,0.9) 0%, transparent 60%);
+  }
+  .style-card-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.85rem;
+    color: var(--white);
+    letter-spacing: 1px;
+    transition: color 0.3s;
+  }
+  .style-card:hover .style-card-name { color: var(--gold); }
+  .style-card-line {
+    width: 0; height: 1px;
+    background: var(--gold);
+    margin-top: 6px;
+    transition: width 0.4s;
+  }
+  .style-card:hover .style-card-line { width: 40px; }
+
+  /* ── ABOUT ── */
+  #about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  .about-img-wrap {
+    position: relative;
+  }
+  /* 🖼️ TO CHANGE ARTIST PHOTO: Replace URL in .about-img */
+  .about-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    filter: grayscale(30%);
+    transition: filter 0.4s;
+    display: block;
+    background: var(--charcoal) url('https://images.unsplash.com/photo-1554774853-d50f9c681ae2?w=800&q=80') center/cover;
+  }
+  .about-img-wrap:hover .about-img { filter: grayscale(0%); }
+  .about-img-frame {
+    position: absolute;
+    top: -20px; right: -20px;
+    width: calc(100% - 20px);
+    height: calc(100% - 20px);
+    border: 1px solid var(--gold);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .about-badge {
+    position: absolute;
+    bottom: -30px; left: -30px;
+    width: 120px; height: 120px;
+    background: var(--gold);
+    color: var(--black);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: 'Cinzel Decorative', serif;
+    clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  }
+  .about-badge .num { font-size: 2rem; font-weight: 900; line-height: 1; }
+  .about-badge .label { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; }
+
+  .about-text .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin: 48px 0;
+    padding: 32px 0;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat { text-align: center; }
+  .stat-num {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    display: block;
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); margin-top: 8px; display: block; }
+
+  .about-text p { color: rgba(245,240,232,0.65); line-height: 1.9; font-size: 0.95rem; margin-bottom: 16px; }
+
+  /* ── PORTFOLIO ── */
+  #portfolio {
+    background: var(--charcoal);
+    position: relative;
+  }
+  #portfolio::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+
+  .portfolio-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 60px;
+    flex-wrap: wrap; gap: 24px;
+  }
+
+  .filter-tabs {
+    display: flex; gap: 4px; flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: none;
+    border: 1px solid rgba(245,240,232,0.15);
+    color: var(--gray);
+    padding: 8px 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    background: var(--gold);
+    color: var(--black);
+    border-color: var(--gold);
+  }
+
+  .portfolio-grid {
+    columns: 4;
+    column-gap: 4px;
+  }
+  .portfolio-item {
+    break-inside: avoid;
+    margin-bottom: 4px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: block;
+  }
+  /* 🖼️ TO CHANGE PORTFOLIO IMAGES:
+     Find the .portfolio-item[data-cat] elements below and change background-image URLs.
+     Each item has a comment showing which image slot it is. */
+  .portfolio-item::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(139,0,0,0.6), rgba(13,13,13,0.8));
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 1;
+  }
+  .portfolio-item:hover::before { opacity: 1; }
+
+  .portfolio-item img {
+    width: 100%;
+    display: block;
+    transition: transform 0.6s;
+    filter: brightness(0.85);
+  }
+  .portfolio-item:hover img { transform: scale(1.08); filter: brightness(0.7); }
+
+  .portfolio-item-overlay {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.4s;
+    gap: 8px;
+  }
+  .portfolio-item:hover .portfolio-item-overlay { opacity: 1; }
+  .portfolio-item-overlay .icon { font-size: 2rem; color: var(--gold); }
+  .portfolio-item-overlay .cat-label {
+    font-size: 0.65rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+
+  /* LIGHTBOX */
+  .lightbox {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.95);
+    z-index: 10000;
+    display: none;
+    align-items: center; justify-content: center;
+    backdrop-filter: blur(10px);
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img {
+    max-width: 90vw; max-height: 90vh;
+    object-fit: contain;
+    border: 1px solid var(--border);
+  }
+  .lightbox-close {
+    position: absolute; top: 30px; right: 30px;
+    background: none; border: 1px solid var(--gold);
+    color: var(--gold); font-size: 1.5rem;
+    width: 48px; height: 48px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.3s;
+  }
+  .lightbox-close:hover { background: var(--gold); color: var(--black); }
+
+  /* ── SERVICES ── */
+  #services { max-width: 1300px; margin: 0 auto; }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+    margin-top: 60px;
+  }
+
+  .service-card {
+    background: var(--charcoal);
+    padding: 48px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute; bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--gold);
+    transition: width 0.5s;
+  }
+  .service-card:hover::before { width: 100%; }
+  .service-card:hover { transform: translateY(-4px); }
+
+  .service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    display: block;
+  }
+  .service-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1rem;
+    color: var(--white);
+    margin-bottom: 12px;
+  }
+  .service-desc { color: var(--gray); font-size: 0.85rem; line-height: 1.8; margin-bottom: 24px; }
+  .service-price {
+    font-size: 0.8rem;
+    color: var(--gold);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .service-safety {
+    margin-top: 80px;
+    background: var(--charcoal);
+    padding: 48px;
+    border: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 32px;
+    align-items: center;
+  }
+  .safety-item { display: flex; gap: 16px; align-items: flex-start; }
+  .safety-icon { font-size: 1.8rem; flex-shrink: 0; }
+  .safety-item h4 { font-size: 0.85rem; margin-bottom: 6px; color: var(--gold); }
+  .safety-item p { font-size: 0.78rem; color: var(--gray); line-height: 1.7; }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials {
+    background: var(--charcoal);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+  #testimonials::before {
+    content: '"';
+    position: absolute;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 30vw;
+    color: rgba(201,166,70,0.03);
+    top: -5vw;
+    left: 50%;
+    transform: translateX(-50%);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .testimonials-slider { position: relative; max-width: 900px; margin: 60px auto 0; }
+  .testimonial-slide { display: none; }
+  .testimonial-slide.active { display: block; animation: fadeIn 0.5s ease; }
+
+  .testimonial-stars { color: var(--gold); font-size: 1.2rem; margin-bottom: 24px; letter-spacing: 4px; }
+  .testimonial-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+    font-style: italic;
+    color: var(--white);
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+  .testimonial-author { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+  .testimonial-location { font-size: 0.7rem; color: var(--gray); margin-top: 4px; }
+
+  .slider-dots {
+    display: flex; justify-content: center; gap: 10px;
+    margin-top: 48px;
+  }
+  .dot {
+    width: 6px; height: 6px;
+    background: var(--gray);
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .dot.active { background: var(--gold); transform: scale(1.5); }
+
+  /* ── GALLERY STRIP ── */
+  .gallery-strip {
+    overflow: hidden;
+    display: flex;
+    gap: 4px;
+    padding: 0;
+  }
+  .gallery-strip-inner {
+    display: flex;
+    gap: 4px;
+    animation: stripScroll 30s linear infinite;
+    flex-shrink: 0;
+  }
+  .gallery-strip-inner:hover { animation-play-state: paused; }
+  @keyframes stripScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* 🖼️ TO CHANGE GALLERY STRIP IMAGES: Replace URLs in .strip-img elements */
+  .strip-img {
+    width: 220px;
+    height: 280px;
+    object-fit: cover;
+    flex-shrink: 0;
+    filter: grayscale(30%) brightness(0.8);
+    transition: filter 0.4s, transform 0.4s;
+  }
+  .strip-img:hover { filter: grayscale(0%) brightness(1); transform: scale(1.03); }
+
+  /* ── BOOKING ── */
+  #booking { max-width: 900px; margin: 0 auto; }
+
+  .booking-form {
+    background: var(--charcoal);
+    padding: 60px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+    margin-top: 60px;
+  }
+  .booking-form::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: linear-gradient(to right, var(--red), var(--gold), var(--red));
+  }
+
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .form-full { grid-column: 1 / -1; }
+
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-group label { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    background: rgba(245,240,232,0.04);
+    border: 1px solid rgba(245,240,232,0.12);
+    color: var(--white);
+    padding: 14px 16px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.88rem;
+    outline: none;
+    transition: border-color 0.3s;
+    -webkit-appearance: none;
+  }
+  .form-group select option { background: var(--charcoal); }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--gold); }
+  .form-group textarea { resize: vertical; min-height: 120px; }
+
+  .form-submit { margin-top: 32px; text-align: center; }
+
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 48px;
+    animation: fadeIn 0.5s ease;
+  }
+  .success-msg.show { display: block; }
+  .success-icon { font-size: 3rem; margin-bottom: 16px; }
+  .success-msg h3 { font-family: 'Cinzel Decorative', serif; color: var(--gold); font-size: 1.4rem; margin-bottom: 12px; }
+  .success-msg p { color: var(--gray); font-size: 0.9rem; }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--charcoal);
+    position: relative;
+  }
+  #contact::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+  }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    max-width: 1300px;
+    margin: 60px auto 0;
+    align-items: start;
+  }
+
+  .contact-info { display: flex; flex-direction: column; gap: 32px; }
+  .contact-item { display: flex; gap: 20px; align-items: flex-start; }
+  .contact-icon {
+    width: 48px; height: 48px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    color: var(--gold);
+  }
+  .contact-item h4 { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .contact-item p, .contact-item a { color: var(--white); font-size: 0.9rem; text-decoration: none; transition: color 0.3s; }
+  .contact-item a:hover { color: var(--gold); }
+
+  .contact-socials { display: flex; gap: 12px; margin-top: 8px; }
+  .social-btn {
+    width: 44px; height: 44px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: border-color 0.3s, color 0.3s, background 0.3s;
+  }
+  .social-btn:hover { border-color: var(--gold); color: var(--black); background: var(--gold); }
+
+  .hours-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-top: 8px; }
+  .hours-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 6px 0; border-bottom: 1px solid var(--border); }
+  .hours-row .day { color: var(--gray); }
+  .hours-row .time { color: var(--white); }
+
+  .map-embed {
+    width: 100%;
+    height: 400px;
+    border: 1px solid var(--border);
+    filter: invert(90%) hue-rotate(180deg) saturate(0.8);
+  }
+
+  /* ── FLOATING BOOK ── */
+  .floating-book {
+    position: fixed;
+    bottom: 40px; right: 40px;
+    background: var(--gold);
+    color: var(--black);
+    padding: 14px 28px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-decoration: none;
+    z-index: 500;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+    box-shadow: 0 8px 32px rgba(201,166,70,0.4);
+    animation: floatPulse 2.5s ease-in-out infinite;
+    transition: background 0.3s, transform 0.3s;
+  }
+  .floating-book:hover { background: var(--gold-light); transform: translateY(-3px) scale(1.05); }
+  @keyframes floatPulse { 0%,100% { box-shadow: 0 8px 32px rgba(201,166,70,0.4); } 50% { box-shadow: 0 12px 48px rgba(201,166,70,0.7); } }
+
+  /* ── WHATSAPP ── */
+  .whatsapp-btn {
+    position: fixed;
+    bottom: 40px; left: 40px;
+    background: #25D366;
+    color: white;
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.6rem;
+    text-decoration: none;
+    z-index: 500;
+    box-shadow: 0 8px 24px rgba(37,211,102,0.4);
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .whatsapp-btn:hover { transform: scale(1.1); box-shadow: 0 12px 36px rgba(37,211,102,0.6); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: #080808;
+    padding: 60px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+  }
+  footer .footer-logo {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.8rem;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 12px;
+  }
+  footer p { color: var(--gray); font-size: 0.8rem; }
+  footer .footer-tagline { font-style: italic; margin-bottom: 32px; color: rgba(245,240,232,0.4); }
+
+  .footer-links { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-bottom: 40px; }
+  .footer-links a { color: var(--gray); text-decoration: none; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
+  .footer-links a:hover { color: var(--gold); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 1024px) {
+    section { padding: 80px 30px; }
+    nav { padding: 16px 30px; }
+    nav.scrolled { padding: 12px 30px; }
+    #about { grid-template-columns: 1fr; gap: 60px; }
+    .about-img-wrap { max-width: 500px; margin: 0 auto; }
+    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
+    .portfolio-grid { columns: 3; }
+    .booking-form { padding: 40px 30px; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(13,13,13,0.98); padding: 20px; gap: 20px; border-bottom: 1px solid var(--border); }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+    section { padding: 70px 20px; }
+    .portfolio-grid { columns: 2; }
+    .styles-grid { grid-template-columns: repeat(3, 1fr); }
+    .about-badge { width: 90px; height: 90px; bottom: -20px; left: -15px; }
+    .about-badge .num { font-size: 1.4rem; }
+    .floating-book { bottom: 20px; right: 20px; padding: 12px 20px; }
+    .whatsapp-btn { bottom: 20px; left: 20px; width: 48px; height: 48px; font-size: 1.3rem; }
+    .hero-ctas { flex-direction: column; align-items: center; }
+    #styles { padding: 60px 20px; }
+    footer { padding: 40px 20px; }
+    .gallery-strip { display: none; }
+  }
+
+  @media (max-width: 480px) {
+    .portfolio-grid { columns: 1; }
+    .styles-grid { grid-template-columns: repeat(2, 1fr); }
+    .contact-socials { flex-wrap: wrap; }
+  }
+</style>
 </head>
-
 <body>
 
-  <!-- Cursor -->
-  <div class="cursor-dot" id="cursorDot"></div>
-  <div class="cursor-ring" id="cursorRing"></div>
+<!-- CURSOR -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-logo">DOM.</a>
-    <ul class="nav-links">
-      <li><a href="#about">About</a></li>
-      <li><a href="#experience">Experience</a></li>
-      <li><a href="#reel">Reel</a></li>
-      <li><a href="#projects">Projects</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <div class="nav-right">
-      <span class="theme-label" id="themeLabel">DARK</span>
-      <button class="theme-btn" id="themeBtn" title="Toggle theme"></button>
-    </div>
-  </nav>
+<!-- FLOATING BUTTONS -->
+<a href="#booking" class="floating-book">Book Now</a>
+<a href="https://wa.me/917005742156" class="whatsapp-btn" target="_blank">💬</a>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-bg">
-      <div class="grain"></div>
-      <div class="hero-bg-text">EDITOR</div>
-    </div>
-    <div style="position:relative;z-index:1">
-      <div class="hero-tag">Freelance Video Editor · Est. 2020</div>
-      <h1 class="hero-name">
-        DOMINATOR<br>
-        <span class="line2">V2X</span>
-      </h1>
-      <p class="hero-desc">
-        Crafting visual stories that hit different. From cinematic cuts to viral reels —
-        every frame is intentional, every transition is felt.
-      </p>
-      <div class="hero-cta">
-        <a href="#reel" class="btn-primary"><span>▶</span> Watch Reel</a>
-        <a href="#contact" class="btn-outline">Let's Work →</a>
-      </div>
-      <div class="hero-stats">
-        <div>
-          <div class="stat-num">4<span>+</span></div>
-          <div class="stat-label">Years Experience</div>
-        </div>
-        <div>
-          <div class="stat-num">120<span>+</span></div>
-          <div class="stat-label">Projects Delivered</div>
-        </div>
-        <div>
-          <div class="stat-num">40<span>+</span></div>
-          <div class="stat-label">Happy Clients</div>
-        </div>
-        <div>
-          <div class="stat-num">15<span>M</span></div>
-          <div class="stat-label">Views Generated</div>
-        </div>
-      </div>
-    </div>
-    <div class="scroll-hint">
-      <div class="scroll-line"></div>
-      Scroll to explore
-    </div>
-  </section>
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+  <button class="lightbox-close" onclick="document.getElementById('lightbox').classList.remove('open')">✕</button>
+  <img id="lightboxImg" src="" alt="Tattoo">
+</div>
 
-  <!-- MARQUEE -->
-  <div class="marquee-wrap">
-    <div class="marquee-track">
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>PREMIERE PRO
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Dream<span>Ink</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#booking" class="nav-book">Book Now</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">✦ Agartala, Tripura ✦</p>
+    <h1 class="hero-title">
+      Ink<br>Your <span class="gold">Story</span>
+    </h1>
+    <p class="hero-sub">Where precision meets artistry. Every mark tells a tale.</p>
+    <div class="hero-ctas">
+      <a href="#booking" class="btn-primary"><span>Book Appointment</span></a>
+      <a href="#portfolio" class="btn-outline">View Portfolio</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- STYLES STRIP -->
+<section id="styles">
+  <div class="reveal" style="text-align:center; margin-bottom: 0;">
+    <p class="section-eyebrow">What We Do</p>
+    <h2 class="section-title">Our <span class="accent">Artistry</span></h2>
+  </div>
+  <div class="styles-grid reveal">
+    <div class="style-card" data-img="1">
+      <div class="style-card-inner">
+        <div class="style-card-name">Realism</div>
+        <div class="style-card-line"></div>
       </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>AFTER EFFECTS
+    </div>
+    <div class="style-card" data-img="2">
+      <div class="style-card-inner">
+        <div class="style-card-name">Blackwork</div>
+        <div class="style-card-line"></div>
       </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>DAVINCI RESOLVE
+    </div>
+    <div class="style-card" data-img="3">
+      <div class="style-card-inner">
+        <div class="style-card-name">Tribal</div>
+        <div class="style-card-line"></div>
       </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>MOTION GRAPHICS
+    </div>
+    <div class="style-card" data-img="4">
+      <div class="style-card-inner">
+        <div class="style-card-name">Portrait</div>
+        <div class="style-card-line"></div>
       </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>COLOR GRADING
+    </div>
+    <div class="style-card" data-img="5">
+      <div class="style-card-inner">
+        <div class="style-card-name">Color</div>
+        <div class="style-card-line"></div>
       </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>SOUND DESIGN
-      </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>CINEMATIC EDITING
-      </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>REELS & SHORTS
-      </div>
-      <!-- Duplicate -->
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>PREMIERE PRO
-      </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>AFTER EFFECTS
-      </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>DAVINCI RESOLVE
-      </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>MOTION GRAPHICS
-      </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>COLOR GRADING
-      </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>SOUND DESIGN
-      </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>CINEMATIC EDITING
-      </div>
-      <div class="marquee-item">
-        <div class="marquee-dot"></div>REELS & SHORTS
+    </div>
+    <div class="style-card" data-img="6">
+      <div class="style-card-inner">
+        <div class="style-card-name">Minimal</div>
+        <div class="style-card-line"></div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-num">01 / ABOUT</div>
-        <h2 class="section-title">THE<br>EDITOR</h2>
-      </div>
-      <p class="section-sub">Turning raw footage into stories that move people.</p>
-    </div>
-    <div class="about-grid">
-      <div class="about-photo reveal">
-        <div class="photo-placeholder">
-          <div class="photo-icon">📷</div>
-          <div>YOUR PHOTO HERE</div>
-        </div>
-        <div class="photo-frame"></div>
-      </div>
-      <div class="about-content reveal">
-        <p class="about-intro">
-          I'm <strong>Dominatorv2x</strong> — a freelance video editor obsessed with
-          the craft of visual storytelling.
-        </p>
-        <p class="about-body">
-          Based in India, I work with creators, brands, and agencies worldwide to transform raw footage into polished,
-          high-impact content. My approach blends technical precision with a deep understanding of narrative flow —
-          every cut serves the story, every transition earns its place.<br><br>
-          Whether it's a cinematic brand film, a punchy YouTube video, or viral short-form content,
-          I bring the same level of care and intentionality to every frame.
-        </p>
-        <div class="skills-grid">
-          <div class="skill-tag">
-            <div class="skill-dot"></div>Adobe Premiere Pro
-          </div>
-          <div class="skill-tag">
-            <div class="skill-dot"></div>After Effects
-          </div>
-          <div class="skill-tag">
-            <div class="skill-dot"></div>DaVinci Resolve
-          </div>
-          <div class="skill-tag">
-            <div class="skill-dot"></div>Color Grading
-          </div>
-          <div class="skill-tag">
-            <div class="skill-dot"></div>Motion Graphics
-          </div>
-          <div class="skill-tag">
-            <div class="skill-dot"></div>Sound Design
-          </div>
-          <div class="skill-tag">
-            <div class="skill-dot"></div>Short-Form Reels
-          </div>
-          <div class="skill-tag">
-            <div class="skill-dot"></div>VFX Compositing
-          </div>
-        </div>
-        <a href="#contact" class="btn-primary">Start a Project →</a>
-      </div>
-    </div>
-  </section>
+<!-- GALLERY STRIP -->
+<!--
+  🖼️ TO CHANGE GALLERY STRIP IMAGES:
+  Replace the src="" values on each .strip-img below.
+  The strip auto-scrolls. Hover to pause.
+-->
+<div class="gallery-strip" id="galleryStrip">
+  <div class="gallery-strip-inner" id="stripInner">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1554774853-d50f9c681ae2?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1612833603922-5e9f4f8d1e1f?w=400&q=70" alt="">
+    <!-- duplicates for seamless loop -->
+    <img class="strip-img" src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1554774853-d50f9c681ae2?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=400&q=70" alt="">
+    <img class="strip-img" src="https://images.unsplash.com/photo-1612833603922-5e9f4f8d1e1f?w=400&q=70" alt="">
+  </div>
+</div>
 
-  <!-- EXPERIENCE -->
-  <section class="experience" id="experience">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-num">02 / EXPERIENCE</div>
-        <h2 class="section-title">WHERE<br>I'VE BEEN</h2>
-      </div>
-      <p class="section-sub">A timeline of projects and collaborations.</p>
-    </div>
-    <div class="exp-list">
-      <div class="exp-item reveal">
-        <div class="exp-year">2023 — NOW</div>
-        <div>
-          <div class="exp-role">Senior Freelance Editor</div>
-          <div class="exp-company">Self-Employed · Remote</div>
-          <p class="exp-desc">Working directly with YouTubers, brands, and agencies. Delivering 10+ projects monthly
-            ranging from short-form reels to full-length cinematic productions. Specializing in retention-optimized
-            edits that maximize watch time.</p>
-          <div class="exp-tags">
-            <div class="exp-tag">YouTube</div>
-            <div class="exp-tag">Reels</div>
-            <div class="exp-tag">Brand Films</div>
-            <div class="exp-tag">Documentaries</div>
-          </div>
-        </div>
-        <div class="exp-arrow">→</div>
-      </div>
-      <div class="exp-item reveal">
-        <div class="exp-year">2022 — 2023</div>
-        <div>
-          <div class="exp-role">Content Editor</div>
-          <div class="exp-company">Digital Agency · Contract</div>
-          <p class="exp-desc">Managed post-production for a portfolio of social media clients. Developed signature
-            editing styles for 20+ creator accounts. Improved average video retention by 34% through strategic pacing
-            and hook optimization.</p>
-          <div class="exp-tags">
-            <div class="exp-tag">Social Media</div>
-            <div class="exp-tag">Motion Graphics</div>
-            <div class="exp-tag">Thumbnails</div>
-          </div>
-        </div>
-        <div class="exp-arrow">→</div>
-      </div>
-      <div class="exp-item reveal">
-        <div class="exp-year">2020 — 2022</div>
-        <div>
-          <div class="exp-role">Junior Editor</div>
-          <div class="exp-company">Local Production House</div>
-          <p class="exp-desc">Started my professional journey editing wedding films, events, and commercial ads.
-            Mastered color grading, audio mixing, and client communication while building a diverse editing vocabulary.
-          </p>
-          <div class="exp-tags">
-            <div class="exp-tag">Wedding Films</div>
-            <div class="exp-tag">Ads</div>
-            <div class="exp-tag">Events</div>
-          </div>
-        </div>
-        <div class="exp-arrow">→</div>
+<!-- ABOUT -->
+<section>
+  <div id="about">
+    <div class="about-img-wrap reveal">
+      <!-- 🖼️ TO CHANGE ARTIST PHOTO: Replace background-image URL below -->
+      <div class="about-img" style="background-image: url('https://images.unsplash.com/photo-1554774853-d50f9c681ae2?w=800&q=80'); width:100%; aspect-ratio:3/4; background-size:cover; background-position:center;"></div>
+      <div class="about-img-frame"></div>
+      <div class="about-badge">
+        <span class="num">10+</span>
+        <span class="label">Years</span>
       </div>
     </div>
-  </section>
+    <div class="about-text reveal" style="transition-delay: 0.2s;">
+      <p class="section-eyebrow">The Artist</p>
+      <h2 class="section-title">Dream Ink<br><span class="accent">Tattoo Studio</span></h2>
+      <div class="section-line"></div>
+      <p>Founded with a passion for precision and a love for artistic expression, Dream Ink Tattoo has become one of Tripura's most sought-after tattoo destinations. Our artists blend traditional techniques with contemporary vision.</p>
+      <p>Every piece we create is a collaboration — between the artist's mastery and your personal story. From delicate minimalist lines to bold full-sleeve epics, we approach every skin canvas with the same dedication.</p>
+      <div class="stats">
+        <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Designs</span></div>
+        <div class="stat"><span class="stat-num">4.8★</span><span class="stat-label">Rating</span></div>
+        <div class="stat"><span class="stat-num">182</span><span class="stat-label">Reviews</span></div>
+      </div>
+      <a href="#booking" class="btn-primary"><span>Get Your Tattoo</span></a>
+    </div>
+  </div>
+</section>
 
-  <!-- VIDEO REEL -->
-  <section class="reel" id="reel">
-    <div class="reel-header reveal">
-      <div class="section-num">03 / SHOWREEL</div>
-      <h2 class="section-title">SELECTED<br>WORKS</h2>
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="portfolio-header reveal">
+    <div>
+      <p class="section-eyebrow">Our Work</p>
+      <h2 class="section-title">The <span class="accent">Portfolio</span></h2>
     </div>
-    <div class="video-slider reveal">
-      <div class="video-track" id="videoTrack">
-        <div class="video-card" onclick="openModal(0)">
-          <div class="video-thumb">
-            <div class="video-gradient" style="background:linear-gradient(135deg,#1a0a0a,#2d1000,#0d0d0d)"></div>
-            <div class="video-play">▶</div>
-            <div class="video-overlay"></div>
-          </div>
-          <div class="video-info">
-            <div class="video-cat">Brand Film</div>
-            <div class="video-title">CINEMATIC REEL 2024</div>
-            <div class="video-meta"><span>⏱ 2:34</span><span>🎬 Brand · Commercial</span></div>
-          </div>
-        </div>
-        <div class="video-card" onclick="openModal(1)">
-          <div class="video-thumb">
-            <div class="video-gradient" style="background:linear-gradient(135deg,#0a1a0a,#002d10,#0d0d0d)"></div>
-            <div class="video-play">▶</div>
-            <div class="video-overlay"></div>
-          </div>
-          <div class="video-info">
-            <div class="video-cat">YouTube Edit</div>
-            <div class="video-title">VIRAL LONG-FORM CUT</div>
-            <div class="video-meta"><span>⏱ 18:22</span><span>🎬 YouTube · Vlog</span></div>
-          </div>
-        </div>
-        <div class="video-card" onclick="openModal(2)">
-          <div class="video-thumb">
-            <div class="video-gradient" style="background:linear-gradient(135deg,#0a0a1a,#10002d,#0d0d0d)"></div>
-            <div class="video-play">▶</div>
-            <div class="video-overlay"></div>
-          </div>
-          <div class="video-info">
-            <div class="video-cat">Short Form</div>
-            <div class="video-title">REELS COMPILATION</div>
-            <div class="video-meta"><span>⏱ 0:45</span><span>🎬 Instagram · Reels</span></div>
-          </div>
-        </div>
-        <div class="video-card" onclick="openModal(3)">
-          <div class="video-thumb">
-            <div class="video-gradient" style="background:linear-gradient(135deg,#1a1a0a,#2d2d00,#0d0d0d)"></div>
-            <div class="video-play">▶</div>
-            <div class="video-overlay"></div>
-          </div>
-          <div class="video-info">
-            <div class="video-cat">Motion Design</div>
-            <div class="video-title">MOTION GRAPHICS REEL</div>
-            <div class="video-meta"><span>⏱ 1:18</span><span>🎬 After Effects</span></div>
-          </div>
-        </div>
-      </div>
+    <div class="filter-tabs">
+      <button class="filter-btn active" onclick="filterPortfolio('all',this)">All</button>
+      <button class="filter-btn" onclick="filterPortfolio('blackwork',this)">Blackwork</button>
+      <button class="filter-btn" onclick="filterPortfolio('color',this)">Color</button>
+      <button class="filter-btn" onclick="filterPortfolio('realism',this)">Realism</button>
+      <button class="filter-btn" onclick="filterPortfolio('minimal',this)">Minimal</button>
+      <button class="filter-btn" onclick="filterPortfolio('sleeve',this)">Sleeve</button>
     </div>
-    <div class="slider-controls">
-      <button class="slider-btn" id="prevBtn">←</button>
-      <div class="slider-dots" id="sliderDots">
-        <div class="slider-dot active" onclick="goToSlide(0)"></div>
-        <div class="slider-dot" onclick="goToSlide(1)"></div>
-        <div class="slider-dot" onclick="goToSlide(2)"></div>
-        <div class="slider-dot" onclick="goToSlide(3)"></div>
-      </div>
-      <button class="slider-btn" id="nextBtn">→</button>
-    </div>
-  </section>
+  </div>
 
-  <!-- PROJECTS -->
-  <section class="projects" id="projects">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-num">04 / PROJECTS</div>
-        <h2 class="section-title">THE<br>WORK</h2>
-      </div>
-      <p class="section-sub">A selection of notable edits across genres.</p>
-    </div>
-    <div class="projects-grid">
-      <div class="project-card reveal">
-        <div class="project-num">01</div>
-        <div class="project-cat">Commercial</div>
-        <div class="project-title">BRAND LAUNCH CAMPAIGN</div>
-        <p class="project-desc">Full commercial package for a D2C brand launch — 3 hero videos, 8 social cuts, and 12
-          story formats delivering 2M+ organic views.</p>
-        <div class="project-tools">
-          <div class="project-tool">Premiere Pro</div>
-          <div class="project-tool">After Effects</div>
-          <div class="project-tool">Photoshop</div>
-        </div>
-      </div>
-      <div class="project-card reveal">
-        <div class="project-num">02</div>
-        <div class="project-cat">YouTube</div>
-        <div class="project-title">CREATOR CHANNEL OVERHAUL</div>
-        <p class="project-desc">Redesigned editing style for a 500K subscriber channel. Increased average view duration
-          by 42% in 60 days through strategic pacing.</p>
-        <div class="project-tools">
-          <div class="project-tool">Premiere Pro</div>
-          <div class="project-tool">DaVinci</div>
-        </div>
-      </div>
-      <div class="project-card reveal">
-        <div class="project-num">03</div>
-        <div class="project-cat">Documentary</div>
-        <div class="project-title">REGIONAL DOC SHORT</div>
-        <p class="project-desc">20-minute documentary short selected for regional festival circuit. End-to-end
-          post-production from rough cut to final grade.</p>
-        <div class="project-tools">
-          <div class="project-tool">DaVinci Resolve</div>
-          <div class="project-tool">Audition</div>
-        </div>
-      </div>
-      <div class="project-card reveal">
-        <div class="project-num">04</div>
-        <div class="project-cat">Sports</div>
-        <div class="project-title">ESPORTS HIGHLIGHT PACK</div>
-        <p class="project-desc">Monthly highlight packages for an esports org — fast-paced edits designed for maximum
-          hype and social shareability.</p>
-        <div class="project-tools">
-          <div class="project-tool">Premiere Pro</div>
-          <div class="project-tool">After Effects</div>
-        </div>
-      </div>
-      <div class="project-card reveal">
-        <div class="project-num">05</div>
-        <div class="project-cat">Music Video</div>
-        <div class="project-title">MUSIC VIDEO PRODUCTION</div>
-        <p class="project-desc">Directed and edited a music video for an indie artist. Creative concept, shoot
-          coordination, and complete post-production pipeline.</p>
-        <div class="project-tools">
-          <div class="project-tool">Premiere Pro</div>
-          <div class="project-tool">After Effects</div>
-          <div class="project-tool">Color</div>
-        </div>
-      </div>
-      <div class="project-card reveal">
-        <div class="project-num">06</div>
-        <div class="project-cat">Event</div>
-        <div class="project-title">CORPORATE EVENT FILMS</div>
-        <p class="project-desc">Cinematic event coverage and same-day edit delivery for corporate conferences and
-          product launches across India.</p>
-        <div class="project-tools">
-          <div class="project-tool">Premiere Pro</div>
-          <div class="project-tool">Resolve</div>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!--
+    🖼️ PORTFOLIO IMAGES — HOW TO CHANGE:
+    1. Find any portfolio-item below.
+    2. Change the src="" of its <img> tag to your desired image URL or local path.
+    3. Change data-cat="" to the category: blackwork | color | realism | minimal | sleeve
+    4. Add more items following the same pattern.
+  -->
+  <div class="portfolio-grid reveal" id="portfolioGrid">
 
-  <!-- CONTACT -->
-  <section class="contact" id="contact">
-    <div class="section-header reveal">
-      <div>
-        <div class="section-num">05 / CONTACT</div>
-        <h2 class="section-title">LET'S<br>CREATE</h2>
+    <div class="portfolio-item" data-cat="blackwork" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=600&q=80" alt="Blackwork Tattoo">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Blackwork</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="realism" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=80" alt="Realism Tattoo">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Realism</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="color" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&q=80" alt="Color Tattoo">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Color</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="minimal" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=600&q=80" alt="Minimal Tattoo">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Minimal</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="sleeve" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=600&q=80" alt="Sleeve Tattoo">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Sleeve</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="blackwork" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=600&q=80" alt="Blackwork">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Blackwork</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="color" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1612833603922-5e9f4f8d1e1f?w=600&q=80" alt="Color Work">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Color</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="realism" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1554774853-d50f9c681ae2?w=600&q=80" alt="Realism">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Realism</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="minimal" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=600&q=80" alt="Minimal">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Minimal</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="sleeve" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=80" alt="Sleeve">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Sleeve</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="blackwork" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=600&q=80" alt="Blackwork">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Blackwork</div></div>
+    </div>
+
+    <div class="portfolio-item" data-cat="color" onclick="openLightbox(this)">
+      <img src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=600&q=80" alt="Color">
+      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Color</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section>
+  <div id="services">
+    <div class="reveal">
+      <p class="section-eyebrow">What's Available</p>
+      <h2 class="section-title">Our <span class="accent">Services</span></h2>
+      <div class="section-line"></div>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal">
+        <span class="service-icon">🖤</span>
+        <div class="service-name">Blackwork & Linework</div>
+        <p class="service-desc">Bold, graphic, and timeless. From fine lines to heavy fills, our black ink work is precise and striking.</p>
+        <div class="service-price">Starting ₹1,500</div>
       </div>
-      <p class="section-sub">Got a project? Let's make something great together.</p>
+      <div class="service-card reveal" style="transition-delay:0.1s">
+        <span class="service-icon">🎨</span>
+        <div class="service-name">Color & Watercolor</div>
+        <p class="service-desc">Vibrant, alive, and expressive. Color tattoos that retain their brilliance for years to come.</p>
+        <div class="service-price">Starting ₹2,500</div>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.2s">
+        <span class="service-icon">👁️</span>
+        <div class="service-name">Portrait & Realism</div>
+        <p class="service-desc">Photorealistic portraits that capture every detail, emotion, and texture on your skin.</p>
+        <div class="service-price">Starting ₹4,000</div>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.3s">
+        <span class="service-icon">🌿</span>
+        <div class="service-name">Minimal & Geometric</div>
+        <p class="service-desc">Clean, intentional, and elegant. Small designs with maximum meaning and refined execution.</p>
+        <div class="service-price">Starting ₹800</div>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.4s">
+        <span class="service-icon">⚔️</span>
+        <div class="service-name">Full Sleeve</div>
+        <p class="service-desc">A complete narrative across your arm. Multi-session epics crafted with cohesion and flow.</p>
+        <div class="service-price">Starting ₹15,000</div>
+      </div>
+      <div class="service-card reveal" style="transition-delay:0.5s">
+        <span class="service-icon">✏️</span>
+        <div class="service-name">Custom Design</div>
+        <p class="service-desc">Your idea, brought to life. Full custom consultation, sketch, refinement, and execution.</p>
+        <div class="service-price">Free Consultation</div>
+      </div>
+    </div>
+
+    <div class="service-safety reveal" style="margin-top:60px">
+      <div><p class="section-eyebrow" style="margin-bottom:8px">Safety First</p><h3 style="font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold)">Your Health Matters</h3></div>
+      <div class="safety-item">
+        <span class="safety-icon">🧤</span>
+        <div><h4>Sterile Equipment</h4><p>Single-use needles, autoclave-sterilized equipment, and medical-grade disposables for every session.</p></div>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">🧴</span>
+        <div><h4>Premium Inks</h4><p>We use only certified, vegan-friendly inks that are skin-tested and long-lasting.</p></div>
+      </div>
+      <div class="safety-item">
+        <span class="safety-icon">🏥</span>
+        <div><h4>Aftercare Guidance</h4><p>Comprehensive aftercare instructions and follow-up support included with every tattoo.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="reveal">
+    <p class="section-eyebrow">Client Stories</p>
+    <h2 class="section-title">What They <span class="accent">Say</span></h2>
+  </div>
+  <div class="testimonials-slider reveal" style="transition-delay:0.2s">
+    <div class="testimonial-slide active">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"Absolutely the best tattoo experience I've had. The attention to detail on my sleeve is unreal — every line is perfect. Dream Ink truly lives up to its name."</p>
+      <div class="testimonial-author">Rahul S.</div>
+      <div class="testimonial-location">Agartala, Tripura</div>
+    </div>
+    <div class="testimonial-slide">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"I came in with just a rough idea and left with something beyond my imagination. The artist listened carefully and created pure magic. Highly recommend!"</p>
+      <div class="testimonial-author">Priya M.</div>
+      <div class="testimonial-location">Guwahati, Assam</div>
+    </div>
+    <div class="testimonial-slide">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"The hygiene standards here are impeccable. I felt so comfortable throughout the session. My portrait tattoo is incredibly lifelike — people think it's a photograph!"</p>
+      <div class="testimonial-author">Amit K.</div>
+      <div class="testimonial-location">Kolkata, WB</div>
+    </div>
+    <div class="testimonial-slide">
+      <div class="testimonial-stars">★★★★★</div>
+      <p class="testimonial-text">"My third tattoo here and they just keep getting better. The team is professional, creative, and genuinely passionate. Dream Ink is the only place I'll go."</p>
+      <div class="testimonial-author">Sneha D.</div>
+      <div class="testimonial-location">Agartala, Tripura</div>
+    </div>
+    <div class="slider-dots" id="sliderDots">
+      <div class="dot active" onclick="goToSlide(0)"></div>
+      <div class="dot" onclick="goToSlide(1)"></div>
+      <div class="dot" onclick="goToSlide(2)"></div>
+      <div class="dot" onclick="goToSlide(3)"></div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section>
+  <div id="booking">
+    <div class="reveal" style="text-align:center;">
+      <p class="section-eyebrow">Reserve Your Spot</p>
+      <h2 class="section-title">Book an <span class="accent">Appointment</span></h2>
+      <div class="section-line" style="margin: 0 auto 0;"></div>
+      <p style="color:var(--gray);margin-top:20px;font-size:0.9rem;">Fill out the form and we'll confirm your slot within 24 hours.</p>
+    </div>
+    <div class="booking-form reveal" style="transition-delay:0.2s">
+      <div id="bookingFormWrap">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="f-name" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label>Phone Number *</label>
+            <input type="tel" id="f-phone" placeholder="+91 XXXXX XXXXX">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="f-email" placeholder="your@email.com">
+          </div>
+          <div class="form-group">
+            <label>Tattoo Style</label>
+            <select id="f-style">
+              <option value="">Select a style...</option>
+              <option>Blackwork / Linework</option>
+              <option>Color / Watercolor</option>
+              <option>Portrait / Realism</option>
+              <option>Minimal / Geometric</option>
+              <option>Tribal</option>
+              <option>Full Sleeve</option>
+              <option>Custom Design</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Preferred Date</label>
+            <input type="date" id="f-date">
+          </div>
+          <div class="form-group">
+            <label>Preferred Time</label>
+            <select id="f-time">
+              <option value="">Select time...</option>
+              <option>11:00 AM</option>
+              <option>12:00 PM</option>
+              <option>1:00 PM</option>
+              <option>2:00 PM</option>
+              <option>3:00 PM</option>
+              <option>4:00 PM</option>
+              <option>5:00 PM</option>
+              <option>6:00 PM</option>
+              <option>7:00 PM</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Body Placement</label>
+            <input type="text" id="f-placement" placeholder="e.g., Left forearm, Back, Neck...">
+          </div>
+          <div class="form-group">
+            <label>Approximate Size</label>
+            <select id="f-size">
+              <option value="">Select size...</option>
+              <option>Small (2–4 cm)</option>
+              <option>Medium (5–10 cm)</option>
+              <option>Large (11–20 cm)</option>
+              <option>Extra Large (20+ cm)</option>
+              <option>Full Sleeve</option>
+            </select>
+          </div>
+          <div class="form-group form-full">
+            <label>Tattoo Idea / Description *</label>
+            <textarea id="f-desc" placeholder="Describe your tattoo idea in detail. Include any references, symbols, or themes..."></textarea>
+          </div>
+          <div class="form-group form-full">
+            <label>Reference Images (optional)</label>
+            <input type="file" id="f-ref" accept="image/*" multiple style="padding:10px 16px; cursor:pointer;">
+          </div>
+        </div>
+        <div class="form-submit">
+          <button class="btn-primary" onclick="submitBooking()"><span>Confirm Booking ✦</span></button>
+        </div>
+      </div>
+      <div class="success-msg" id="successMsg">
+        <div class="success-icon">✦</div>
+        <h3>Booking Received!</h3>
+        <p>Thank you! We'll confirm your appointment within 24 hours via phone or WhatsApp.<br>In the meantime, follow us on Instagram <strong>@dream_ink_tattooz_23</strong></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div style="max-width:1300px;margin:0 auto;">
+    <div class="reveal">
+      <p class="section-eyebrow">Find Us</p>
+      <h2 class="section-title">Get in <span class="accent">Touch</span></h2>
+      <div class="section-line"></div>
     </div>
     <div class="contact-grid">
-      <div class="contact-info reveal">
-        <p class="contact-tagline">
-          I'm always open to new projects, creative ideas, or just a good conversation about editing.
-        </p>
-        <div class="contact-detail">
-          <div class="contact-icon">✉</div>
+      <div class="contact-info">
+        <div class="contact-item reveal">
+          <div class="contact-icon">📍</div>
           <div>
-            <div class="contact-key">Email</div>
-            <div class="contact-val"><a href="mailto:youremail@gmail.com">youremail@gmail.com</a></div>
+            <h4>Studio Address</h4>
+            <p>Pratapgarh Road, Upar Bazaar,<br>Pratapgarh, Agartala, Tripura 799004</p>
           </div>
         </div>
-        <div class="contact-detail">
-          <div class="contact-icon">📱</div>
+        <div class="contact-item reveal" style="transition-delay:0.1s">
+          <div class="contact-icon">📞</div>
           <div>
-            <div class="contact-key">WhatsApp / Call</div>
-            <div class="contact-val"><a href="https://wa.me/919362131252" target="_blank">+91 93621 31252</a></div>
+            <h4>Phone & WhatsApp</h4>
+            <a href="tel:+917005742156">+91 70057 42156</a>
           </div>
         </div>
-        <div class="contact-detail">
-          <div class="contact-icon">📸</div>
+        <div class="contact-item reveal" style="transition-delay:0.2s">
+          <div class="contact-icon">⏰</div>
           <div>
-            <div class="contact-key">Instagram</div>
-            <div class="contact-val"><a href="https://instagram.com/dominatorv2x" target="_blank">@dominatorv2x</a>
+            <h4>Business Hours</h4>
+            <div class="hours-grid">
+              <div class="hours-row"><span class="day">Mon–Fri</span><span class="time">11am – 8pm</span></div>
+              <div class="hours-row"><span class="day">Saturday</span><span class="time">11am – 8pm</span></div>
+              <div class="hours-row"><span class="day">Sunday</span><span class="time">By Appointment</span></div>
             </div>
           </div>
         </div>
-        <div style="margin-top:40px;">
-          <div class="contact-key" style="margin-bottom:12px;">AVAILABILITY</div>
-          <div style="display:flex;align-items:center;gap:12px;font-size:15px;">
-            <div
-              style="width:10px;height:10px;border-radius:50%;background:#4caf50;box-shadow:0 0 12px #4caf50;animation:pulse 2s infinite;flex-shrink:0;">
+        <div class="contact-item reveal" style="transition-delay:0.3s">
+          <div class="contact-icon">🌐</div>
+          <div>
+            <h4>Follow Us</h4>
+            <div class="contact-socials">
+              <a href="https://instagram.com/dream_ink_tattooz_23" target="_blank" class="social-btn" title="Instagram">📸</a>
+              <a href="https://youtube.com/channel/UCcUyqpUB12Fe5TIFkDP0muA" target="_blank" class="social-btn" title="YouTube">▶</a>
+              <a href="https://wa.me/917005742156" target="_blank" class="social-btn" title="WhatsApp">💬</a>
+              <a href="tel:+917005742156" class="social-btn" title="Call">📞</a>
             </div>
-            Currently Available for Projects
           </div>
-          <style>
-            @keyframes pulse {
-
-              0%,
-              100% {
-                opacity: 1
-              }
-
-              50% {
-                opacity: 0.5
-              }
-            }
-          </style>
         </div>
       </div>
-      <div class="contact-form reveal">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Your Name *</label>
-            <input type="text" class="form-input" id="fname" placeholder="Full Name">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Phone Number</label>
-            <input type="tel" class="form-input" id="fphone" placeholder="+91 00000 00000">
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Email Address *</label>
-          <input type="email" class="form-input" id="femail" placeholder="your@email.com">
-        </div>
-        <div class="form-group">
-          <label class="form-label">Project Type *</label>
-          <select class="form-select form-input" id="ftype">
-            <option value="" disabled selected>Select a project type</option>
-            <option>YouTube Video Editing</option>
-            <option>Instagram Reels / Short Form</option>
-            <option>Brand / Commercial Film</option>
-            <option>Wedding / Event Film</option>
-            <option>Documentary</option>
-            <option>Music Video</option>
-            <option>Motion Graphics</option>
-            <option>Other</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Budget Range</label>
-            <select class="form-select form-input" id="fbudget">
-              <option value="" disabled selected>Budget</option>
-              <option>Under ₹5,000</option>
-              <option>₹5,000 – ₹15,000</option>
-              <option>₹15,000 – ₹50,000</option>
-              <option>₹50,000+</option>
-              <option>Let's Discuss</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Timeline</label>
-            <select class="form-select form-input" id="ftimeline">
-              <option value="" disabled selected>When?</option>
-              <option>ASAP</option>
-              <option>Within 1 Week</option>
-              <option>Within 1 Month</option>
-              <option>Flexible</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Project Details *</label>
-          <textarea class="form-textarea" id="fmessage"
-            placeholder="Tell me about your project — what do you need, what style are you going for, any references?"></textarea>
-        </div>
-        <button class="form-submit" onclick="submitForm()">
-          <span>SEND TO WHATSAPP →</span>
-        </button>
-        <p class="form-note">* You'll be redirected to WhatsApp with your info pre-filled</p>
+      <div class="reveal" style="transition-delay:0.2s">
+        <iframe
+          class="map-embed"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3647.8!2d91.284!3d23.834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sDream+Ink+Tattoo+Studio!5e0!3m2!1sen!2sin!4v1"
+          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Dream Ink Tattoo Studio Location">
+        </iframe>
       </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-logo">DOM.</div>
-    <div class="footer-copy">© 2024 Dominatorv2x · All Rights Reserved</div>
-    <div class="footer-links">
-      <a href="mailto:youremail@gmail.com">Email</a>
-      <a href="https://wa.me/919362131252" target="_blank">WhatsApp</a>
-      <a href="https://instagram.com/dominatorv2x" target="_blank">Instagram</a>
-    </div>
-  </footer>
-
-  <!-- VIDEO MODAL -->
-  <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeModal()">✕</button>
-      <div class="modal-video" id="modalContent">
-        <div style="text-align:center">
-          <div style="font-size:48px;margin-bottom:16px;">🎬</div>
-          <div>Add your YouTube/Vimeo embed here</div>
-        </div>
-      </div>
-      <div id="modalTitle"
-        style="font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:8px;"></div>
-      <div id="modalDesc" style="font-size:14px;color:var(--muted);line-height:1.6;"></div>
     </div>
   </div>
+</section>
 
-  <script>
-    // CURSOR
-    const dot = document.getElementById('cursorDot');
-    const ring = document.getElementById('cursorRing');
-    let mx = 0, my = 0, rx = 0, ry = 0;
-    document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
-    function animCursor() {
-      dot.style.left = (mx - 4) + 'px'; dot.style.top = (my - 4) + 'px';
-      rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
-      ring.style.left = (rx - 20) + 'px'; ring.style.top = (ry - 20) + 'px';
-      requestAnimationFrame(animCursor);
-    }
-    animCursor();
-    document.querySelectorAll('a,button,.video-card,.project-card,.exp-item,.theme-btn').forEach(el => {
-      el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-      el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-    });
+<!-- FOOTER -->
+<footer>
+  <span class="footer-logo">Dream Ink</span>
+  <p class="footer-tagline">"Ink Your Story"</p>
+  <div class="footer-links">
+    <a href="#hero">Home</a>
+    <a href="#about">About</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#services">Services</a>
+    <a href="#booking">Book Now</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <p style="color: rgba(245,240,232,0.2); font-size:0.72rem; margin-top:24px;">
+    © 2024 Dream Ink Tattoo Studio · Agartala, Tripura · All Rights Reserved
+  </p>
+</footer>
 
-    // THEME TOGGLE
-    const themeBtn = document.getElementById('themeBtn');
-    const themeLabel = document.getElementById('themeLabel');
-    let isDark = true;
-    themeBtn.addEventListener('click', () => {
-      isDark = !isDark;
-      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-      themeLabel.textContent = isDark ? 'DARK' : 'LIGHT';
-    });
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
 
-    // SCROLL REVEAL
-    const reveals = document.querySelectorAll('.reveal');
-    const revObs = new IntersectionObserver((entries) => {
-      entries.forEach((e, i) => {
-        if (e.isIntersecting) {
-          setTimeout(() => e.target.classList.add('visible'), i * 80);
-          revObs.unobserve(e.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    reveals.forEach(r => revObs.observe(r));
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
 
-    // VIDEO SLIDER
-    let current = 0;
-    const total = 4;
-    const track = document.getElementById('videoTrack');
-    const dots = document.querySelectorAll('.slider-dot');
+function animRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
 
-    function updateSlider() {
-      const card = track.querySelector('.video-card');
-      const cardW = card.offsetWidth + 24;
-      const maxOffset = Math.max(0, (total * cardW) - track.parentElement.offsetWidth);
-      const offset = Math.min(current * cardW, maxOffset);
-      track.style.transform = `translateX(-${offset}px)`;
-      dots.forEach((d, i) => d.classList.toggle('active', i === current));
-    }
+document.querySelectorAll('a,button,.portfolio-item,.style-card,.filter-btn').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.width = '20px'; cursor.style.height = '20px';
+    ring.style.width = '60px'; ring.style.height = '60px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.width = '12px'; cursor.style.height = '12px';
+    ring.style.width = '36px'; ring.style.height = '36px';
+  });
+});
 
-    document.getElementById('nextBtn').onclick = () => { current = (current + 1) % total; updateSlider(); };
-    document.getElementById('prevBtn').onclick = () => { current = (current - 1 + total) % total; updateSlider(); };
-    function goToSlide(i) { current = i; updateSlider(); }
+// ── NAV SCROLL ──
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('navbar');
+  if (window.scrollY > 60) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+});
 
-    // Auto slide
-    setInterval(() => { current = (current + 1) % total; updateSlider(); }, 4000);
+function toggleMenu() {
+  document.getElementById('navLinks').classList.toggle('open');
+}
 
-    // MODAL
-    const videos = [
-      { title: 'CINEMATIC REEL 2024', desc: 'A compilation of my best brand and commercial work from 2024. Color graded in DaVinci Resolve.' },
-      { title: 'VIRAL LONG-FORM CUT', desc: 'An 18-minute YouTube edit optimized for retention with strategic pacing and hook design.' },
-      { title: 'REELS COMPILATION', desc: 'Short-form reels edited for Instagram — punchy cuts, trending sounds, high engagement.' },
-      { title: 'MOTION GRAPHICS REEL', desc: 'After Effects motion graphics work — kinetic typography, logo animations, and visual effects.' },
-    ];
-    function openModal(i) {
-      document.getElementById('modalTitle').textContent = videos[i].title;
-      document.getElementById('modalDesc').textContent = videos[i].desc;
-      document.getElementById('modal').classList.add('open');
-    }
-    function closeModal() { document.getElementById('modal').classList.remove('open'); }
-    function closeModalOutside(e) { if (e.target.id === 'modal') closeModal(); }
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+// close menu on link click
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
+});
 
-    // CONTACT FORM → WHATSAPP
-    function submitForm() {
-      const name = document.getElementById('fname').value.trim();
-      const phone = document.getElementById('fphone').value.trim();
-      const email = document.getElementById('femail').value.trim();
-      const type = document.getElementById('ftype').value;
-      const budget = document.getElementById('fbudget').value;
-      const timeline = document.getElementById('ftimeline').value;
-      const message = document.getElementById('fmessage').value.trim();
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
 
-      if (!name || !email || !type || !message) {
-        alert('Please fill in all required fields (Name, Email, Project Type, Details).');
-        return;
-      }
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-      const text = `*New Project Inquiry — Dominatorv2x Portfolio*%0A%0A` +
-        `*Name:* ${encodeURIComponent(name)}%0A` +
-        `*Phone:* ${encodeURIComponent(phone || 'Not provided')}%0A` +
-        `*Email:* ${encodeURIComponent(email)}%0A` +
-        `*Project Type:* ${encodeURIComponent(type)}%0A` +
-        `*Budget:* ${encodeURIComponent(budget || 'Not specified')}%0A` +
-        `*Timeline:* ${encodeURIComponent(timeline || 'Not specified')}%0A%0A` +
-        `*Project Details:*%0A${encodeURIComponent(message)}`;
+// ── PORTFOLIO FILTER ──
+function filterPortfolio(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
 
-      window.open(`https://wa.me/919362131252?text=${text}`, '_blank');
-    }
+  document.querySelectorAll('.portfolio-item').forEach(item => {
+    const match = cat === 'all' || item.dataset.cat === cat;
+    item.style.opacity = match ? '1' : '0.15';
+    item.style.transform = match ? 'scale(1)' : 'scale(0.95)';
+    item.style.pointerEvents = match ? 'auto' : 'none';
+    item.style.transition = 'opacity 0.4s, transform 0.4s';
+  });
+}
 
-    // Nav active state on scroll
-    const sections = document.querySelectorAll('section[id]');
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(s => { if (window.scrollY >= s.offsetTop - 200) current = s.id; });
-      document.querySelectorAll('.nav-links a').forEach(a => {
-        a.style.color = a.getAttribute('href') === `#${current}` ? 'var(--accent)' : '';
-      });
-    });
-  </script>
+// ── LIGHTBOX ──
+function openLightbox(el) {
+  const src = el.querySelector('img').src;
+  document.getElementById('lightboxImg').src = src;
+  document.getElementById('lightbox').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(e) {
+  if (e.target === document.getElementById('lightbox') || e.target.tagName !== 'IMG') {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+}
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+});
+
+// ── TESTIMONIALS ──
+let currentSlide = 0;
+const slides = document.querySelectorAll('.testimonial-slide');
+const dots = document.querySelectorAll('.dot');
+
+function goToSlide(n) {
+  slides[currentSlide].classList.remove('active');
+  dots[currentSlide].classList.remove('active');
+  currentSlide = n;
+  slides[currentSlide].classList.add('active');
+  dots[currentSlide].classList.add('active');
+}
+
+setInterval(() => goToSlide((currentSlide + 1) % slides.length), 5000);
+
+// ── BOOKING FORM ──
+function submitBooking() {
+  const name = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const desc = document.getElementById('f-desc').value.trim();
+
+  if (!name || !phone || !desc) {
+    alert('Please fill in your name, phone, and tattoo description.');
+    return;
+  }
+
+  document.getElementById('bookingFormWrap').style.display = 'none';
+  document.getElementById('successMsg').classList.add('show');
+}
+
+// ── PARALLAX HERO ──
+window.addEventListener('scroll', () => {
+  const y = window.scrollY;
+  const heroBg = document.getElementById('heroBg');
+  if (heroBg) heroBg.style.transform = `scale(1.05) translateY(${y * 0.3}px)`;
+});
+</script>
 </body>
-
 </html>
