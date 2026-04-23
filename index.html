@@ -3,1548 +3,1059 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dream Ink Tattoo Studio | Agartala</title>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<title>SOLE — Premium Footwear</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  /* =============================================
+   *  🖼️  CHANGE YOUR SHOE IMAGES HERE
+   *  Just replace the URLs in the JS section
+   *  at the bottom of the file (search for
+   *  "IMAGE CONFIGURATION")
+   * ============================================= */
+
   :root {
-    --black: #0D0D0D;
-    --charcoal: #1A1A1A;
-    --charcoal2: #222222;
-    --gold: #C9A646;
-    --gold-light: #e8c96a;
-    --red: #8B0000;
-    --white: #F5F0E8;
-    --gray: #888;
-    --border: rgba(201,166,70,0.2);
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --card: #161616;
+    --accent: #ff3d00;
+    --accent2: #ffbe00;
+    --text: #f0ede8;
+    --muted: #666;
+    --border: #222;
+    --glow: rgba(255, 61, 0, 0.4);
   }
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   html { scroll-behavior: smooth; }
 
   body {
-    background: var(--black);
-    color: var(--white);
-    font-family: 'Poppins', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
     overflow-x: hidden;
     cursor: none;
   }
 
-  /* ── CUSTOM CURSOR ── */
-  .cursor {
+  /* ── Custom Cursor ── */
+  #cursor {
+    position: fixed; top: 0; left: 0;
     width: 12px; height: 12px;
-    background: var(--gold);
+    background: var(--accent);
     border-radius: 50%;
-    position: fixed; top: 0; left: 0;
     pointer-events: none;
-    z-index: 99999;
-    transform: translate(-50%,-50%);
-    transition: transform 0.1s, width 0.3s, height 0.3s, background 0.3s;
-    mix-blend-mode: difference;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width .2s, height .2s, background .2s;
   }
-  .cursor-ring {
-    width: 36px; height: 36px;
-    border: 1px solid var(--gold);
-    border-radius: 50%;
+  #cursor-ring {
     position: fixed; top: 0; left: 0;
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
     pointer-events: none;
-    z-index: 99998;
-    transform: translate(-50%,-50%);
-    transition: transform 0.18s ease, width 0.3s, height 0.3s;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform .12s ease, width .3s, height .3s, opacity .3s;
     opacity: 0.6;
   }
+  body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 20px; height: 20px; background: var(--accent2); }
+  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring { width: 56px; height: 56px; opacity: 0.3; }
 
-  /* ── NOISE TEXTURE ── */
+  /* ── Noise overlay ── */
   body::before {
     content: '';
     position: fixed; inset: 0;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 9999;
-    opacity: 0.4;
+    pointer-events: none; z-index: 1000; opacity: 0.4;
   }
 
   /* ── NAV ── */
   nav {
     position: fixed; top: 0; left: 0; right: 0;
-    z-index: 1000;
     display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 60px;
-    background: rgba(13,13,13,0.85);
-    backdrop-filter: blur(16px);
+    padding: 24px 48px;
+    z-index: 100;
+    backdrop-filter: blur(12px);
+    background: rgba(10,10,10,0.7);
     border-bottom: 1px solid var(--border);
-    transition: padding 0.4s;
   }
-  nav.scrolled { padding: 12px 60px; }
-
   .nav-logo {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1.3rem;
-    color: var(--gold);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem;
+    letter-spacing: 6px;
+    color: var(--text);
     text-decoration: none;
-    letter-spacing: 2px;
   }
-  .nav-logo span { color: var(--white); }
-
+  .nav-logo span { color: var(--accent); }
   .nav-links { display: flex; gap: 36px; list-style: none; }
   .nav-links a {
-    color: var(--white);
-    text-decoration: none;
-    font-size: 0.78rem;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    position: relative;
-    transition: color 0.3s;
+    text-decoration: none; color: var(--muted);
+    font-size: .85rem; letter-spacing: 2px; text-transform: uppercase;
+    transition: color .3s;
+    font-family: 'Space Mono', monospace;
   }
-  .nav-links a::after {
-    content: '';
-    position: absolute; bottom: -4px; left: 0;
-    width: 0; height: 1px;
-    background: var(--gold);
-    transition: width 0.3s;
+  .nav-links a:hover { color: var(--text); }
+  .nav-cta {
+    background: var(--accent); color: #fff;
+    border: none; padding: 10px 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: .8rem; letter-spacing: 2px; text-transform: uppercase;
+    cursor: none; transition: background .3s, transform .2s;
   }
-  .nav-links a:hover { color: var(--gold); }
-  .nav-links a:hover::after { width: 100%; }
-
-  .nav-book {
-    background: var(--gold);
-    color: var(--black) !important;
-    padding: 10px 24px;
-    border-radius: 2px;
-    font-weight: 700 !important;
-    transition: background 0.3s, transform 0.2s !important;
-  }
-  .nav-book::after { display: none !important; }
-  .nav-book:hover { background: var(--gold-light) !important; transform: translateY(-1px); }
-
-  .hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 4px;
-  }
-  .hamburger span {
-    width: 26px; height: 2px;
-    background: var(--gold);
-    transition: 0.3s;
-    display: block;
-  }
+  .nav-cta:hover { background: var(--accent2); color: #000; transform: scale(1.04); }
 
   /* ── HERO ── */
   #hero {
-    position: relative;
-    height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden;
-  }
-
-  /* ── IMAGE CONFIG: HERO BACKGROUND ── */
-  /* 🖼️ TO CHANGE HERO IMAGE: Replace the URL below in .hero-bg */
-  .hero-bg {
-    position: absolute; inset: 0;
-    background-image: url('https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=1600&q=80');
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.3) saturate(0.8);
-    transform: scale(1.05);
-    animation: heroZoom 12s ease-in-out infinite alternate;
-  }
-  @keyframes heroZoom { from { transform: scale(1.05); } to { transform: scale(1.12); } }
-
-  .hero-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(13,13,13,0.7) 0%, rgba(139,0,0,0.15) 50%, rgba(13,13,13,0.9) 100%);
-  }
-
-  .hero-content {
-    position: relative; z-index: 2;
-    text-align: center;
-    max-width: 900px;
-    padding: 0 20px;
-  }
-
-  .hero-eyebrow {
-    font-size: 0.7rem;
-    letter-spacing: 6px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.3s forwards;
-  }
-
-  .hero-title {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(3rem, 8vw, 7rem);
-    line-height: 1.05;
-    font-weight: 900;
-    color: var(--white);
-    opacity: 0;
-    animation: fadeUp 0.9s 0.5s forwards;
-  }
-  .hero-title .gold { color: var(--gold); }
-
-  .hero-sub {
-    font-size: clamp(0.9rem, 2vw, 1.1rem);
-    color: rgba(245,240,232,0.6);
-    margin: 28px 0 48px;
-    font-weight: 300;
-    letter-spacing: 1px;
-    opacity: 0;
-    animation: fadeUp 0.9s 0.7s forwards;
-  }
-
-  .hero-ctas {
-    display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 0.9s 0.9s forwards;
-  }
-
-  .btn-primary {
-    background: var(--gold);
-    color: var(--black);
-    padding: 16px 40px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: 0.8rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.3s, box-shadow 0.3s;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-  }
-  .btn-primary::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: var(--gold-light);
-    transform: translateX(-100%) skewX(-15deg);
-    transition: transform 0.4s;
-  }
-  .btn-primary:hover::before { transform: translateX(0) skewX(-15deg); }
-  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(201,166,70,0.3); }
-  .btn-primary span { position: relative; z-index: 1; }
-
-  .btn-outline {
-    background: transparent;
-    color: var(--white);
-    padding: 15px 40px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 600;
-    font-size: 0.8rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    border: 1px solid rgba(245,240,232,0.4);
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-block;
-    transition: border-color 0.3s, color 0.3s, transform 0.3s;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-  }
-  .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-3px); }
-
-  .hero-scroll {
-    position: absolute; bottom: 40px; left: 50%;
-    transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center;
-    gap: 8px;
-    opacity: 0;
-    animation: fadeIn 1s 1.5s forwards;
-    z-index: 2;
-  }
-  .hero-scroll span { font-size: 0.6rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gray); }
-  .scroll-line {
-    width: 1px; height: 50px;
-    background: linear-gradient(to bottom, var(--gold), transparent);
-    animation: scrollPulse 1.8s infinite;
-  }
-  @keyframes scrollPulse { 0%,100% { opacity: 0.3; } 50% { opacity: 1; } }
-
-  @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-  /* ── SECTIONS ── */
-  section { padding: 120px 60px; }
-
-  .section-eyebrow {
-    font-size: 0.65rem;
-    letter-spacing: 5px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 16px;
-  }
-  .section-title {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    line-height: 1.15;
-    color: var(--white);
-    margin-bottom: 20px;
-  }
-  .section-title .accent { color: var(--gold); }
-  .section-line {
-    width: 60px; height: 2px;
-    background: var(--gold);
-    margin-bottom: 40px;
-  }
-
-  /* reveal on scroll */
-  .reveal {
-    opacity: 0;
-    transform: translateY(60px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* ── STYLES STRIP ── */
-  #styles {
-    background: var(--charcoal);
-    padding: 80px 60px;
-    position: relative;
-    overflow: hidden;
-  }
-  #styles::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(to right, transparent, var(--gold), transparent);
-  }
-
-  .styles-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 2px;
-    margin-top: 60px;
-  }
-
-  .style-card {
-    position: relative;
-    aspect-ratio: 3/4;
-    overflow: hidden;
-    background: var(--charcoal2);
-    cursor: pointer;
-  }
-  /* 🖼️ TO CHANGE STYLE CARD IMAGES: Replace URLs in .style-card[data-style] */
-  .style-card::before {
-    content: '';
-    position: absolute; inset: 0;
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.5) saturate(0.7);
-    transition: transform 0.6s, filter 0.6s;
-  }
-  .style-card:hover::before { transform: scale(1.1); filter: brightness(0.35) saturate(1); }
-
-  .style-card[data-img="1"]::before { background-image: url('https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=600&q=80'); }
-  .style-card[data-img="2"]::before { background-image: url('https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=80'); }
-  .style-card[data-img="3"]::before { background-image: url('https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=600&q=80'); }
-  .style-card[data-img="4"]::before { background-image: url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&q=80'); }
-  .style-card[data-img="5"]::before { background-image: url('https://images.unsplash.com/photo-1612833603922-5e9f4f8d1e1f?w=600&q=80'); }
-  .style-card[data-img="6"]::before { background-image: url('https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=600&q=80'); }
-
-  .style-card-inner {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 24px 20px;
-    background: linear-gradient(to top, rgba(13,13,13,0.9) 0%, transparent 60%);
-  }
-  .style-card-name {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 0.85rem;
-    color: var(--white);
-    letter-spacing: 1px;
-    transition: color 0.3s;
-  }
-  .style-card:hover .style-card-name { color: var(--gold); }
-  .style-card-line {
-    width: 0; height: 1px;
-    background: var(--gold);
-    margin-top: 6px;
-    transition: width 0.4s;
-  }
-  .style-card:hover .style-card-line { width: 40px; }
-
-  /* ── ABOUT ── */
-  #about {
+    min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 100px;
     align-items: center;
-    max-width: 1300px;
-    margin: 0 auto;
+    padding: 120px 48px 60px;
+    gap: 40px;
+    position: relative;
+    overflow: hidden;
   }
+  .hero-bg-text {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28vw;
+    color: rgba(255,255,255,0.02);
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -4px;
+    animation: bgDrift 12s ease-in-out infinite alternate;
+  }
+  @keyframes bgDrift { from { transform: translate(-52%, -50%); } to { transform: translate(-48%, -50%); } }
 
-  .about-img-wrap {
+  .hero-left { z-index: 2; }
+  .hero-tag {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: .75rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 24px;
+    opacity: 0; animation: fadeUp .8s .2s forwards;
+  }
+  .hero-tag::before {
+    content: ''; width: 24px; height: 1.5px; background: var(--accent);
+  }
+  .hero-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(4rem, 8vw, 9rem);
+    line-height: .92;
+    letter-spacing: 2px;
+    opacity: 0; animation: fadeUp .9s .35s forwards;
+  }
+  .hero-title em { color: var(--accent); font-style: normal; }
+  .hero-sub {
+    margin: 28px 0 44px;
+    color: var(--muted); line-height: 1.7;
+    max-width: 400px; font-size: 1rem;
+    opacity: 0; animation: fadeUp .9s .5s forwards;
+  }
+  .hero-btns {
+    display: flex; gap: 16px; align-items: center;
+    opacity: 0; animation: fadeUp .9s .65s forwards;
+  }
+  .btn-primary {
+    background: var(--accent); color: #fff;
+    border: none; padding: 16px 36px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem; letter-spacing: 3px;
+    cursor: none; transition: all .3s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  }
+  .btn-primary:hover { background: var(--accent2); color: #000; transform: translateY(-2px); }
+  .btn-ghost {
+    color: var(--text); background: none;
+    border: 1px solid var(--border);
+    padding: 15px 36px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem; letter-spacing: 3px;
+    cursor: none; transition: all .3s;
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  .hero-stats {
+    display: flex; gap: 40px; margin-top: 60px;
+    opacity: 0; animation: fadeUp .9s .8s forwards;
+  }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.4rem; color: var(--text); line-height: 1;
+  }
+  .stat-num span { color: var(--accent); }
+  .stat-label { font-size: .72rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-family: 'Space Mono', monospace; }
+
+  /* ── Hero Shoe Showcase ── */
+  .hero-right {
+    position: relative; display: flex;
+    align-items: center; justify-content: center;
+    height: 580px; z-index: 2;
+    opacity: 0; animation: fadeIn 1.2s .4s forwards;
+  }
+  .shoe-stage {
+    position: relative; width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .shoe-glow {
+    position: absolute;
+    width: 60%; height: 40%;
+    background: radial-gradient(ellipse, var(--glow) 0%, transparent 70%);
+    bottom: 10%; left: 50%; transform: translateX(-50%);
+    animation: pulseGlow 3s ease-in-out infinite;
+    filter: blur(20px);
+  }
+  @keyframes pulseGlow { 0%,100% { opacity: .6; transform: translateX(-50%) scale(1); } 50% { opacity: 1; transform: translateX(-50%) scale(1.1); } }
+
+  .hero-shoe-img {
+    width: 90%; max-width: 520px;
+    object-fit: contain;
+    filter: drop-shadow(0 30px 60px rgba(255,61,0,0.35));
+    animation: heroFloat 5s ease-in-out infinite;
+    position: relative; z-index: 2;
+    transition: opacity .5s ease;
+  }
+  @keyframes heroFloat { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-18px) rotate(-2deg); } }
+
+  .hero-shoe-dots {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    display: flex; gap: 8px; z-index: 5;
+  }
+  .hero-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); border: 1px solid var(--muted);
+    cursor: none; transition: all .3s;
+  }
+  .hero-dot.active { background: var(--accent); border-color: var(--accent); width: 24px; border-radius: 4px; }
+
+  .shoe-counter {
+    position: absolute; top: 20px; right: 20px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem; color: var(--muted); letter-spacing: 3px;
+  }
+  .shoe-counter strong { color: var(--accent); font-size: 1.6rem; }
+
+  /* ── Marquee ── */
+  .marquee-wrap {
+    overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 14px 0; background: var(--accent);
+  }
+  .marquee-inner {
+    display: flex; gap: 0;
+    animation: marquee 18s linear infinite;
+    width: max-content;
+  }
+  .marquee-item {
+    display: flex; align-items: center; gap: 20px;
+    padding: 0 32px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem; letter-spacing: 4px;
+    color: #000; white-space: nowrap;
+  }
+  .marquee-item::after { content: '✦'; opacity: .5; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── COLLECTION ── */
+  #collection {
+    padding: 100px 48px;
     position: relative;
   }
-  /* 🖼️ TO CHANGE ARTIST PHOTO: Replace URL in .about-img */
-  .about-img {
-    width: 100%;
-    aspect-ratio: 3/4;
-    object-fit: cover;
-    filter: grayscale(30%);
-    transition: filter 0.4s;
-    display: block;
-    background: var(--charcoal) url('https://images.unsplash.com/photo-1554774853-d50f9c681ae2?w=800&q=80') center/cover;
+  .section-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 56px;
   }
-  .about-img-wrap:hover .about-img { filter: grayscale(0%); }
-  .about-img-frame {
-    position: absolute;
-    top: -20px; right: -20px;
-    width: calc(100% - 20px);
-    height: calc(100% - 20px);
-    border: 1px solid var(--gold);
-    pointer-events: none;
-    z-index: -1;
+  .section-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: .75rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 12px;
   }
-  .about-badge {
-    position: absolute;
-    bottom: -30px; left: -30px;
-    width: 120px; height: 120px;
-    background: var(--gold);
-    color: var(--black);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-family: 'Cinzel Decorative', serif;
-    clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%);
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 1; letter-spacing: 2px;
   }
-  .about-badge .num { font-size: 2rem; font-weight: 900; line-height: 1; }
-  .about-badge .label { font-size: 0.55rem; letter-spacing: 2px; text-transform: uppercase; }
+  .filter-tabs {
+    display: flex; gap: 4px;
+  }
+  .filter-tab {
+    padding: 8px 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: .72rem; letter-spacing: 2px; text-transform: uppercase;
+    background: none; border: 1px solid var(--border);
+    color: var(--muted); cursor: none; transition: all .3s;
+  }
+  .filter-tab.active, .filter-tab:hover {
+    background: var(--accent); border-color: var(--accent); color: #fff;
+  }
 
-  .about-text .stats {
+  .product-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 24px;
-    margin: 48px 0;
-    padding: 32px 0;
-    border-top: 1px solid var(--border);
-    border-bottom: 1px solid var(--border);
-  }
-  .stat { text-align: center; }
-  .stat-num {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 2.2rem;
-    color: var(--gold);
-    display: block;
-    line-height: 1;
-  }
-  .stat-label { font-size: 0.65rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); margin-top: 8px; display: block; }
-
-  .about-text p { color: rgba(245,240,232,0.65); line-height: 1.9; font-size: 0.95rem; margin-bottom: 16px; }
-
-  /* ── PORTFOLIO ── */
-  #portfolio {
-    background: var(--charcoal);
-    position: relative;
-  }
-  #portfolio::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(to right, transparent, var(--gold), transparent);
   }
 
-  .portfolio-header {
-    display: flex; align-items: flex-end; justify-content: space-between;
-    margin-bottom: 60px;
-    flex-wrap: wrap; gap: 24px;
-  }
-
-  .filter-tabs {
-    display: flex; gap: 4px; flex-wrap: wrap;
-  }
-  .filter-btn {
-    background: none;
-    border: 1px solid rgba(245,240,232,0.15);
-    color: var(--gray);
-    padding: 8px 20px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.72rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-  .filter-btn.active, .filter-btn:hover {
-    background: var(--gold);
-    color: var(--black);
-    border-color: var(--gold);
-  }
-
-  .portfolio-grid {
-    columns: 4;
-    column-gap: 4px;
-  }
-  .portfolio-item {
-    break-inside: avoid;
-    margin-bottom: 4px;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    display: block;
-  }
-  /* 🖼️ TO CHANGE PORTFOLIO IMAGES:
-     Find the .portfolio-item[data-cat] elements below and change background-image URLs.
-     Each item has a comment showing which image slot it is. */
-  .portfolio-item::before {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(139,0,0,0.6), rgba(13,13,13,0.8));
-    opacity: 0;
-    transition: opacity 0.4s;
-    z-index: 1;
-  }
-  .portfolio-item:hover::before { opacity: 1; }
-
-  .portfolio-item img {
-    width: 100%;
-    display: block;
-    transition: transform 0.6s;
-    filter: brightness(0.85);
-  }
-  .portfolio-item:hover img { transform: scale(1.08); filter: brightness(0.7); }
-
-  .portfolio-item-overlay {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    z-index: 2;
-    opacity: 0;
-    transition: opacity 0.4s;
-    gap: 8px;
-  }
-  .portfolio-item:hover .portfolio-item-overlay { opacity: 1; }
-  .portfolio-item-overlay .icon { font-size: 2rem; color: var(--gold); }
-  .portfolio-item-overlay .cat-label {
-    font-size: 0.65rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--white);
-  }
-
-  /* LIGHTBOX */
-  .lightbox {
-    position: fixed; inset: 0;
-    background: rgba(0,0,0,0.95);
-    z-index: 10000;
-    display: none;
-    align-items: center; justify-content: center;
-    backdrop-filter: blur(10px);
-  }
-  .lightbox.open { display: flex; }
-  .lightbox img {
-    max-width: 90vw; max-height: 90vh;
-    object-fit: contain;
+  .product-card {
+    background: var(--card);
     border: 1px solid var(--border);
+    overflow: hidden; position: relative;
+    cursor: none;
+    transition: border-color .3s, transform .4s cubic-bezier(.16,1,.3,1);
+    animation: cardReveal .6s both;
   }
-  .lightbox-close {
-    position: absolute; top: 30px; right: 30px;
-    background: none; border: 1px solid var(--gold);
-    color: var(--gold); font-size: 1.5rem;
-    width: 48px; height: 48px;
-    cursor: pointer;
+  .product-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-8px);
+  }
+  @keyframes cardReveal { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+  .product-card:nth-child(1) { animation-delay: .05s; }
+  .product-card:nth-child(2) { animation-delay: .12s; }
+  .product-card:nth-child(3) { animation-delay: .19s; }
+  .product-card:nth-child(4) { animation-delay: .26s; }
+  .product-card:nth-child(5) { animation-delay: .33s; }
+  .product-card:nth-child(6) { animation-delay: .40s; }
+
+  .product-card.featured {
+    grid-column: span 2;
+  }
+
+  .card-badge {
+    position: absolute; top: 16px; left: 16px; z-index: 3;
+    padding: 4px 12px;
+    font-family: 'Space Mono', monospace;
+    font-size: .65rem; letter-spacing: 2px; text-transform: uppercase;
+    background: var(--accent); color: #fff;
+  }
+  .card-badge.new { background: var(--accent2); color: #000; }
+
+  .card-img-wrap {
+    height: 260px; overflow: hidden;
+    background: #0e0e0e;
     display: flex; align-items: center; justify-content: center;
-    transition: background 0.3s;
-  }
-  .lightbox-close:hover { background: var(--gold); color: var(--black); }
-
-  /* ── SERVICES ── */
-  #services { max-width: 1300px; margin: 0 auto; }
-
-  .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2px;
-    margin-top: 60px;
-  }
-
-  .service-card {
-    background: var(--charcoal);
-    padding: 48px 36px;
     position: relative;
-    overflow: hidden;
-    transition: transform 0.3s;
   }
-  .service-card::before {
-    content: '';
-    position: absolute; bottom: 0; left: 0;
-    width: 0; height: 2px;
-    background: var(--gold);
-    transition: width 0.5s;
-  }
-  .service-card:hover::before { width: 100%; }
-  .service-card:hover { transform: translateY(-4px); }
+  .product-card.featured .card-img-wrap { height: 340px; }
 
-  .service-icon {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    display: block;
+  .card-img-wrap::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 50% 80%, rgba(255,61,0,0.12), transparent 70%);
+    opacity: 0; transition: opacity .4s;
   }
-  .service-name {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1rem;
-    color: var(--white);
+  .product-card:hover .card-img-wrap::after { opacity: 1; }
+
+  .card-img {
+    width: 85%; height: 85%; object-fit: contain;
+    transition: transform .6s cubic-bezier(.16,1,.3,1), filter .4s;
+    filter: drop-shadow(0 12px 30px rgba(0,0,0,.6));
+  }
+  .product-card:hover .card-img {
+    transform: scale(1.08) rotate(3deg) translateY(-6px);
+    filter: drop-shadow(0 24px 40px rgba(255,61,0,0.3));
+  }
+
+  .card-quick-add {
+    position: absolute; bottom: -48px; left: 0; right: 0;
+    background: var(--accent); color: #fff;
+    text-align: center; padding: 14px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem; letter-spacing: 3px;
+    transition: bottom .3s cubic-bezier(.16,1,.3,1);
+    z-index: 3;
+  }
+  .product-card:hover .card-quick-add { bottom: 0; }
+
+  .card-body { padding: 20px 20px 24px; }
+  .card-brand {
+    font-family: 'Space Mono', monospace;
+    font-size: .68rem; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 6px;
+  }
+  .card-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem; font-weight: 700;
     margin-bottom: 12px;
   }
-  .service-desc { color: var(--gray); font-size: 0.85rem; line-height: 1.8; margin-bottom: 24px; }
-  .service-price {
-    font-size: 0.8rem;
-    color: var(--gold);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 600;
+  .card-footer {
+    display: flex; justify-content: space-between; align-items: center;
   }
+  .card-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem; letter-spacing: 1px;
+  }
+  .card-price .old {
+    font-size: 1rem; color: var(--muted);
+    text-decoration: line-through; margin-left: 8px;
+  }
+  .card-colors {
+    display: flex; gap: 6px;
+  }
+  .color-dot {
+    width: 14px; height: 14px; border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    transition: transform .2s;
+  }
+  .color-dot:hover { transform: scale(1.3); }
 
-  .service-safety {
-    margin-top: 80px;
-    background: var(--charcoal);
-    padding: 48px;
+  /* ── FEATURED BANNER ── */
+  #featured {
+    margin: 0 48px 100px;
+    background: var(--surface);
     border: 1px solid var(--border);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 32px;
-    align-items: center;
-  }
-  .safety-item { display: flex; gap: 16px; align-items: flex-start; }
-  .safety-icon { font-size: 1.8rem; flex-shrink: 0; }
-  .safety-item h4 { font-size: 0.85rem; margin-bottom: 6px; color: var(--gold); }
-  .safety-item p { font-size: 0.78rem; color: var(--gray); line-height: 1.7; }
-
-  /* ── TESTIMONIALS ── */
-  #testimonials {
-    background: var(--charcoal);
-    position: relative;
-    overflow: hidden;
-    text-align: center;
-  }
-  #testimonials::before {
-    content: '"';
-    position: absolute;
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 30vw;
-    color: rgba(201,166,70,0.03);
-    top: -5vw;
-    left: 50%;
-    transform: translateX(-50%);
-    line-height: 1;
-    pointer-events: none;
-  }
-
-  .testimonials-slider { position: relative; max-width: 900px; margin: 60px auto 0; }
-  .testimonial-slide { display: none; }
-  .testimonial-slide.active { display: block; animation: fadeIn 0.5s ease; }
-
-  .testimonial-stars { color: var(--gold); font-size: 1.2rem; margin-bottom: 24px; letter-spacing: 4px; }
-  .testimonial-text {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-    font-style: italic;
-    color: var(--white);
-    line-height: 1.7;
-    margin-bottom: 36px;
-  }
-  .testimonial-author { font-size: 0.75rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
-  .testimonial-location { font-size: 0.7rem; color: var(--gray); margin-top: 4px; }
-
-  .slider-dots {
-    display: flex; justify-content: center; gap: 10px;
-    margin-top: 48px;
-  }
-  .dot {
-    width: 6px; height: 6px;
-    background: var(--gray);
-    border-radius: 50%;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.3s;
-  }
-  .dot.active { background: var(--gold); transform: scale(1.5); }
-
-  /* ── GALLERY STRIP ── */
-  .gallery-strip {
-    overflow: hidden;
-    display: flex;
-    gap: 4px;
-    padding: 0;
-  }
-  .gallery-strip-inner {
-    display: flex;
-    gap: 4px;
-    animation: stripScroll 30s linear infinite;
-    flex-shrink: 0;
-  }
-  .gallery-strip-inner:hover { animation-play-state: paused; }
-  @keyframes stripScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-  /* 🖼️ TO CHANGE GALLERY STRIP IMAGES: Replace URLs in .strip-img elements */
-  .strip-img {
-    width: 220px;
-    height: 280px;
-    object-fit: cover;
-    flex-shrink: 0;
-    filter: grayscale(30%) brightness(0.8);
-    transition: filter 0.4s, transform 0.4s;
-  }
-  .strip-img:hover { filter: grayscale(0%) brightness(1); transform: scale(1.03); }
-
-  /* ── BOOKING ── */
-  #booking { max-width: 900px; margin: 0 auto; }
-
-  .booking-form {
-    background: var(--charcoal);
-    padding: 60px;
-    border: 1px solid var(--border);
-    position: relative;
-    overflow: hidden;
-    margin-top: 60px;
-  }
-  .booking-form::before {
-    content: '';
-    position: absolute; top: 0; left: 0;
-    width: 100%; height: 3px;
-    background: linear-gradient(to right, var(--red), var(--gold), var(--red));
-  }
-
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .form-full { grid-column: 1 / -1; }
-
-  .form-group { display: flex; flex-direction: column; gap: 8px; }
-  .form-group label { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
-  .form-group input,
-  .form-group textarea,
-  .form-group select {
-    background: rgba(245,240,232,0.04);
-    border: 1px solid rgba(245,240,232,0.12);
-    color: var(--white);
-    padding: 14px 16px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 0.88rem;
-    outline: none;
-    transition: border-color 0.3s;
-    -webkit-appearance: none;
-  }
-  .form-group select option { background: var(--charcoal); }
-  .form-group input:focus,
-  .form-group textarea:focus,
-  .form-group select:focus { border-color: var(--gold); }
-  .form-group textarea { resize: vertical; min-height: 120px; }
-
-  .form-submit { margin-top: 32px; text-align: center; }
-
-  .success-msg {
-    display: none;
-    text-align: center;
-    padding: 48px;
-    animation: fadeIn 0.5s ease;
-  }
-  .success-msg.show { display: block; }
-  .success-icon { font-size: 3rem; margin-bottom: 16px; }
-  .success-msg h3 { font-family: 'Cinzel Decorative', serif; color: var(--gold); font-size: 1.4rem; margin-bottom: 12px; }
-  .success-msg p { color: var(--gray); font-size: 0.9rem; }
-
-  /* ── CONTACT ── */
-  #contact {
-    background: var(--charcoal);
-    position: relative;
-  }
-  #contact::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 1px;
-    background: linear-gradient(to right, transparent, var(--gold), transparent);
-  }
-
-  .contact-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    max-width: 1300px;
-    margin: 60px auto 0;
-    align-items: start;
+    overflow: hidden;
+    position: relative;
+  }
+  .featured-left {
+    padding: 80px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .featured-right {
+    display: flex; align-items: center; justify-content: center;
+    background: #0d0d0d;
+    padding: 40px;
+    position: relative; overflow: hidden;
+  }
+  .featured-right::before {
+    content: '';
+    position: absolute; width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(255,190,0,0.12), transparent 65%);
+    top: 50%; left: 50%; transform: translate(-50%,-50%);
+  }
+  .featured-shoe {
+    width: 100%; max-width: 420px; object-fit: contain;
+    filter: drop-shadow(0 20px 50px rgba(255,190,0,0.3));
+    animation: featuredFloat 6s ease-in-out infinite;
+    position: relative; z-index: 2;
+    transition: opacity .5s ease;
+  }
+  @keyframes featuredFloat {
+    0%,100% { transform: rotate(5deg) translateY(0); }
+    50% { transform: rotate(3deg) translateY(-16px); }
   }
 
-  .contact-info { display: flex; flex-direction: column; gap: 32px; }
-  .contact-item { display: flex; gap: 20px; align-items: flex-start; }
-  .contact-icon {
-    width: 48px; height: 48px;
+  .featured-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: .72rem; letter-spacing: 4px; text-transform: uppercase;
+    color: var(--accent2); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .featured-eyebrow::before { content: ''; width: 30px; height: 1px; background: var(--accent2); }
+  .featured-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    line-height: .95; letter-spacing: 2px; margin-bottom: 20px;
+  }
+  .featured-desc {
+    color: var(--muted); line-height: 1.7; margin-bottom: 36px; max-width: 380px;
+  }
+  .featured-price-row {
+    display: flex; align-items: center; gap: 24px; margin-bottom: 36px;
+  }
+  .featured-price {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.8rem; color: var(--accent2);
+  }
+  .featured-old-price {
+    font-family: 'Space Mono', monospace;
+    font-size: .9rem; color: var(--muted);
+    text-decoration: line-through;
+  }
+  .featured-sale-tag {
+    background: var(--accent); color: #fff;
+    padding: 4px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: .7rem; letter-spacing: 1px;
+  }
+
+  /* ── ABOUT / WHY US ── */
+  #why {
+    padding: 100px 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .why-left .section-title { margin-bottom: 24px; }
+  .why-desc { color: var(--muted); line-height: 1.8; margin-bottom: 40px; }
+  .why-features { display: flex; flex-direction: column; gap: 20px; }
+  .feature-item {
+    display: flex; align-items: flex-start; gap: 20px;
+    padding: 20px; border: 1px solid var(--border);
+    transition: border-color .3s, background .3s;
+  }
+  .feature-item:hover { border-color: var(--accent); background: rgba(255,61,0,.04); }
+  .feature-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem;
+    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  }
+  .feature-title { font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
+  .feature-desc { font-size: .85rem; color: var(--muted); line-height: 1.6; }
+
+  .why-right { position: relative; }
+  .why-img-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+  }
+  .why-img-item {
+    aspect-ratio: 1;
+    background: var(--card);
     border: 1px solid var(--border);
     display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem;
-    flex-shrink: 0;
-    color: var(--gold);
+    overflow: hidden; position: relative;
   }
-  .contact-item h4 { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
-  .contact-item p, .contact-item a { color: var(--white); font-size: 0.9rem; text-decoration: none; transition: color 0.3s; }
-  .contact-item a:hover { color: var(--gold); }
-
-  .contact-socials { display: flex; gap: 12px; margin-top: 8px; }
-  .social-btn {
-    width: 44px; height: 44px;
-    border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--gray);
-    text-decoration: none;
-    font-size: 1rem;
-    transition: border-color 0.3s, color 0.3s, background 0.3s;
+  .why-img-item:first-child { grid-row: span 2; aspect-ratio: auto; }
+  .why-img-item img {
+    width: 85%; height: 85%; object-fit: contain;
+    transition: transform .5s;
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,.5));
   }
-  .social-btn:hover { border-color: var(--gold); color: var(--black); background: var(--gold); }
+  .why-img-item:hover img { transform: scale(1.1) rotate(-3deg); }
 
-  .hours-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; margin-top: 8px; }
-  .hours-row { display: flex; justify-content: space-between; font-size: 0.82rem; padding: 6px 0; border-bottom: 1px solid var(--border); }
-  .hours-row .day { color: var(--gray); }
-  .hours-row .time { color: var(--white); }
-
-  .map-embed {
-    width: 100%;
-    height: 400px;
-    border: 1px solid var(--border);
-    filter: invert(90%) hue-rotate(180deg) saturate(0.8);
+  /* ── NEWSLETTER ── */
+  #newsletter {
+    margin: 0 48px 100px;
+    background: var(--accent);
+    padding: 80px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 40px;
+    clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
   }
-
-  /* ── FLOATING BOOK ── */
-  .floating-book {
-    position: fixed;
-    bottom: 40px; right: 40px;
-    background: var(--gold);
-    color: var(--black);
-    padding: 14px 28px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 700;
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-decoration: none;
-    z-index: 500;
-    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
-    box-shadow: 0 8px 32px rgba(201,166,70,0.4);
-    animation: floatPulse 2.5s ease-in-out infinite;
-    transition: background 0.3s, transform 0.3s;
+  .nl-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    letter-spacing: 2px; color: #000; line-height: 1;
   }
-  .floating-book:hover { background: var(--gold-light); transform: translateY(-3px) scale(1.05); }
-  @keyframes floatPulse { 0%,100% { box-shadow: 0 8px 32px rgba(201,166,70,0.4); } 50% { box-shadow: 0 12px 48px rgba(201,166,70,0.7); } }
-
-  /* ── WHATSAPP ── */
-  .whatsapp-btn {
-    position: fixed;
-    bottom: 40px; left: 40px;
-    background: #25D366;
-    color: white;
-    width: 56px; height: 56px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.6rem;
-    text-decoration: none;
-    z-index: 500;
-    box-shadow: 0 8px 24px rgba(37,211,102,0.4);
-    transition: transform 0.3s, box-shadow 0.3s;
+  .nl-sub { color: rgba(0,0,0,0.6); margin-top: 8px; font-size: .95rem; }
+  .nl-form { display: flex; gap: 0; min-width: 400px; }
+  .nl-input {
+    flex: 1; padding: 16px 20px;
+    background: rgba(0,0,0,0.15);
+    border: 2px solid rgba(0,0,0,0.2);
+    color: #000; font-family: 'Space Mono', monospace;
+    font-size: .85rem; outline: none;
   }
-  .whatsapp-btn:hover { transform: scale(1.1); box-shadow: 0 12px 36px rgba(37,211,102,0.6); }
+  .nl-input::placeholder { color: rgba(0,0,0,0.5); }
+  .nl-btn {
+    padding: 16px 28px;
+    background: #000; color: #fff;
+    border: none; cursor: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem; letter-spacing: 3px;
+    transition: background .3s;
+  }
+  .nl-btn:hover { background: #222; }
 
   /* ── FOOTER ── */
   footer {
-    background: #080808;
-    padding: 60px;
-    text-align: center;
     border-top: 1px solid var(--border);
+    padding: 60px 48px 40px;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 40px;
   }
-  footer .footer-logo {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1.8rem;
-    color: var(--gold);
-    display: block;
-    margin-bottom: 12px;
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; letter-spacing: 6px; margin-bottom: 16px;
   }
-  footer p { color: var(--gray); font-size: 0.8rem; }
-  footer .footer-tagline { font-style: italic; margin-bottom: 32px; color: rgba(245,240,232,0.4); }
-
-  .footer-links { display: flex; justify-content: center; gap: 32px; flex-wrap: wrap; margin-bottom: 40px; }
-  .footer-links a { color: var(--gray); text-decoration: none; font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase; transition: color 0.3s; }
-  .footer-links a:hover { color: var(--gold); }
-
-  /* ── MOBILE ── */
-  @media (max-width: 1024px) {
-    section { padding: 80px 30px; }
-    nav { padding: 16px 30px; }
-    nav.scrolled { padding: 12px 30px; }
-    #about { grid-template-columns: 1fr; gap: 60px; }
-    .about-img-wrap { max-width: 500px; margin: 0 auto; }
-    .contact-grid { grid-template-columns: 1fr; gap: 48px; }
-    .portfolio-grid { columns: 3; }
-    .booking-form { padding: 40px 30px; }
-    .form-grid { grid-template-columns: 1fr; }
+  .footer-logo span { color: var(--accent); }
+  .footer-desc { color: var(--muted); font-size: .85rem; line-height: 1.8; max-width: 240px; }
+  .footer-col-title {
+    font-family: 'Space Mono', monospace;
+    font-size: .7rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 20px;
   }
-
-  @media (max-width: 768px) {
-    nav { padding: 16px 20px; }
-    .nav-links { display: none; flex-direction: column; position: absolute; top: 100%; left: 0; right: 0; background: rgba(13,13,13,0.98); padding: 20px; gap: 20px; border-bottom: 1px solid var(--border); }
-    .nav-links.open { display: flex; }
-    .hamburger { display: flex; }
-    section { padding: 70px 20px; }
-    .portfolio-grid { columns: 2; }
-    .styles-grid { grid-template-columns: repeat(3, 1fr); }
-    .about-badge { width: 90px; height: 90px; bottom: -20px; left: -15px; }
-    .about-badge .num { font-size: 1.4rem; }
-    .floating-book { bottom: 20px; right: 20px; padding: 12px 20px; }
-    .whatsapp-btn { bottom: 20px; left: 20px; width: 48px; height: 48px; font-size: 1.3rem; }
-    .hero-ctas { flex-direction: column; align-items: center; }
-    #styles { padding: 60px 20px; }
-    footer { padding: 40px 20px; }
-    .gallery-strip { display: none; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a {
+    color: var(--muted); text-decoration: none; font-size: .88rem;
+    transition: color .3s;
+  }
+  .footer-links a:hover { color: var(--text); }
+  .footer-bottom {
+    grid-column: 1/-1;
+    border-top: 1px solid var(--border);
+    padding-top: 28px; margin-top: 20px;
+    display: flex; justify-content: space-between;
+    color: var(--muted); font-size: .78rem;
+    font-family: 'Space Mono', monospace;
   }
 
-  @media (max-width: 480px) {
-    .portfolio-grid { columns: 1; }
-    .styles-grid { grid-template-columns: repeat(2, 1fr); }
-    .contact-socials { flex-wrap: wrap; }
+  /* ── Animations ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
   }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* ── Scroll reveal ── */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
 </style>
 </head>
 <body>
 
-<!-- CURSOR -->
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
 
-<!-- FLOATING BUTTONS -->
-<a href="#booking" class="floating-book">Book Now</a>
-<a href="https://wa.me/917005742156" class="whatsapp-btn" target="_blank">💬</a>
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
-  <button class="lightbox-close" onclick="document.getElementById('lightbox').classList.remove('open')">✕</button>
-  <img id="lightboxImg" src="" alt="Tattoo">
-</div>
-
-<!-- NAV -->
-<nav id="navbar">
-  <a href="#hero" class="nav-logo">Dream<span>Ink</span></a>
-  <ul class="nav-links" id="navLinks">
-    <li><a href="#about">About</a></li>
-    <li><a href="#portfolio">Portfolio</a></li>
-    <li><a href="#services">Services</a></li>
-    <li><a href="#testimonials">Reviews</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#booking" class="nav-book">Book Now</a></li>
+<!-- ──────────────────────── NAV ──────────────────────── -->
+<nav>
+  <a class="nav-logo" href="#"><span>S</span>OLE</a>
+  <ul class="nav-links">
+    <li><a href="#collection">Collection</a></li>
+    <li><a href="#featured">Featured</a></li>
+    <li><a href="#why">About</a></li>
+    <li><a href="#newsletter">Contact</a></li>
   </ul>
-  <button class="hamburger" id="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </button>
+  <button class="nav-cta">Shop Now</button>
 </nav>
 
-<!-- HERO -->
+<!-- ──────────────────────── HERO ──────────────────────── -->
 <section id="hero">
-  <div class="hero-bg" id="heroBg"></div>
-  <div class="hero-overlay"></div>
-  <div class="hero-content">
-    <p class="hero-eyebrow">✦ Agartala, Tripura ✦</p>
+  <div class="hero-bg-text">SOLE</div>
+
+  <div class="hero-left">
+    <div class="hero-tag">New Season 2026</div>
     <h1 class="hero-title">
-      Ink<br>Your <span class="gold">Story</span>
+      Step Into<br><em>Greatness</em>
     </h1>
-    <p class="hero-sub">Where precision meets artistry. Every mark tells a tale.</p>
-    <div class="hero-ctas">
-      <a href="#booking" class="btn-primary"><span>Book Appointment</span></a>
-      <a href="#portfolio" class="btn-outline">View Portfolio</a>
+    <p class="hero-sub">
+      Engineered for champions. Worn by icons. Every sole tells a story — what will yours say?
+    </p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">Explore Collection</button>
+      <button class="btn-ghost">Watch Film</button>
+    </div>
+    <div class="hero-stats">
+      <div>
+        <div class="stat-num">12<span>K+</span></div>
+        <div class="stat-label">Happy Feet</div>
+      </div>
+      <div>
+        <div class="stat-num">340<span>+</span></div>
+        <div class="stat-label">Styles</div>
+      </div>
+      <div>
+        <div class="stat-num">48<span>h</span></div>
+        <div class="stat-label">Delivery</div>
+      </div>
     </div>
   </div>
-  <div class="hero-scroll">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
-</section>
 
-<!-- STYLES STRIP -->
-<section id="styles">
-  <div class="reveal" style="text-align:center; margin-bottom: 0;">
-    <p class="section-eyebrow">What We Do</p>
-    <h2 class="section-title">Our <span class="accent">Artistry</span></h2>
-  </div>
-  <div class="styles-grid reveal">
-    <div class="style-card" data-img="1">
-      <div class="style-card-inner">
-        <div class="style-card-name">Realism</div>
-        <div class="style-card-line"></div>
+  <div class="hero-right">
+    <div class="shoe-stage">
+      <div class="shoe-glow"></div>
+      <img id="hero-shoe" class="hero-shoe-img" src="" alt="Featured shoe">
+      <div class="shoe-counter">
+        <strong id="hero-counter">01</strong> / <span id="hero-total">04</span>
       </div>
-    </div>
-    <div class="style-card" data-img="2">
-      <div class="style-card-inner">
-        <div class="style-card-name">Blackwork</div>
-        <div class="style-card-line"></div>
-      </div>
-    </div>
-    <div class="style-card" data-img="3">
-      <div class="style-card-inner">
-        <div class="style-card-name">Tribal</div>
-        <div class="style-card-line"></div>
-      </div>
-    </div>
-    <div class="style-card" data-img="4">
-      <div class="style-card-inner">
-        <div class="style-card-name">Portrait</div>
-        <div class="style-card-line"></div>
-      </div>
-    </div>
-    <div class="style-card" data-img="5">
-      <div class="style-card-inner">
-        <div class="style-card-name">Color</div>
-        <div class="style-card-line"></div>
-      </div>
-    </div>
-    <div class="style-card" data-img="6">
-      <div class="style-card-inner">
-        <div class="style-card-name">Minimal</div>
-        <div class="style-card-line"></div>
-      </div>
+      <div class="hero-shoe-dots" id="hero-dots"></div>
     </div>
   </div>
 </section>
 
-<!-- GALLERY STRIP -->
-<!--
-  🖼️ TO CHANGE GALLERY STRIP IMAGES:
-  Replace the src="" values on each .strip-img below.
-  The strip auto-scrolls. Hover to pause.
--->
-<div class="gallery-strip" id="galleryStrip">
-  <div class="gallery-strip-inner" id="stripInner">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1554774853-d50f9c681ae2?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1612833603922-5e9f4f8d1e1f?w=400&q=70" alt="">
-    <!-- duplicates for seamless loop -->
-    <img class="strip-img" src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1554774853-d50f9c681ae2?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=400&q=70" alt="">
-    <img class="strip-img" src="https://images.unsplash.com/photo-1612833603922-5e9f4f8d1e1f?w=400&q=70" alt="">
+<!-- ──────────────────────── MARQUEE ──────────────────────── -->
+<div class="marquee-wrap">
+  <div class="marquee-inner" id="marquee-inner"></div>
+</div>
+
+<!-- ──────────────────────── COLLECTION ──────────────────────── -->
+<section id="collection">
+  <div class="section-header reveal">
+    <div>
+      <div class="section-tag">Our Products</div>
+      <h2 class="section-title">Latest Drops</h2>
+    </div>
+    <div class="filter-tabs">
+      <button class="filter-tab active" onclick="filterProducts('all', this)">All</button>
+      <button class="filter-tab" onclick="filterProducts('running', this)">Running</button>
+      <button class="filter-tab" onclick="filterProducts('lifestyle', this)">Lifestyle</button>
+      <button class="filter-tab" onclick="filterProducts('limited', this)">Limited</button>
+    </div>
+  </div>
+  <div class="product-grid" id="product-grid"></div>
+</section>
+
+<!-- ──────────────────────── FEATURED BANNER ──────────────────────── -->
+<section id="featured">
+  <div class="featured-left reveal">
+    <div class="featured-eyebrow">Editor's Pick</div>
+    <h2 class="featured-title" id="feat-title">Loading...</h2>
+    <p class="featured-desc" id="feat-desc">Loading...</p>
+    <div class="featured-price-row">
+      <div class="featured-price" id="feat-price">—</div>
+      <div class="featured-old-price" id="feat-old">—</div>
+      <div class="featured-sale-tag" id="feat-tag">SALE</div>
+    </div>
+    <div class="hero-btns">
+      <button class="btn-primary">Buy Now</button>
+      <button class="btn-ghost">View Details</button>
+    </div>
+  </div>
+  <div class="featured-right">
+    <img id="feat-img" class="featured-shoe" src="" alt="Featured shoe">
+  </div>
+</section>
+
+<!-- ──────────────────────── WHY US ──────────────────────── -->
+<section id="why">
+  <div class="why-left reveal">
+    <div class="section-tag">Why SOLE?</div>
+    <h2 class="section-title">Beyond The Shoe</h2>
+    <p class="why-desc">We obsess over every millimeter, every material, every stitch so you don't have to. Premium performance, without compromise.</p>
+    <div class="why-features">
+      <div class="feature-item">
+        <div class="feature-icon">⚡</div>
+        <div>
+          <div class="feature-title">Ultra-Light Build</div>
+          <div class="feature-desc">Carbon-infused soles engineered to reduce weight without sacrificing durability or grip.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🌊</div>
+        <div>
+          <div class="feature-title">All-Weather Tech</div>
+          <div class="feature-desc">Hydrophobic membranes keep you dry. Grip patterns keep you stable. Every condition, covered.</div>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">♻️</div>
+        <div>
+          <div class="feature-title">Sustainable Materials</div>
+          <div class="feature-desc">60% recycled components across our entire 2026 lineup. Looks good, does good.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="why-right reveal">
+    <div class="why-img-grid" id="why-grid"></div>
+  </div>
+</section>
+
+<!-- ──────────────────────── NEWSLETTER ──────────────────────── -->
+<div id="newsletter" class="reveal">
+  <div>
+    <div class="nl-title">Early Access.<br>Exclusive Drops.</div>
+    <div class="nl-sub">Join 12,000+ sneakerheads. No spam, ever.</div>
+  </div>
+  <div>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="your@email.com">
+      <button class="nl-btn">Subscribe</button>
+    </div>
   </div>
 </div>
 
-<!-- ABOUT -->
-<section>
-  <div id="about">
-    <div class="about-img-wrap reveal">
-      <!-- 🖼️ TO CHANGE ARTIST PHOTO: Replace background-image URL below -->
-      <div class="about-img" style="background-image: url('https://images.unsplash.com/photo-1554774853-d50f9c681ae2?w=800&q=80'); width:100%; aspect-ratio:3/4; background-size:cover; background-position:center;"></div>
-      <div class="about-img-frame"></div>
-      <div class="about-badge">
-        <span class="num">10+</span>
-        <span class="label">Years</span>
-      </div>
-    </div>
-    <div class="about-text reveal" style="transition-delay: 0.2s;">
-      <p class="section-eyebrow">The Artist</p>
-      <h2 class="section-title">Dream Ink<br><span class="accent">Tattoo Studio</span></h2>
-      <div class="section-line"></div>
-      <p>Founded with a passion for precision and a love for artistic expression, Dream Ink Tattoo has become one of Tripura's most sought-after tattoo destinations. Our artists blend traditional techniques with contemporary vision.</p>
-      <p>Every piece we create is a collaboration — between the artist's mastery and your personal story. From delicate minimalist lines to bold full-sleeve epics, we approach every skin canvas with the same dedication.</p>
-      <div class="stats">
-        <div class="stat"><span class="stat-num">500+</span><span class="stat-label">Designs</span></div>
-        <div class="stat"><span class="stat-num">4.8★</span><span class="stat-label">Rating</span></div>
-        <div class="stat"><span class="stat-num">182</span><span class="stat-label">Reviews</span></div>
-      </div>
-      <a href="#booking" class="btn-primary"><span>Get Your Tattoo</span></a>
-    </div>
-  </div>
-</section>
-
-<!-- PORTFOLIO -->
-<section id="portfolio">
-  <div class="portfolio-header reveal">
-    <div>
-      <p class="section-eyebrow">Our Work</p>
-      <h2 class="section-title">The <span class="accent">Portfolio</span></h2>
-    </div>
-    <div class="filter-tabs">
-      <button class="filter-btn active" onclick="filterPortfolio('all',this)">All</button>
-      <button class="filter-btn" onclick="filterPortfolio('blackwork',this)">Blackwork</button>
-      <button class="filter-btn" onclick="filterPortfolio('color',this)">Color</button>
-      <button class="filter-btn" onclick="filterPortfolio('realism',this)">Realism</button>
-      <button class="filter-btn" onclick="filterPortfolio('minimal',this)">Minimal</button>
-      <button class="filter-btn" onclick="filterPortfolio('sleeve',this)">Sleeve</button>
-    </div>
-  </div>
-
-  <!--
-    🖼️ PORTFOLIO IMAGES — HOW TO CHANGE:
-    1. Find any portfolio-item below.
-    2. Change the src="" of its <img> tag to your desired image URL or local path.
-    3. Change data-cat="" to the category: blackwork | color | realism | minimal | sleeve
-    4. Add more items following the same pattern.
-  -->
-  <div class="portfolio-grid reveal" id="portfolioGrid">
-
-    <div class="portfolio-item" data-cat="blackwork" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=600&q=80" alt="Blackwork Tattoo">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Blackwork</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="realism" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=80" alt="Realism Tattoo">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Realism</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="color" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&q=80" alt="Color Tattoo">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Color</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="minimal" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=600&q=80" alt="Minimal Tattoo">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Minimal</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="sleeve" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1562962230-16e4623d36e6?w=600&q=80" alt="Sleeve Tattoo">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Sleeve</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="blackwork" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=600&q=80" alt="Blackwork">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Blackwork</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="color" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1612833603922-5e9f4f8d1e1f?w=600&q=80" alt="Color Work">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Color</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="realism" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1554774853-d50f9c681ae2?w=600&q=80" alt="Realism">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Realism</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="minimal" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?w=600&q=80" alt="Minimal">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Minimal</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="sleeve" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=600&q=80" alt="Sleeve">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Sleeve</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="blackwork" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1570458436416-b8fcccfe883f?w=600&q=80" alt="Blackwork">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Blackwork</div></div>
-    </div>
-
-    <div class="portfolio-item" data-cat="color" onclick="openLightbox(this)">
-      <img src="https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?w=600&q=80" alt="Color">
-      <div class="portfolio-item-overlay"><div class="icon">⊕</div><div class="cat-label">Color</div></div>
-    </div>
-
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section>
-  <div id="services">
-    <div class="reveal">
-      <p class="section-eyebrow">What's Available</p>
-      <h2 class="section-title">Our <span class="accent">Services</span></h2>
-      <div class="section-line"></div>
-    </div>
-    <div class="services-grid">
-      <div class="service-card reveal">
-        <span class="service-icon">🖤</span>
-        <div class="service-name">Blackwork & Linework</div>
-        <p class="service-desc">Bold, graphic, and timeless. From fine lines to heavy fills, our black ink work is precise and striking.</p>
-        <div class="service-price">Starting ₹1,500</div>
-      </div>
-      <div class="service-card reveal" style="transition-delay:0.1s">
-        <span class="service-icon">🎨</span>
-        <div class="service-name">Color & Watercolor</div>
-        <p class="service-desc">Vibrant, alive, and expressive. Color tattoos that retain their brilliance for years to come.</p>
-        <div class="service-price">Starting ₹2,500</div>
-      </div>
-      <div class="service-card reveal" style="transition-delay:0.2s">
-        <span class="service-icon">👁️</span>
-        <div class="service-name">Portrait & Realism</div>
-        <p class="service-desc">Photorealistic portraits that capture every detail, emotion, and texture on your skin.</p>
-        <div class="service-price">Starting ₹4,000</div>
-      </div>
-      <div class="service-card reveal" style="transition-delay:0.3s">
-        <span class="service-icon">🌿</span>
-        <div class="service-name">Minimal & Geometric</div>
-        <p class="service-desc">Clean, intentional, and elegant. Small designs with maximum meaning and refined execution.</p>
-        <div class="service-price">Starting ₹800</div>
-      </div>
-      <div class="service-card reveal" style="transition-delay:0.4s">
-        <span class="service-icon">⚔️</span>
-        <div class="service-name">Full Sleeve</div>
-        <p class="service-desc">A complete narrative across your arm. Multi-session epics crafted with cohesion and flow.</p>
-        <div class="service-price">Starting ₹15,000</div>
-      </div>
-      <div class="service-card reveal" style="transition-delay:0.5s">
-        <span class="service-icon">✏️</span>
-        <div class="service-name">Custom Design</div>
-        <p class="service-desc">Your idea, brought to life. Full custom consultation, sketch, refinement, and execution.</p>
-        <div class="service-price">Free Consultation</div>
-      </div>
-    </div>
-
-    <div class="service-safety reveal" style="margin-top:60px">
-      <div><p class="section-eyebrow" style="margin-bottom:8px">Safety First</p><h3 style="font-family:'Cinzel Decorative',serif;font-size:1.1rem;color:var(--gold)">Your Health Matters</h3></div>
-      <div class="safety-item">
-        <span class="safety-icon">🧤</span>
-        <div><h4>Sterile Equipment</h4><p>Single-use needles, autoclave-sterilized equipment, and medical-grade disposables for every session.</p></div>
-      </div>
-      <div class="safety-item">
-        <span class="safety-icon">🧴</span>
-        <div><h4>Premium Inks</h4><p>We use only certified, vegan-friendly inks that are skin-tested and long-lasting.</p></div>
-      </div>
-      <div class="safety-item">
-        <span class="safety-icon">🏥</span>
-        <div><h4>Aftercare Guidance</h4><p>Comprehensive aftercare instructions and follow-up support included with every tattoo.</p></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- TESTIMONIALS -->
-<section id="testimonials">
-  <div class="reveal">
-    <p class="section-eyebrow">Client Stories</p>
-    <h2 class="section-title">What They <span class="accent">Say</span></h2>
-  </div>
-  <div class="testimonials-slider reveal" style="transition-delay:0.2s">
-    <div class="testimonial-slide active">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">"Absolutely the best tattoo experience I've had. The attention to detail on my sleeve is unreal — every line is perfect. Dream Ink truly lives up to its name."</p>
-      <div class="testimonial-author">Rahul S.</div>
-      <div class="testimonial-location">Agartala, Tripura</div>
-    </div>
-    <div class="testimonial-slide">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">"I came in with just a rough idea and left with something beyond my imagination. The artist listened carefully and created pure magic. Highly recommend!"</p>
-      <div class="testimonial-author">Priya M.</div>
-      <div class="testimonial-location">Guwahati, Assam</div>
-    </div>
-    <div class="testimonial-slide">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">"The hygiene standards here are impeccable. I felt so comfortable throughout the session. My portrait tattoo is incredibly lifelike — people think it's a photograph!"</p>
-      <div class="testimonial-author">Amit K.</div>
-      <div class="testimonial-location">Kolkata, WB</div>
-    </div>
-    <div class="testimonial-slide">
-      <div class="testimonial-stars">★★★★★</div>
-      <p class="testimonial-text">"My third tattoo here and they just keep getting better. The team is professional, creative, and genuinely passionate. Dream Ink is the only place I'll go."</p>
-      <div class="testimonial-author">Sneha D.</div>
-      <div class="testimonial-location">Agartala, Tripura</div>
-    </div>
-    <div class="slider-dots" id="sliderDots">
-      <div class="dot active" onclick="goToSlide(0)"></div>
-      <div class="dot" onclick="goToSlide(1)"></div>
-      <div class="dot" onclick="goToSlide(2)"></div>
-      <div class="dot" onclick="goToSlide(3)"></div>
-    </div>
-  </div>
-</section>
-
-<!-- BOOKING -->
-<section>
-  <div id="booking">
-    <div class="reveal" style="text-align:center;">
-      <p class="section-eyebrow">Reserve Your Spot</p>
-      <h2 class="section-title">Book an <span class="accent">Appointment</span></h2>
-      <div class="section-line" style="margin: 0 auto 0;"></div>
-      <p style="color:var(--gray);margin-top:20px;font-size:0.9rem;">Fill out the form and we'll confirm your slot within 24 hours.</p>
-    </div>
-    <div class="booking-form reveal" style="transition-delay:0.2s">
-      <div id="bookingFormWrap">
-        <div class="form-grid">
-          <div class="form-group">
-            <label>Full Name *</label>
-            <input type="text" id="f-name" placeholder="Your name">
-          </div>
-          <div class="form-group">
-            <label>Phone Number *</label>
-            <input type="tel" id="f-phone" placeholder="+91 XXXXX XXXXX">
-          </div>
-          <div class="form-group">
-            <label>Email Address</label>
-            <input type="email" id="f-email" placeholder="your@email.com">
-          </div>
-          <div class="form-group">
-            <label>Tattoo Style</label>
-            <select id="f-style">
-              <option value="">Select a style...</option>
-              <option>Blackwork / Linework</option>
-              <option>Color / Watercolor</option>
-              <option>Portrait / Realism</option>
-              <option>Minimal / Geometric</option>
-              <option>Tribal</option>
-              <option>Full Sleeve</option>
-              <option>Custom Design</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Preferred Date</label>
-            <input type="date" id="f-date">
-          </div>
-          <div class="form-group">
-            <label>Preferred Time</label>
-            <select id="f-time">
-              <option value="">Select time...</option>
-              <option>11:00 AM</option>
-              <option>12:00 PM</option>
-              <option>1:00 PM</option>
-              <option>2:00 PM</option>
-              <option>3:00 PM</option>
-              <option>4:00 PM</option>
-              <option>5:00 PM</option>
-              <option>6:00 PM</option>
-              <option>7:00 PM</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Body Placement</label>
-            <input type="text" id="f-placement" placeholder="e.g., Left forearm, Back, Neck...">
-          </div>
-          <div class="form-group">
-            <label>Approximate Size</label>
-            <select id="f-size">
-              <option value="">Select size...</option>
-              <option>Small (2–4 cm)</option>
-              <option>Medium (5–10 cm)</option>
-              <option>Large (11–20 cm)</option>
-              <option>Extra Large (20+ cm)</option>
-              <option>Full Sleeve</option>
-            </select>
-          </div>
-          <div class="form-group form-full">
-            <label>Tattoo Idea / Description *</label>
-            <textarea id="f-desc" placeholder="Describe your tattoo idea in detail. Include any references, symbols, or themes..."></textarea>
-          </div>
-          <div class="form-group form-full">
-            <label>Reference Images (optional)</label>
-            <input type="file" id="f-ref" accept="image/*" multiple style="padding:10px 16px; cursor:pointer;">
-          </div>
-        </div>
-        <div class="form-submit">
-          <button class="btn-primary" onclick="submitBooking()"><span>Confirm Booking ✦</span></button>
-        </div>
-      </div>
-      <div class="success-msg" id="successMsg">
-        <div class="success-icon">✦</div>
-        <h3>Booking Received!</h3>
-        <p>Thank you! We'll confirm your appointment within 24 hours via phone or WhatsApp.<br>In the meantime, follow us on Instagram <strong>@dream_ink_tattooz_23</strong></p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT -->
-<section id="contact">
-  <div style="max-width:1300px;margin:0 auto;">
-    <div class="reveal">
-      <p class="section-eyebrow">Find Us</p>
-      <h2 class="section-title">Get in <span class="accent">Touch</span></h2>
-      <div class="section-line"></div>
-    </div>
-    <div class="contact-grid">
-      <div class="contact-info">
-        <div class="contact-item reveal">
-          <div class="contact-icon">📍</div>
-          <div>
-            <h4>Studio Address</h4>
-            <p>Pratapgarh Road, Upar Bazaar,<br>Pratapgarh, Agartala, Tripura 799004</p>
-          </div>
-        </div>
-        <div class="contact-item reveal" style="transition-delay:0.1s">
-          <div class="contact-icon">📞</div>
-          <div>
-            <h4>Phone & WhatsApp</h4>
-            <a href="tel:+917005742156">+91 70057 42156</a>
-          </div>
-        </div>
-        <div class="contact-item reveal" style="transition-delay:0.2s">
-          <div class="contact-icon">⏰</div>
-          <div>
-            <h4>Business Hours</h4>
-            <div class="hours-grid">
-              <div class="hours-row"><span class="day">Mon–Fri</span><span class="time">11am – 8pm</span></div>
-              <div class="hours-row"><span class="day">Saturday</span><span class="time">11am – 8pm</span></div>
-              <div class="hours-row"><span class="day">Sunday</span><span class="time">By Appointment</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="contact-item reveal" style="transition-delay:0.3s">
-          <div class="contact-icon">🌐</div>
-          <div>
-            <h4>Follow Us</h4>
-            <div class="contact-socials">
-              <a href="https://instagram.com/dream_ink_tattooz_23" target="_blank" class="social-btn" title="Instagram">📸</a>
-              <a href="https://youtube.com/channel/UCcUyqpUB12Fe5TIFkDP0muA" target="_blank" class="social-btn" title="YouTube">▶</a>
-              <a href="https://wa.me/917005742156" target="_blank" class="social-btn" title="WhatsApp">💬</a>
-              <a href="tel:+917005742156" class="social-btn" title="Call">📞</a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="reveal" style="transition-delay:0.2s">
-        <iframe
-          class="map-embed"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3647.8!2d91.284!3d23.834!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sDream+Ink+Tattoo+Studio!5e0!3m2!1sen!2sin!4v1"
-          allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          title="Dream Ink Tattoo Studio Location">
-        </iframe>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
+<!-- ──────────────────────── FOOTER ──────────────────────── -->
 <footer>
-  <span class="footer-logo">Dream Ink</span>
-  <p class="footer-tagline">"Ink Your Story"</p>
-  <div class="footer-links">
-    <a href="#hero">Home</a>
-    <a href="#about">About</a>
-    <a href="#portfolio">Portfolio</a>
-    <a href="#services">Services</a>
-    <a href="#booking">Book Now</a>
-    <a href="#contact">Contact</a>
+  <div>
+    <div class="footer-logo"><span>S</span>OLE</div>
+    <div class="footer-desc">Premium footwear for those who move with purpose. Crafted to last, designed to inspire.</div>
   </div>
-  <p style="color: rgba(245,240,232,0.2); font-size:0.72rem; margin-top:24px;">
-    © 2024 Dream Ink Tattoo Studio · Agartala, Tripura · All Rights Reserved
-  </p>
+  <div>
+    <div class="footer-col-title">Shop</div>
+    <ul class="footer-links">
+      <li><a href="#">New Arrivals</a></li>
+      <li><a href="#">Running</a></li>
+      <li><a href="#">Lifestyle</a></li>
+      <li><a href="#">Limited Edition</a></li>
+      <li><a href="#">Sale</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="footer-col-title">Support</div>
+    <ul class="footer-links">
+      <li><a href="#">Size Guide</a></li>
+      <li><a href="#">Returns</a></li>
+      <li><a href="#">Track Order</a></li>
+      <li><a href="#">FAQ</a></li>
+      <li><a href="#">Contact Us</a></li>
+    </ul>
+  </div>
+  <div>
+    <div class="footer-col-title">Company</div>
+    <ul class="footer-links">
+      <li><a href="#">About</a></li>
+      <li><a href="#">Careers</a></li>
+      <li><a href="#">Sustainability</a></li>
+      <li><a href="#">Press</a></li>
+      <li><a href="#">Affiliates</a></li>
+    </ul>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 SOLE Premium Footwear. All rights reserved.</span>
+    <span>Privacy · Terms · Cookies</span>
+  </div>
 </footer>
 
 <script>
-// ── CURSOR ──
+/* ================================================================
+ *  🖼️  IMAGE CONFIGURATION — CHANGE YOUR IMAGES HERE
+ *
+ *  Replace any `image` URL with your own image URL or local path.
+ *  For local files use:  "./your-image.jpg"
+ *  For web URLs use:     "https://example.com/shoe.png"
+ *
+ *  HERO SLIDES — shown in the rotating hero carousel (top-right)
+ * ================================================================ */
+
+const HERO_SLIDES = [
+  {
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700&q=90",
+    label: "Air Runner Pro"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=700&q=90",
+    label: "Urban Stealth X"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=700&q=90",
+    label: "Shadow Boost 3"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=700&q=90",
+    label: "Street Legend"
+  }
+];
+
+/* ================================================================
+ *  PRODUCTS — shown in the main product grid
+ *  Fields:
+ *    image    — URL or path to shoe image
+ *    brand    — Brand label (top of card)
+ *    name     — Product name
+ *    price    — Current price (string, include $)
+ *    oldPrice — Crossed-out old price (optional, set "" to hide)
+ *    colors   — Array of CSS color strings for color dots
+ *    badge    — "HOT" | "NEW" | "SALE" | "" (leave "" for none)
+ *    badgeNew — set true to use yellow badge style
+ *    category — "running" | "lifestyle" | "limited" (for filter tabs)
+ *    featured — set true to make card wide (2-column span)
+ * ================================================================ */
+
+const PRODUCTS = [
+  {
+    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=85",
+    brand: "SOLE × Air",
+    name: "Air Runner Pro 2026",
+    price: "$189",
+    oldPrice: "$230",
+    colors: ["#ff3d00", "#000", "#fff"],
+    badge: "HOT", badgeNew: false,
+    category: "running", featured: true
+  },
+  {
+    image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&q=85",
+    brand: "SOLE × Urban",
+    name: "Urban Stealth X",
+    price: "$145",
+    oldPrice: "",
+    colors: ["#222", "#888", "#ffbe00"],
+    badge: "NEW", badgeNew: true,
+    category: "lifestyle", featured: false
+  },
+  {
+    image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=600&q=85",
+    brand: "SOLE × Shadow",
+    name: "Shadow Boost 3",
+    price: "$210",
+    oldPrice: "",
+    colors: ["#111", "#333"],
+    badge: "", badgeNew: false,
+    category: "running", featured: false
+  },
+  {
+    image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&q=85",
+    brand: "SOLE × Legend",
+    name: "Street Legend OG",
+    price: "$99",
+    oldPrice: "$160",
+    colors: ["#fff", "#ffbe00", "#ff3d00"],
+    badge: "SALE", badgeNew: false,
+    category: "lifestyle", featured: false
+  },
+  {
+    image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&q=85",
+    brand: "SOLE × Apex",
+    name: "Apex Trail Force",
+    price: "$230",
+    oldPrice: "",
+    colors: ["#2e7d32", "#000", "#888"],
+    badge: "NEW", badgeNew: true,
+    category: "running", featured: false
+  },
+  {
+    image: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=600&q=85",
+    brand: "SOLE × Rare",
+    name: "Rare Edition — No.7",
+    price: "$480",
+    oldPrice: "",
+    colors: ["#gold", "#b8860b", "#111"],
+    badge: "LIMITED", badgeNew: false,
+    category: "limited", featured: false
+  }
+];
+
+/* ================================================================
+ *  FEATURED PRODUCT — the big banner section below the grid
+ * ================================================================ */
+
+const FEATURED_PRODUCT = {
+  image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=90",
+  title: "Apex Trail Force",
+  desc: "Built for the mountain. Ready for the city. The Apex Trail Force fuses aggressive traction with everyday comfort in a silhouette that turns heads everywhere.",
+  price: "$230",
+  oldPrice: "$299",
+  saleTag: "23% OFF"
+};
+
+/* ================================================================
+ *  WHY-US PANEL images — 3 images shown in the feature grid
+ * ================================================================ */
+
+const WHY_IMAGES = [
+  "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80",
+  "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&q=80",
+  "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80"
+];
+
+/* ================================================================
+ *  MARQUEE ITEMS — text that scrolls across the orange band
+ * ================================================================ */
+
+const MARQUEE_ITEMS = [
+  "Free Shipping Over $120",
+  "New Drop Every Friday",
+  "30-Day Returns",
+  "Limited Collabs Available",
+  "Members Get Early Access",
+  "Sustainable Since 2022"
+];
+
+/* ============================================================
+ *  ⚙️  ENGINE — No need to edit below this line
+ * ============================================================ */
+
+// Cursor
 const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
+const ring   = document.getElementById('cursor-ring');
 let mx = 0, my = 0, rx = 0, ry = 0;
-
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-});
-
-function animRing() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  ring.style.left = rx + 'px';
-  ring.style.top = ry + 'px';
+document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
+(function animRing(){
+  rx += (mx - rx) * .14;
+  ry += (my - ry) * .14;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
   requestAnimationFrame(animRing);
+})();
+
+// Marquee
+(function buildMarquee(){
+  const inner = document.getElementById('marquee-inner');
+  const doubled = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
+  inner.innerHTML = doubled.map(t => `<div class="marquee-item">${t}</div>`).join('');
+})();
+
+// Hero carousel
+let heroIdx = 0;
+(function buildHero(){
+  const img   = document.getElementById('hero-shoe');
+  const dots  = document.getElementById('hero-dots');
+  const total = document.getElementById('hero-total');
+  const ctr   = document.getElementById('hero-counter');
+
+  total.textContent = String(HERO_SLIDES.length).padStart(2,'0');
+  img.src = HERO_SLIDES[0].image;
+
+  dots.innerHTML = HERO_SLIDES.map((_, i) =>
+    `<div class="hero-dot${i===0?' active':''}" onclick="goHero(${i})"></div>`
+  ).join('');
+
+  setInterval(() => goHero((heroIdx + 1) % HERO_SLIDES.length), 3800);
+})();
+
+function goHero(idx){
+  heroIdx = idx;
+  const img  = document.getElementById('hero-shoe');
+  const dots = document.querySelectorAll('.hero-dot');
+  const ctr  = document.getElementById('hero-counter');
+  img.style.opacity = '0';
+  setTimeout(() => {
+    img.src = HERO_SLIDES[idx].image;
+    img.style.opacity = '1';
+  }, 300);
+  ctr.textContent = String(idx+1).padStart(2,'0');
+  dots.forEach((d,i) => d.classList.toggle('active', i===idx));
 }
-animRing();
 
-document.querySelectorAll('a,button,.portfolio-item,.style-card,.filter-btn').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursor.style.width = '20px'; cursor.style.height = '20px';
-    ring.style.width = '60px'; ring.style.height = '60px';
-  });
-  el.addEventListener('mouseleave', () => {
-    cursor.style.width = '12px'; cursor.style.height = '12px';
-    ring.style.width = '36px'; ring.style.height = '36px';
-  });
-});
+// Featured product
+(function buildFeatured(){
+  document.getElementById('feat-img').src    = FEATURED_PRODUCT.image;
+  document.getElementById('feat-title').textContent = FEATURED_PRODUCT.title;
+  document.getElementById('feat-desc').textContent  = FEATURED_PRODUCT.desc;
+  document.getElementById('feat-price').textContent = FEATURED_PRODUCT.price;
+  document.getElementById('feat-old').textContent   = FEATURED_PRODUCT.oldPrice;
+  document.getElementById('feat-tag').textContent   = FEATURED_PRODUCT.saleTag;
+})();
 
-// ── NAV SCROLL ──
-window.addEventListener('scroll', () => {
-  const nav = document.getElementById('navbar');
-  if (window.scrollY > 60) nav.classList.add('scrolled');
-  else nav.classList.remove('scrolled');
-});
-
-function toggleMenu() {
-  document.getElementById('navLinks').classList.toggle('open');
+// Product grid
+let activeFilter = 'all';
+function renderProducts(filter){
+  const grid = document.getElementById('product-grid');
+  const visible = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
+  grid.innerHTML = visible.map((p, i) => `
+    <div class="product-card${p.featured ? ' featured' : ''}" style="animation-delay:${i*.07}s">
+      ${p.badge ? `<div class="card-badge${p.badgeNew?' new':''}">${p.badge}</div>` : ''}
+      <div class="card-img-wrap">
+        <img class="card-img" src="${p.image}" alt="${p.name}" loading="lazy">
+        <div class="card-quick-add">+ Quick Add</div>
+      </div>
+      <div class="card-body">
+        <div class="card-brand">${p.brand}</div>
+        <div class="card-name">${p.name}</div>
+        <div class="card-footer">
+          <div class="card-price">
+            ${p.price}
+            ${p.oldPrice ? `<span class="old">${p.oldPrice}</span>` : ''}
+          </div>
+          <div class="card-colors">
+            ${p.colors.map(c => `<div class="color-dot" style="background:${c}"></div>`).join('')}
+          </div>
+        </div>
+      </div>
+    </div>
+  `).join('');
 }
 
-// close menu on link click
-document.querySelectorAll('.nav-links a').forEach(a => {
-  a.addEventListener('click', () => document.getElementById('navLinks').classList.remove('open'));
-});
-
-// ── SCROLL REVEAL ──
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
-
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-// ── PORTFOLIO FILTER ──
-function filterPortfolio(cat, btn) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+function filterProducts(cat, btn){
+  activeFilter = cat;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
   btn.classList.add('active');
-
-  document.querySelectorAll('.portfolio-item').forEach(item => {
-    const match = cat === 'all' || item.dataset.cat === cat;
-    item.style.opacity = match ? '1' : '0.15';
-    item.style.transform = match ? 'scale(1)' : 'scale(0.95)';
-    item.style.pointerEvents = match ? 'auto' : 'none';
-    item.style.transition = 'opacity 0.4s, transform 0.4s';
-  });
+  renderProducts(cat);
 }
 
-// ── LIGHTBOX ──
-function openLightbox(el) {
-  const src = el.querySelector('img').src;
-  document.getElementById('lightboxImg').src = src;
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow = 'hidden';
-}
-function closeLightbox(e) {
-  if (e.target === document.getElementById('lightbox') || e.target.tagName !== 'IMG') {
-    document.getElementById('lightbox').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-}
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    document.getElementById('lightbox').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-});
+renderProducts('all');
 
-// ── TESTIMONIALS ──
-let currentSlide = 0;
-const slides = document.querySelectorAll('.testimonial-slide');
-const dots = document.querySelectorAll('.dot');
+// Why images
+(function buildWhy(){
+  const grid = document.getElementById('why-grid');
+  grid.innerHTML = WHY_IMAGES.map(src => `
+    <div class="why-img-item">
+      <img src="${src}" alt="shoe detail" loading="lazy">
+    </div>
+  `).join('');
+})();
 
-function goToSlide(n) {
-  slides[currentSlide].classList.remove('active');
-  dots[currentSlide].classList.remove('active');
-  currentSlide = n;
-  slides[currentSlide].classList.add('active');
-  dots[currentSlide].classList.add('active');
-}
-
-setInterval(() => goToSlide((currentSlide + 1) % slides.length), 5000);
-
-// ── BOOKING FORM ──
-function submitBooking() {
-  const name = document.getElementById('f-name').value.trim();
-  const phone = document.getElementById('f-phone').value.trim();
-  const desc = document.getElementById('f-desc').value.trim();
-
-  if (!name || !phone || !desc) {
-    alert('Please fill in your name, phone, and tattoo description.');
-    return;
-  }
-
-  document.getElementById('bookingFormWrap').style.display = 'none';
-  document.getElementById('successMsg').classList.add('show');
-}
-
-// ── PARALLAX HERO ──
-window.addEventListener('scroll', () => {
-  const y = window.scrollY;
-  const heroBg = document.getElementById('heroBg');
-  if (heroBg) heroBg.style.transform = `scale(1.05) translateY(${y * 0.3}px)`;
-});
+// Scroll reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
 </body>
 </html>
