@@ -1,1061 +1,438 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SOLE — Premium Footwear</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<style>
-  /* =============================================
-   *  🖼️  CHANGE YOUR SHOE IMAGES HERE
-   *  Just replace the URLs in the JS section
-   *  at the bottom of the file (search for
-   *  "IMAGE CONFIGURATION")
-   * ============================================= */
-
-  :root {
-    --bg: #0a0a0a;
-    --surface: #111111;
-    --card: #161616;
-    --accent: #ff3d00;
-    --accent2: #ffbe00;
-    --text: #f0ede8;
-    --muted: #666;
-    --border: #222;
-    --glow: rgba(255, 61, 0, 0.4);
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Syne', sans-serif;
-    overflow-x: hidden;
-    cursor: none;
-  }
-
-  /* ── Custom Cursor ── */
-  #cursor {
-    position: fixed; top: 0; left: 0;
-    width: 12px; height: 12px;
-    background: var(--accent);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: width .2s, height .2s, background .2s;
-  }
-  #cursor-ring {
-    position: fixed; top: 0; left: 0;
-    width: 36px; height: 36px;
-    border: 1.5px solid var(--accent);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: transform .12s ease, width .3s, height .3s, opacity .3s;
-    opacity: 0.6;
-  }
-  body:has(a:hover) #cursor, body:has(button:hover) #cursor { width: 20px; height: 20px; background: var(--accent2); }
-  body:has(a:hover) #cursor-ring, body:has(button:hover) #cursor-ring { width: 56px; height: 56px; opacity: 0.3; }
-
-  /* ── Noise overlay ── */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
-    pointer-events: none; z-index: 1000; opacity: 0.4;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 24px 48px;
-    z-index: 100;
-    backdrop-filter: blur(12px);
-    background: rgba(10,10,10,0.7);
-    border-bottom: 1px solid var(--border);
-  }
-  .nav-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem;
-    letter-spacing: 6px;
-    color: var(--text);
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a {
-    text-decoration: none; color: var(--muted);
-    font-size: .85rem; letter-spacing: 2px; text-transform: uppercase;
-    transition: color .3s;
-    font-family: 'Space Mono', monospace;
-  }
-  .nav-links a:hover { color: var(--text); }
-  .nav-cta {
-    background: var(--accent); color: #fff;
-    border: none; padding: 10px 24px;
-    font-family: 'Space Mono', monospace;
-    font-size: .8rem; letter-spacing: 2px; text-transform: uppercase;
-    cursor: none; transition: background .3s, transform .2s;
-  }
-  .nav-cta:hover { background: var(--accent2); color: #000; transform: scale(1.04); }
-
-  /* ── HERO ── */
-  #hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    align-items: center;
-    padding: 120px 48px 60px;
-    gap: 40px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero-bg-text {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 28vw;
-    color: rgba(255,255,255,0.02);
-    white-space: nowrap;
-    pointer-events: none;
-    user-select: none;
-    letter-spacing: -4px;
-    animation: bgDrift 12s ease-in-out infinite alternate;
-  }
-  @keyframes bgDrift { from { transform: translate(-52%, -50%); } to { transform: translate(-48%, -50%); } }
-
-  .hero-left { z-index: 2; }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 8px;
-    font-family: 'Space Mono', monospace;
-    font-size: .75rem; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 24px;
-    opacity: 0; animation: fadeUp .8s .2s forwards;
-  }
-  .hero-tag::before {
-    content: ''; width: 24px; height: 1.5px; background: var(--accent);
-  }
-  .hero-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(4rem, 8vw, 9rem);
-    line-height: .92;
-    letter-spacing: 2px;
-    opacity: 0; animation: fadeUp .9s .35s forwards;
-  }
-  .hero-title em { color: var(--accent); font-style: normal; }
-  .hero-sub {
-    margin: 28px 0 44px;
-    color: var(--muted); line-height: 1.7;
-    max-width: 400px; font-size: 1rem;
-    opacity: 0; animation: fadeUp .9s .5s forwards;
-  }
-  .hero-btns {
-    display: flex; gap: 16px; align-items: center;
-    opacity: 0; animation: fadeUp .9s .65s forwards;
-  }
-  .btn-primary {
-    background: var(--accent); color: #fff;
-    border: none; padding: 16px 36px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem; letter-spacing: 3px;
-    cursor: none; transition: all .3s;
-    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
-  }
-  .btn-primary:hover { background: var(--accent2); color: #000; transform: translateY(-2px); }
-  .btn-ghost {
-    color: var(--text); background: none;
-    border: 1px solid var(--border);
-    padding: 15px 36px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem; letter-spacing: 3px;
-    cursor: none; transition: all .3s;
-  }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-  .hero-stats {
-    display: flex; gap: 40px; margin-top: 60px;
-    opacity: 0; animation: fadeUp .9s .8s forwards;
-  }
-  .stat-num {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.4rem; color: var(--text); line-height: 1;
-  }
-  .stat-num span { color: var(--accent); }
-  .stat-label { font-size: .72rem; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-top: 4px; font-family: 'Space Mono', monospace; }
-
-  /* ── Hero Shoe Showcase ── */
-  .hero-right {
-    position: relative; display: flex;
-    align-items: center; justify-content: center;
-    height: 580px; z-index: 2;
-    opacity: 0; animation: fadeIn 1.2s .4s forwards;
-  }
-  .shoe-stage {
-    position: relative; width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .shoe-glow {
-    position: absolute;
-    width: 60%; height: 40%;
-    background: radial-gradient(ellipse, var(--glow) 0%, transparent 70%);
-    bottom: 10%; left: 50%; transform: translateX(-50%);
-    animation: pulseGlow 3s ease-in-out infinite;
-    filter: blur(20px);
-  }
-  @keyframes pulseGlow { 0%,100% { opacity: .6; transform: translateX(-50%) scale(1); } 50% { opacity: 1; transform: translateX(-50%) scale(1.1); } }
-
-  .hero-shoe-img {
-    width: 90%; max-width: 520px;
-    object-fit: contain;
-    filter: drop-shadow(0 30px 60px rgba(255,61,0,0.35));
-    animation: heroFloat 5s ease-in-out infinite;
-    position: relative; z-index: 2;
-    transition: opacity .5s ease;
-  }
-  @keyframes heroFloat { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-18px) rotate(-2deg); } }
-
-  .hero-shoe-dots {
-    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
-    display: flex; gap: 8px; z-index: 5;
-  }
-  .hero-dot {
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--border); border: 1px solid var(--muted);
-    cursor: none; transition: all .3s;
-  }
-  .hero-dot.active { background: var(--accent); border-color: var(--accent); width: 24px; border-radius: 4px; }
-
-  .shoe-counter {
-    position: absolute; top: 20px; right: 20px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem; color: var(--muted); letter-spacing: 3px;
-  }
-  .shoe-counter strong { color: var(--accent); font-size: 1.6rem; }
-
-  /* ── Marquee ── */
-  .marquee-wrap {
-    overflow: hidden; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
-    padding: 14px 0; background: var(--accent);
-  }
-  .marquee-inner {
-    display: flex; gap: 0;
-    animation: marquee 18s linear infinite;
-    width: max-content;
-  }
-  .marquee-item {
-    display: flex; align-items: center; gap: 20px;
-    padding: 0 32px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem; letter-spacing: 4px;
-    color: #000; white-space: nowrap;
-  }
-  .marquee-item::after { content: '✦'; opacity: .5; }
-  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-
-  /* ── COLLECTION ── */
-  #collection {
-    padding: 100px 48px;
-    position: relative;
-  }
-  .section-header {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    margin-bottom: 56px;
-  }
-  .section-tag {
-    font-family: 'Space Mono', monospace;
-    font-size: .75rem; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 12px;
-  }
-  .section-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    line-height: 1; letter-spacing: 2px;
-  }
-  .filter-tabs {
-    display: flex; gap: 4px;
-  }
-  .filter-tab {
-    padding: 8px 20px;
-    font-family: 'Space Mono', monospace;
-    font-size: .72rem; letter-spacing: 2px; text-transform: uppercase;
-    background: none; border: 1px solid var(--border);
-    color: var(--muted); cursor: none; transition: all .3s;
-  }
-  .filter-tab.active, .filter-tab:hover {
-    background: var(--accent); border-color: var(--accent); color: #fff;
-  }
-
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-  }
-
-  .product-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    overflow: hidden; position: relative;
-    cursor: none;
-    transition: border-color .3s, transform .4s cubic-bezier(.16,1,.3,1);
-    animation: cardReveal .6s both;
-  }
-  .product-card:hover {
-    border-color: var(--accent);
-    transform: translateY(-8px);
-  }
-  @keyframes cardReveal { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-  .product-card:nth-child(1) { animation-delay: .05s; }
-  .product-card:nth-child(2) { animation-delay: .12s; }
-  .product-card:nth-child(3) { animation-delay: .19s; }
-  .product-card:nth-child(4) { animation-delay: .26s; }
-  .product-card:nth-child(5) { animation-delay: .33s; }
-  .product-card:nth-child(6) { animation-delay: .40s; }
-
-  .product-card.featured {
-    grid-column: span 2;
-  }
-
-  .card-badge {
-    position: absolute; top: 16px; left: 16px; z-index: 3;
-    padding: 4px 12px;
-    font-family: 'Space Mono', monospace;
-    font-size: .65rem; letter-spacing: 2px; text-transform: uppercase;
-    background: var(--accent); color: #fff;
-  }
-  .card-badge.new { background: var(--accent2); color: #000; }
-
-  .card-img-wrap {
-    height: 260px; overflow: hidden;
-    background: #0e0e0e;
-    display: flex; align-items: center; justify-content: center;
-    position: relative;
-  }
-  .product-card.featured .card-img-wrap { height: 340px; }
-
-  .card-img-wrap::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse at 50% 80%, rgba(255,61,0,0.12), transparent 70%);
-    opacity: 0; transition: opacity .4s;
-  }
-  .product-card:hover .card-img-wrap::after { opacity: 1; }
-
-  .card-img {
-    width: 85%; height: 85%; object-fit: contain;
-    transition: transform .6s cubic-bezier(.16,1,.3,1), filter .4s;
-    filter: drop-shadow(0 12px 30px rgba(0,0,0,.6));
-  }
-  .product-card:hover .card-img {
-    transform: scale(1.08) rotate(3deg) translateY(-6px);
-    filter: drop-shadow(0 24px 40px rgba(255,61,0,0.3));
-  }
-
-  .card-quick-add {
-    position: absolute; bottom: -48px; left: 0; right: 0;
-    background: var(--accent); color: #fff;
-    text-align: center; padding: 14px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem; letter-spacing: 3px;
-    transition: bottom .3s cubic-bezier(.16,1,.3,1);
-    z-index: 3;
-  }
-  .product-card:hover .card-quick-add { bottom: 0; }
-
-  .card-body { padding: 20px 20px 24px; }
-  .card-brand {
-    font-family: 'Space Mono', monospace;
-    font-size: .68rem; letter-spacing: 2px; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 6px;
-  }
-  .card-name {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.1rem; font-weight: 700;
-    margin-bottom: 12px;
-  }
-  .card-footer {
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .card-price {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.6rem; letter-spacing: 1px;
-  }
-  .card-price .old {
-    font-size: 1rem; color: var(--muted);
-    text-decoration: line-through; margin-left: 8px;
-  }
-  .card-colors {
-    display: flex; gap: 6px;
-  }
-  .color-dot {
-    width: 14px; height: 14px; border-radius: 50%;
-    border: 1.5px solid rgba(255,255,255,0.2);
-    transition: transform .2s;
-  }
-  .color-dot:hover { transform: scale(1.3); }
-
-  /* ── FEATURED BANNER ── */
-  #featured {
-    margin: 0 48px 100px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    overflow: hidden;
-    position: relative;
-  }
-  .featured-left {
-    padding: 80px;
-    display: flex; flex-direction: column; justify-content: center;
-  }
-  .featured-right {
-    display: flex; align-items: center; justify-content: center;
-    background: #0d0d0d;
-    padding: 40px;
-    position: relative; overflow: hidden;
-  }
-  .featured-right::before {
-    content: '';
-    position: absolute; width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(255,190,0,0.12), transparent 65%);
-    top: 50%; left: 50%; transform: translate(-50%,-50%);
-  }
-  .featured-shoe {
-    width: 100%; max-width: 420px; object-fit: contain;
-    filter: drop-shadow(0 20px 50px rgba(255,190,0,0.3));
-    animation: featuredFloat 6s ease-in-out infinite;
-    position: relative; z-index: 2;
-    transition: opacity .5s ease;
-  }
-  @keyframes featuredFloat {
-    0%,100% { transform: rotate(5deg) translateY(0); }
-    50% { transform: rotate(3deg) translateY(-16px); }
-  }
-
-  .featured-eyebrow {
-    font-family: 'Space Mono', monospace;
-    font-size: .72rem; letter-spacing: 4px; text-transform: uppercase;
-    color: var(--accent2); margin-bottom: 16px;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .featured-eyebrow::before { content: ''; width: 30px; height: 1px; background: var(--accent2); }
-  .featured-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3rem, 5vw, 5.5rem);
-    line-height: .95; letter-spacing: 2px; margin-bottom: 20px;
-  }
-  .featured-desc {
-    color: var(--muted); line-height: 1.7; margin-bottom: 36px; max-width: 380px;
-  }
-  .featured-price-row {
-    display: flex; align-items: center; gap: 24px; margin-bottom: 36px;
-  }
-  .featured-price {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2.8rem; color: var(--accent2);
-  }
-  .featured-old-price {
-    font-family: 'Space Mono', monospace;
-    font-size: .9rem; color: var(--muted);
-    text-decoration: line-through;
-  }
-  .featured-sale-tag {
-    background: var(--accent); color: #fff;
-    padding: 4px 10px;
-    font-family: 'Space Mono', monospace;
-    font-size: .7rem; letter-spacing: 1px;
-  }
-
-  /* ── ABOUT / WHY US ── */
-  #why {
-    padding: 100px 48px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px; align-items: center;
-  }
-  .why-left .section-title { margin-bottom: 24px; }
-  .why-desc { color: var(--muted); line-height: 1.8; margin-bottom: 40px; }
-  .why-features { display: flex; flex-direction: column; gap: 20px; }
-  .feature-item {
-    display: flex; align-items: flex-start; gap: 20px;
-    padding: 20px; border: 1px solid var(--border);
-    transition: border-color .3s, background .3s;
-  }
-  .feature-item:hover { border-color: var(--accent); background: rgba(255,61,0,.04); }
-  .feature-icon {
-    width: 44px; height: 44px; flex-shrink: 0;
-    background: var(--accent); display: flex; align-items: center; justify-content: center;
-    font-size: 1.3rem;
-    clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
-  }
-  .feature-title { font-weight: 700; font-size: 1rem; margin-bottom: 6px; }
-  .feature-desc { font-size: .85rem; color: var(--muted); line-height: 1.6; }
-
-  .why-right { position: relative; }
-  .why-img-grid {
-    display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
-  }
-  .why-img-item {
-    aspect-ratio: 1;
-    background: var(--card);
-    border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    overflow: hidden; position: relative;
-  }
-  .why-img-item:first-child { grid-row: span 2; aspect-ratio: auto; }
-  .why-img-item img {
-    width: 85%; height: 85%; object-fit: contain;
-    transition: transform .5s;
-    filter: drop-shadow(0 10px 20px rgba(0,0,0,.5));
-  }
-  .why-img-item:hover img { transform: scale(1.1) rotate(-3deg); }
-
-  /* ── NEWSLETTER ── */
-  #newsletter {
-    margin: 0 48px 100px;
-    background: var(--accent);
-    padding: 80px;
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 40px;
-    clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
-  }
-  .nl-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(2.5rem, 4vw, 4rem);
-    letter-spacing: 2px; color: #000; line-height: 1;
-  }
-  .nl-sub { color: rgba(0,0,0,0.6); margin-top: 8px; font-size: .95rem; }
-  .nl-form { display: flex; gap: 0; min-width: 400px; }
-  .nl-input {
-    flex: 1; padding: 16px 20px;
-    background: rgba(0,0,0,0.15);
-    border: 2px solid rgba(0,0,0,0.2);
-    color: #000; font-family: 'Space Mono', monospace;
-    font-size: .85rem; outline: none;
-  }
-  .nl-input::placeholder { color: rgba(0,0,0,0.5); }
-  .nl-btn {
-    padding: 16px 28px;
-    background: #000; color: #fff;
-    border: none; cursor: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem; letter-spacing: 3px;
-    transition: background .3s;
-  }
-  .nl-btn:hover { background: #222; }
-
-  /* ── FOOTER ── */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 60px 48px 40px;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 40px;
-  }
-  .footer-logo {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 2rem; letter-spacing: 6px; margin-bottom: 16px;
-  }
-  .footer-logo span { color: var(--accent); }
-  .footer-desc { color: var(--muted); font-size: .85rem; line-height: 1.8; max-width: 240px; }
-  .footer-col-title {
-    font-family: 'Space Mono', monospace;
-    font-size: .7rem; letter-spacing: 3px; text-transform: uppercase;
-    color: var(--accent); margin-bottom: 20px;
-  }
-  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .footer-links a {
-    color: var(--muted); text-decoration: none; font-size: .88rem;
-    transition: color .3s;
-  }
-  .footer-links a:hover { color: var(--text); }
-  .footer-bottom {
-    grid-column: 1/-1;
-    border-top: 1px solid var(--border);
-    padding-top: 28px; margin-top: 20px;
-    display: flex; justify-content: space-between;
-    color: var(--muted); font-size: .78rem;
-    font-family: 'Space Mono', monospace;
-  }
-
-  /* ── Animations ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  /* ── Scroll reveal ── */
-  .reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s ease, transform .8s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Starbucks | Where Every Cup Tells a Story</title>
+    <meta name="description"
+        content="Starbucks Coffee - Discover our handcrafted drinks, premium coffee blends, and the Starbucks experience.">
+    <link rel="stylesheet" href="new-styles.css">
+    <link rel="icon" href="images/frappuccino-hero.png" type="image/png">
 </head>
+
 <body>
 
-<div id="cursor"></div>
-<div id="cursor-ring"></div>
-
-<!-- ──────────────────────── NAV ──────────────────────── -->
-<nav>
-  <a class="nav-logo" href="#"><span>S</span>OLE</a>
-  <ul class="nav-links">
-    <li><a href="#collection">Collection</a></li>
-    <li><a href="#featured">Featured</a></li>
-    <li><a href="#why">About</a></li>
-    <li><a href="#newsletter">Contact</a></li>
-  </ul>
-  <button class="nav-cta">Shop Now</button>
-</nav>
-
-<!-- ──────────────────────── HERO ──────────────────────── -->
-<section id="hero">
-  <div class="hero-bg-text">SOLE</div>
-
-  <div class="hero-left">
-    <div class="hero-tag">New Season 2026</div>
-    <h1 class="hero-title">
-      Step Into<br><em>Greatness</em>
-    </h1>
-    <p class="hero-sub">
-      Engineered for champions. Worn by icons. Every sole tells a story — what will yours say?
-    </p>
-    <div class="hero-btns">
-      <button class="btn-primary" onclick="document.getElementById('collection').scrollIntoView({behavior:'smooth'})">Explore Collection</button>
-      <button class="btn-ghost">Watch Film</button>
+    <!-- LOADER -->
+    <div class="loader" id="loader">
+        <img src="https://static.vecteezy.com/system/resources/previews/022/636/379/non_2x/starbucks-logo-starbucks-icon-transparent-free-png.png"
+            alt="Loading" class="loader-logo">
     </div>
-    <div class="hero-stats">
-      <div>
-        <div class="stat-num">12<span>K+</span></div>
-        <div class="stat-label">Happy Feet</div>
-      </div>
-      <div>
-        <div class="stat-num">340<span>+</span></div>
-        <div class="stat-label">Styles</div>
-      </div>
-      <div>
-        <div class="stat-num">48<span>h</span></div>
-        <div class="stat-label">Delivery</div>
-      </div>
-    </div>
-  </div>
 
-  <div class="hero-right">
-    <div class="shoe-stage">
-      <div class="shoe-glow"></div>
-      <img id="hero-shoe" class="hero-shoe-img" src="" alt="Featured shoe">
-      <div class="shoe-counter">
-        <strong id="hero-counter">01</strong> / <span id="hero-total">04</span>
-      </div>
-      <div class="hero-shoe-dots" id="hero-dots"></div>
-    </div>
-  </div>
-</section>
+    <!-- PARALLAX BEANS -->
+    <div class="parallax-bean" style="top:10%;left:5%"><img
+            src="https://static.vecteezy.com/system/resources/previews/052/387/523/non_2x/coffee-beans-splashing-in-liquid-showcasing-a-dynamic-moment-against-a-transparent-background-coffee-beans-splashing-isolated-free-png.png"
+            alt="bean"></div>
+    <div class="parallax-bean" style="top:40%;right:3%"><img
+            src="https://gallery.yopriceville.com/downloadfullsize/send/25152" alt="bean"></div>
+    <div class="parallax-bean" style="top:70%;left:8%"><img src="images/coffee-beans.png" alt="bean"></div>
 
-<!-- ──────────────────────── MARQUEE ──────────────────────── -->
-<div class="marquee-wrap">
-  <div class="marquee-inner" id="marquee-inner"></div>
-</div>
-
-<!-- ──────────────────────── COLLECTION ──────────────────────── -->
-<section id="collection">
-  <div class="section-header reveal">
-    <div>
-      <div class="section-tag">Our Products</div>
-      <h2 class="section-title">Latest Drops</h2>
-    </div>
-    <div class="filter-tabs">
-      <button class="filter-tab active" onclick="filterProducts('all', this)">All</button>
-      <button class="filter-tab" onclick="filterProducts('running', this)">Running</button>
-      <button class="filter-tab" onclick="filterProducts('lifestyle', this)">Lifestyle</button>
-      <button class="filter-tab" onclick="filterProducts('limited', this)">Limited</button>
-    </div>
-  </div>
-  <div class="product-grid" id="product-grid"></div>
-</section>
-
-<!-- ──────────────────────── FEATURED BANNER ──────────────────────── -->
-<section id="featured">
-  <div class="featured-left reveal">
-    <div class="featured-eyebrow">Editor's Pick</div>
-    <h2 class="featured-title" id="feat-title">Loading...</h2>
-    <p class="featured-desc" id="feat-desc">Loading...</p>
-    <div class="featured-price-row">
-      <div class="featured-price" id="feat-price">—</div>
-      <div class="featured-old-price" id="feat-old">—</div>
-      <div class="featured-sale-tag" id="feat-tag">SALE</div>
-    </div>
-    <div class="hero-btns">
-      <button class="btn-primary">Buy Now</button>
-      <button class="btn-ghost">View Details</button>
-    </div>
-  </div>
-  <div class="featured-right">
-    <img id="feat-img" class="featured-shoe" src="" alt="Featured shoe">
-  </div>
-</section>
-
-<!-- ──────────────────────── WHY US ──────────────────────── -->
-<section id="why">
-  <div class="why-left reveal">
-    <div class="section-tag">Why SOLE?</div>
-    <h2 class="section-title">Beyond The Shoe</h2>
-    <p class="why-desc">We obsess over every millimeter, every material, every stitch so you don't have to. Premium performance, without compromise.</p>
-    <div class="why-features">
-      <div class="feature-item">
-        <div class="feature-icon">⚡</div>
-        <div>
-          <div class="feature-title">Ultra-Light Build</div>
-          <div class="feature-desc">Carbon-infused soles engineered to reduce weight without sacrificing durability or grip.</div>
+    <!-- NAVBAR -->
+    <nav id="navbar">
+        <img src="images/frappuccino-hero.png" alt="Starbucks Logo" class="nav-logo" id="nav-logo">
+        <div class="nav-links">
+            <a href="#hero" class="active">Home</a>
+            <a href="#menu">Menu</a>
+            <a href="#popular">Rewards</a>
+            <a href="#contact">Gift Cards</a>
         </div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">🌊</div>
-        <div>
-          <div class="feature-title">All-Weather Tech</div>
-          <div class="feature-desc">Hydrophobic membranes keep you dry. Grip patterns keep you stable. Every condition, covered.</div>
+        <div class="nav-cart" id="cart-btn">🛒</div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero" id="hero">
+        <div class="deco-circle deco-c1"></div>
+        <div class="deco-circle deco-c2"></div>
+
+        <div class="hero-beans bean1"><img
+                src="https://png.pngtree.com/png-clipart/20250524/original/pngtree-flying-coffee-beans-isolated-on-transparent-background-png-image_21065279.png"
+                alt="Coffee Bean"></div>
+        <div class="hero-beans bean2"><img src="https://gallery.yopriceville.com/downloadfullsize/send/25152"
+                alt="Coffee Bean"></div>
+        <div class="hero-beans bean3"><img
+                src="https://static.vecteezy.com/system/resources/previews/052/387/523/non_2x/coffee-beans-splashing-in-liquid-showcasing-a-dynamic-moment-against-a-transparent-background-coffee-beans-splashing-isolated-free-png.png"
+                alt="Coffee Bean"></div>
+        <div class="hero-beans bean4"><img
+                src="https://static.vecteezy.com/system/resources/previews/052/387/523/non_2x/coffee-beans-splashing-in-liquid-showcasing-a-dynamic-moment-against-a-transparent-background-coffee-beans-splashing-isolated-free-png.png"
+                alt="Coffee Bean"></div>
+
+        <div class="hero-content reveal-left">
+            <p class="hero-subtitle">WHERE EVERY CUP TELLS A STORY</p>
+            <h1 class="hero-title">WHAT'S <span class="italic">YOURS</span>?</h1>
+            <div class="hero-desc-label">FRAPPUCCINO COFFEE DELIGHT</div>
+            <p class="hero-desc">Indulge in the perfect blend of coffee and ice — the Frappuccino is your go-to chilled
+                Starbucks drink that will make you fall in love at first sip.</p>
+            <div class="hero-rating">
+                <span>BEST RATING</span>
+                <span class="stars">⭐⭐⭐</span>
+                <span class="price">$8.49</span>
+            </div>
+            <button class="btn-add-cart" onclick="addToCart('Frappuccino')">🛒 ADD TO CART</button>
         </div>
-      </div>
-      <div class="feature-item">
-        <div class="feature-icon">♻️</div>
-        <div>
-          <div class="feature-title">Sustainable Materials</div>
-          <div class="feature-desc">60% recycled components across our entire 2026 lineup. Looks good, does good.</div>
+
+        <div class="hero-image reveal-right">
+            <img src="https://pngfre.com/wp-content/uploads/Starbucks-5-663x1024.png" alt="Frappuccino Coffee Delight"
+                id="hero-drink-img">
         </div>
-      </div>
-    </div>
-  </div>
-  <div class="why-right reveal">
-    <div class="why-img-grid" id="why-grid"></div>
-  </div>
-</section>
 
-<!-- ──────────────────────── NEWSLETTER ──────────────────────── -->
-<div id="newsletter" class="reveal">
-  <div>
-    <div class="nl-title">Early Access.<br>Exclusive Drops.</div>
-    <div class="nl-sub">Join 12,000+ sneakerheads. No spam, ever.</div>
-  </div>
-  <div>
-    <div class="nl-form">
-      <input class="nl-input" type="email" placeholder="your@email.com">
-      <button class="nl-btn">Subscribe</button>
-    </div>
-  </div>
-</div>
+        <div class="hero-vertical-text">FRAPPUCCINO FRAPPUCCINO</div>
+    </section>
 
-<!-- ──────────────────────── FOOTER ──────────────────────── -->
-<footer>
-  <div>
-    <div class="footer-logo"><span>S</span>OLE</div>
-    <div class="footer-desc">Premium footwear for those who move with purpose. Crafted to last, designed to inspire.</div>
-  </div>
-  <div>
-    <div class="footer-col-title">Shop</div>
-    <ul class="footer-links">
-      <li><a href="#">New Arrivals</a></li>
-      <li><a href="#">Running</a></li>
-      <li><a href="#">Lifestyle</a></li>
-      <li><a href="#">Limited Edition</a></li>
-      <li><a href="#">Sale</a></li>
-    </ul>
-  </div>
-  <div>
-    <div class="footer-col-title">Support</div>
-    <ul class="footer-links">
-      <li><a href="#">Size Guide</a></li>
-      <li><a href="#">Returns</a></li>
-      <li><a href="#">Track Order</a></li>
-      <li><a href="#">FAQ</a></li>
-      <li><a href="#">Contact Us</a></li>
-    </ul>
-  </div>
-  <div>
-    <div class="footer-col-title">Company</div>
-    <ul class="footer-links">
-      <li><a href="#">About</a></li>
-      <li><a href="#">Careers</a></li>
-      <li><a href="#">Sustainability</a></li>
-      <li><a href="#">Press</a></li>
-      <li><a href="#">Affiliates</a></li>
-    </ul>
-  </div>
-  <div class="footer-bottom">
-    <span>© 2026 SOLE Premium Footwear. All rights reserved.</span>
-    <span>Privacy · Terms · Cookies</span>
-  </div>
-</footer>
-
-<script>
-/* ================================================================
- *  🖼️  IMAGE CONFIGURATION — CHANGE YOUR IMAGES HERE
- *
- *  Replace any `image` URL with your own image URL or local path.
- *  For local files use:  "./your-image.jpg"
- *  For web URLs use:     "https://example.com/shoe.png"
- *
- *  HERO SLIDES — shown in the rotating hero carousel (top-right)
- * ================================================================ */
-
-const HERO_SLIDES = [
-  {
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=700&q=90",
-    label: "Air Runner Pro"
-  },
-  {
-    image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=700&q=90",
-    label: "Urban Stealth X"
-  },
-  {
-    image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=700&q=90",
-    label: "Shadow Boost 3"
-  },
-  {
-    image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=700&q=90",
-    label: "Street Legend"
-  }
-];
-
-/* ================================================================
- *  PRODUCTS — shown in the main product grid
- *  Fields:
- *    image    — URL or path to shoe image
- *    brand    — Brand label (top of card)
- *    name     — Product name
- *    price    — Current price (string, include $)
- *    oldPrice — Crossed-out old price (optional, set "" to hide)
- *    colors   — Array of CSS color strings for color dots
- *    badge    — "HOT" | "NEW" | "SALE" | "" (leave "" for none)
- *    badgeNew — set true to use yellow badge style
- *    category — "running" | "lifestyle" | "limited" (for filter tabs)
- *    featured — set true to make card wide (2-column span)
- * ================================================================ */
-
-const PRODUCTS = [
-  {
-    image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=600&q=85",
-    brand: "SOLE × Air",
-    name: "Air Runner Pro 2026",
-    price: "$189",
-    oldPrice: "$230",
-    colors: ["#ff3d00", "#000", "#fff"],
-    badge: "HOT", badgeNew: false,
-    category: "running", featured: true
-  },
-  {
-    image: "https://images.unsplash.com/photo-1608231387042-66d1773070a5?w=600&q=85",
-    brand: "SOLE × Urban",
-    name: "Urban Stealth X",
-    price: "$145",
-    oldPrice: "",
-    colors: ["#222", "#888", "#ffbe00"],
-    badge: "NEW", badgeNew: true,
-    category: "lifestyle", featured: false
-  },
-  {
-    image: "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=600&q=85",
-    brand: "SOLE × Shadow",
-    name: "Shadow Boost 3",
-    price: "$210",
-    oldPrice: "",
-    colors: ["#111", "#333"],
-    badge: "", badgeNew: false,
-    category: "running", featured: false
-  },
-  {
-    image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=600&q=85",
-    brand: "SOLE × Legend",
-    name: "Street Legend OG",
-    price: "$99",
-    oldPrice: "$160",
-    colors: ["#fff", "#ffbe00", "#ff3d00"],
-    badge: "SALE", badgeNew: false,
-    category: "lifestyle", featured: false
-  },
-  {
-    image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=600&q=85",
-    brand: "SOLE × Apex",
-    name: "Apex Trail Force",
-    price: "$230",
-    oldPrice: "",
-    colors: ["#2e7d32", "#000", "#888"],
-    badge: "NEW", badgeNew: true,
-    category: "running", featured: false
-  },
-  {
-    image: "https://images.unsplash.com/photo-1539185441755-769473a23570?w=600&q=85",
-    brand: "SOLE × Rare",
-    name: "Rare Edition — No.7",
-    price: "$480",
-    oldPrice: "",
-    colors: ["#gold", "#b8860b", "#111"],
-    badge: "LIMITED", badgeNew: false,
-    category: "limited", featured: false
-  }
-];
-
-/* ================================================================
- *  FEATURED PRODUCT — the big banner section below the grid
- * ================================================================ */
-
-const FEATURED_PRODUCT = {
-  image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=800&q=90",
-  title: "Apex Trail Force",
-  desc: "Built for the mountain. Ready for the city. The Apex Trail Force fuses aggressive traction with everyday comfort in a silhouette that turns heads everywhere.",
-  price: "$230",
-  oldPrice: "$299",
-  saleTag: "23% OFF"
-};
-
-/* ================================================================
- *  WHY-US PANEL images — 3 images shown in the feature grid
- * ================================================================ */
-
-const WHY_IMAGES = [
-  "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&q=80",
-  "https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?w=400&q=80",
-  "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&q=80"
-];
-
-/* ================================================================
- *  MARQUEE ITEMS — text that scrolls across the orange band
- * ================================================================ */
-
-const MARQUEE_ITEMS = [
-  "Free Shipping Over $120",
-  "New Drop Every Friday",
-  "30-Day Returns",
-  "Limited Collabs Available",
-  "Members Get Early Access",
-  "Sustainable Since 2022"
-];
-
-/* ============================================================
- *  ⚙️  ENGINE — No need to edit below this line
- * ============================================================ */
-
-// Cursor
-const cursor = document.getElementById('cursor');
-const ring   = document.getElementById('cursor-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
-document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.style.left = mx+'px'; cursor.style.top = my+'px'; });
-(function animRing(){
-  rx += (mx - rx) * .14;
-  ry += (my - ry) * .14;
-  ring.style.left = rx+'px'; ring.style.top = ry+'px';
-  requestAnimationFrame(animRing);
-})();
-
-// Marquee
-(function buildMarquee(){
-  const inner = document.getElementById('marquee-inner');
-  const doubled = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
-  inner.innerHTML = doubled.map(t => `<div class="marquee-item">${t}</div>`).join('');
-})();
-
-// Hero carousel
-let heroIdx = 0;
-(function buildHero(){
-  const img   = document.getElementById('hero-shoe');
-  const dots  = document.getElementById('hero-dots');
-  const total = document.getElementById('hero-total');
-  const ctr   = document.getElementById('hero-counter');
-
-  total.textContent = String(HERO_SLIDES.length).padStart(2,'0');
-  img.src = HERO_SLIDES[0].image;
-
-  dots.innerHTML = HERO_SLIDES.map((_, i) =>
-    `<div class="hero-dot${i===0?' active':''}" onclick="goHero(${i})"></div>`
-  ).join('');
-
-  setInterval(() => goHero((heroIdx + 1) % HERO_SLIDES.length), 3800);
-})();
-
-function goHero(idx){
-  heroIdx = idx;
-  const img  = document.getElementById('hero-shoe');
-  const dots = document.querySelectorAll('.hero-dot');
-  const ctr  = document.getElementById('hero-counter');
-  img.style.opacity = '0';
-  setTimeout(() => {
-    img.src = HERO_SLIDES[idx].image;
-    img.style.opacity = '1';
-  }, 300);
-  ctr.textContent = String(idx+1).padStart(2,'0');
-  dots.forEach((d,i) => d.classList.toggle('active', i===idx));
-}
-
-// Featured product
-(function buildFeatured(){
-  document.getElementById('feat-img').src    = FEATURED_PRODUCT.image;
-  document.getElementById('feat-title').textContent = FEATURED_PRODUCT.title;
-  document.getElementById('feat-desc').textContent  = FEATURED_PRODUCT.desc;
-  document.getElementById('feat-price').textContent = FEATURED_PRODUCT.price;
-  document.getElementById('feat-old').textContent   = FEATURED_PRODUCT.oldPrice;
-  document.getElementById('feat-tag').textContent   = FEATURED_PRODUCT.saleTag;
-})();
-
-// Product grid
-let activeFilter = 'all';
-function renderProducts(filter){
-  const grid = document.getElementById('product-grid');
-  const visible = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.category === filter);
-  grid.innerHTML = visible.map((p, i) => `
-    <div class="product-card${p.featured ? ' featured' : ''}" style="animation-delay:${i*.07}s">
-      ${p.badge ? `<div class="card-badge${p.badgeNew?' new':''}">${p.badge}</div>` : ''}
-      <div class="card-img-wrap">
-        <img class="card-img" src="${p.image}" alt="${p.name}" loading="lazy">
-        <div class="card-quick-add">+ Quick Add</div>
-      </div>
-      <div class="card-body">
-        <div class="card-brand">${p.brand}</div>
-        <div class="card-name">${p.name}</div>
-        <div class="card-footer">
-          <div class="card-price">
-            ${p.price}
-            ${p.oldPrice ? `<span class="old">${p.oldPrice}</span>` : ''}
-          </div>
-          <div class="card-colors">
-            ${p.colors.map(c => `<div class="color-dot" style="background:${c}"></div>`).join('')}
-          </div>
+    <!-- MENU SECTION -->
+    <section class="menu-section" id="menu">
+        <div class="menu-tabs reveal">
+            <button class="menu-tab active" onclick="switchTab(this, 'drinks')">Drinks</button>
+            <button class="menu-tab" onclick="switchTab(this, 'food')">Food</button>
+            <button class="menu-tab" onclick="switchTab(this, 'athome')">At Home</button>
+            <button class="menu-tab" onclick="switchTab(this, 'merch')">Merchandise</button>
         </div>
-      </div>
+
+        <div class="carousel-wrapper reveal-scale">
+            <button class="carousel-nav prev" onclick="slideCarousel(-1)">❮</button>
+            <div class="carousel" id="carousel">
+                <div class="product-card">
+                    <img src="https://www.pngplay.com/wp-content/uploads/9/Starbucks-Coffee-Transparent-Free-PNG.png"
+                        alt="Caramel Latte" id="product-img-1">
+                    <h3>CARAMEL LATTE</h3>
+                    <p class="flavor">Smooth & Sweet</p>
+                    <p class="card-price">$7.99</p>
+                </div>
+                <div class="product-card featured">
+                    <img src="https://png.pngtree.com/png-clipart/20231116/original/pngtree-starbucks-caramel-frappuccino-color-image-liquid-photo-png-image_13575926.png"
+                        alt="Mocha Frapp" id="product-img-2">
+                    <h3>MOCHA FRAPP</h3>
+                    <p class="flavor">Rich Chocolate Blend</p>
+                    <p class="card-price">$8.49</p>
+                    <button class="btn-add-cart-sm" onclick="addToCart('Mocha Frapp')">ADD TO CART</button>
+                </div>
+                <div class="product-card">
+                    <img src="https://www.pngarts.com/files/11/Sweet-Iced-Coffee-Free-PNG-Image.png" alt="Vanilla Bean"
+                        id="product-img-3">
+                    <h3>VANILLA BEAN</h3>
+                    <p class="flavor">Creamy Vanilla</p>
+                    <p class="card-price">$7.49</p>
+                </div>
+                <div class="product-card">
+                    <img src="https://static.vecteezy.com/system/resources/thumbnails/048/719/985/small/pumpkin-spice-latte-cup-of-warm-pumpkin-spice-latte-during-autumn-fall-time-pumpkin-spice-latte-with-nutmeg-vanilla-and-espresso-coffee-in-cup-sweet-fall-beverage-isolated-png.png"
+                        alt="Hazelnut Brew" id="product-img-4">
+                    <h3>HAZELNUT BREW</h3>
+                    <p class="flavor">Nutty & Bold</p>
+                    <p class="card-price">$6.99</p>
+                </div>
+            </div>
+            <button class="carousel-nav next" onclick="slideCarousel(1)">❯</button>
+        </div>
+    </section>
+
+    <!-- UNMATCHED QUALITY -->
+    <section class="quality-section" id="quality">
+        <h2 class="quality-title reveal">UNMATCHED<br>QUALITY</h2>
+        <div class="quality-content">
+            <div class="quality-img reveal-left">
+                <img src="https://www.foodandwine.com/thmb/qDNjyBph8oQfR3rxlv0UgI9qb1M=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Starbucks-Crema-Collection-Premium-Instant-Coffee-FT-BLOG0225-af7f9daeecd64b55bf7a5a5020bd8336.jpg"
+                    alt="Quality Coffee" id="quality-img">
+            </div>
+            <div class="quality-text reveal-right">
+                <p>At Starbucks, every sip is a journey into a world of rich, aromatic coffee perfection. We source the
+                    finest beans from around the globe, roasted to perfection by our master roasters.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARQUEE -->
+    <div class="marquee">
+        <div class="marquee-track">
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+        </div>
     </div>
-  `).join('');
-}
 
-function filterProducts(cat, btn){
-  activeFilter = cat;
-  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  renderProducts(cat);
-}
+    <!-- DESCRIPTION BUBBLE -->
+    <section style="padding:60px 40px;background:var(--bg-dark);">
+        <div class="desc-bubble">
+            <div class="desc-bubble-img reveal-left">
+                <img src="https://mir-s3-cdn-cf.behance.net/projects/404/3fc2e0148840717.Y3JvcCwxMDgwLDg0NCwwLDU5Mw.png"
+                    alt="Starbucks Experience" id="desc-bubble-img">
+            </div>
+            <div class="desc-bubble-card reveal-right">
+                <p>Starbucks redefines the coffee experience with every sip — unmatched quality, flavors, and comfort.
+                    From our signature roasts to our handcrafted beverages, we bring the coffeehouse experience to life.
+                </p>
+            </div>
+        </div>
+    </section>
 
-renderProducts('all');
+    <!-- POPULAR SECTION -->
+    <section class="popular-section" id="popular">
+        <div class="section-title-wrap">
+            <h2 class="section-title reveal">POPULAR</h2>
+        </div>
+        <div class="popular-grid">
+            <div class="popular-card reveal">
+                <img src="images/mocha-frapp.png" alt="Mocha Brew" id="popular-img-1">
+                <h4>MOCHA BREW</h4>
+                <button class="btn-sm" onclick="addToCart('Mocha Brew')">ADD TO CART</button>
+            </div>
+            <div class="popular-card reveal">
+                <img src="images/vanilla-bean.png" alt="Vanilla Latte" id="popular-img-2">
+                <h4>VANILLA LATTE</h4>
+                <button class="btn-sm" onclick="addToCart('Vanilla Latte')">ADD TO CART</button>
+            </div>
+            <div class="popular-card reveal">
+                <img src="images/caramel-latte.png" alt="Vanilla Latte" id="popular-img-3">
+                <h4>VANILLA LATTE</h4>
+                <button class="btn-sm" onclick="addToCart('Vanilla Latte 2')">ADD TO CART</button>
+            </div>
+        </div>
+    </section>
 
-// Why images
-(function buildWhy(){
-  const grid = document.getElementById('why-grid');
-  grid.innerHTML = WHY_IMAGES.map(src => `
-    <div class="why-img-item">
-      <img src="${src}" alt="shoe detail" loading="lazy">
+    <!-- BRANCHES -->
+    <section class="branches-section" id="branches">
+        <div class="branches-wrapper reveal">
+            <div class="branches-left">
+                <span class="branch-label">OUR BRANCHES</span>
+                <img src="images/frappuccino-hero.png" alt="Starbucks Store" id="branch-logo-img">
+            </div>
+            <div>
+                <div class="branches-grid">
+                    <div class="branch-card">
+                        <img src="images/caramel-latte.png" alt="New York" id="branch-img-1">
+                        <div class="branch-name">NEW YORK</div>
+                    </div>
+                    <div class="branch-card">
+                        <img src="images/vanilla-bean.png" alt="New York" id="branch-img-2">
+                        <div class="branch-name">NEW YORK</div>
+                    </div>
+                    <div class="branch-card">
+                        <img src="images/mocha-frapp.png" alt="New York" id="branch-img-3">
+                        <div class="branch-name">NEW YORK</div>
+                    </div>
+                    <div class="branch-card">
+                        <img src="images/hazelnut-brew.png" alt="New York" id="branch-img-4">
+                        <div class="branch-name">NEW YORK</div>
+                    </div>
+                    <div class="branch-card">
+                        <img src="images/frappuccino-hero.png" alt="New York" id="branch-img-5">
+                        <div class="branch-name">NEW YORK</div>
+                    </div>
+                    <div class="branch-card">
+                        <img src="images/caramel-latte.png" alt="New York" id="branch-img-6">
+                        <div class="branch-name">NEW YORK</div>
+                    </div>
+                </div>
+                <div class="more-link"><a href="#">MORE →</a></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MARQUEE 2 -->
+    <div class="marquee" style="background:var(--green-dark);">
+        <div class="marquee-track">
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+            <span>STARBUCKS</span><span>✦</span>
+        </div>
     </div>
-  `).join('');
-})();
 
-// Scroll reveal
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.15 });
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
+    <!-- CONTACT -->
+    <section class="contact-section" id="contact">
+        <div class="contact-grid reveal">
+            <div class="contact-form-box">
+                <h3>CONTACT</h3>
+                <form id="contact-form" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" placeholder="Your Name" required id="contact-name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" placeholder="Your Email" required id="contact-email">
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea placeholder="Your Message..." required id="contact-message"></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit">SUBMIT</button>
+                </form>
+            </div>
+            <div class="thank-you-box">
+                <h3>THANK YOU!</h3>
+                <p>Hang tight! We're coming your way soon! Your message has been received and we'll get back to you
+                    shortly.</p>
+            </div>
+        </div>
+        <div class="contact-bg-text">CONTACT</div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-top">
+            <div class="footer-brand">
+                <img src="images/frappuccino-hero.png" alt="Starbucks" id="footer-logo-img">
+                <p>Start the day with a perfect coffee. We bring the world's finest coffee right to your cup with
+                    passion and effort.</p>
+            </div>
+            <div class="subscribe-box">
+                <h4>🌿 SUBSCRIBE</h4>
+                <div class="subscribe-form">
+                    <input type="email" placeholder="Enter your email" id="subscribe-email">
+                    <button onclick="subscribe()">→</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Starbucks Corporation. All Rights Reserved. Crafted with ☕ and ❤️</p>
+        </div>
+    </footer>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast"
+        style="position:fixed;bottom:30px;right:30px;background:var(--green);color:#fff;padding:14px 28px;border-radius:12px;font-size:13px;font-weight:600;transform:translateY(100px);opacity:0;transition:all .4s;z-index:999;box-shadow:0 8px 30px rgba(0,0,0,.3);">
+        <span id="toast-text">Added to cart!</span>
+    </div>
+
+    <script>
+        // LOADER
+        window.addEventListener('load', () => {
+            setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1200);
+        });
+
+        // NAVBAR HIDE/SHOW ON SCROLL
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            const currentScroll = window.pageYOffset;
+            if (currentScroll > lastScroll && currentScroll > 80) {
+                nav.classList.add('hidden');
+            } else {
+                nav.classList.remove('hidden');
+            }
+            lastScroll = currentScroll;
+        });
+
+        // ACTIVE NAV LINK
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                document.querySelectorAll('.nav-links a').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // SCROLL REVEAL
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+        revealElements.forEach(el => observer.observe(el));
+
+        // PARALLAX BEANS
+        window.addEventListener('scroll', () => {
+            const beans = document.querySelectorAll('.parallax-bean');
+            const scrollY = window.pageYOffset;
+            beans.forEach((bean, i) => {
+                const speed = 0.03 + (i * 0.015);
+                bean.style.transform = `translateY(${scrollY * speed}px) rotate(${scrollY * 0.02}deg)`;
+            });
+        });
+
+        // MENU TABS
+        function switchTab(btn, tab) {
+            document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            // Add tab switching animation
+            const carousel = document.getElementById('carousel');
+            carousel.style.opacity = '0';
+            carousel.style.transform = 'translateY(20px)';
+            setTimeout(() => {
+                carousel.style.opacity = '1';
+                carousel.style.transform = 'translateY(0)';
+            }, 300);
+        }
+
+        // CAROUSEL
+        let carouselPos = 0;
+        function slideCarousel(dir) {
+            const carousel = document.getElementById('carousel');
+            const cards = carousel.querySelectorAll('.product-card');
+            carouselPos = Math.max(0, Math.min(carouselPos + dir, cards.length - 3));
+            const offset = carouselPos * 224;
+            carousel.style.transition = 'transform .5s cubic-bezier(.16,1,.3,1)';
+            carousel.style.transform = `translateX(-${offset}px)`;
+        }
+
+        // ADD TO CART
+        function addToCart(item) {
+            showToast(`${item} added to cart! 🎉`);
+        }
+
+        // TOAST
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = msg;
+            toast.style.transform = 'translateY(0)';
+            toast.style.opacity = '1';
+            setTimeout(() => {
+                toast.style.transform = 'translateY(100px)';
+                toast.style.opacity = '0';
+            }, 2500);
+        }
+
+        // CONTACT FORM
+        function handleSubmit(e) {
+            e.preventDefault();
+            showToast('Message sent successfully! ✅');
+            e.target.reset();
+        }
+
+        // SUBSCRIBE
+        function subscribe() {
+            const email = document.getElementById('subscribe-email').value;
+            if (email) {
+                showToast('Subscribed successfully! 📬');
+                document.getElementById('subscribe-email').value = '';
+            }
+        }
+
+        // SMOOTH SCROLL FOR NAV LINKS
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        // TILT EFFECT ON HERO IMAGE
+        const heroImg = document.querySelector('.hero-image img');
+        if (heroImg) {
+            document.querySelector('.hero').addEventListener('mousemove', (e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                const x = (e.clientX - rect.left) / rect.width - 0.5;
+                const y = (e.clientY - rect.top) / rect.height - 0.5;
+                heroImg.style.transform = `perspective(1000px) rotateY(${x * 15}deg) rotateX(${-y * 15}deg) translateY(${Math.sin(Date.now() / 1000) * 10}px)`;
+            });
+            document.querySelector('.hero').addEventListener('mouseleave', () => {
+                heroImg.style.transform = '';
+            });
+        }
+    </script>
 </body>
+
 </html>
